@@ -1,0 +1,51 @@
+\documentclass{egpubl}
+\usepackage{egsgp15}
+%\SpecialIssueSubmission
+\SpecialIssuePaper
+\electronicVersion
+\PrintedOrElectronic
+\usepackage{t1enc,dfadobe}
+\usepackage{egweblnk}
+\usepackage{cite}
+\usepackage{amsmath}
+\usepackage{microtype}
+
+\title[Robust Articulated-ICP for Real-Time Hand Tracking] 
+{Robust Articulated-ICP for Real-Time Hand Tracking}
+%\author[Submission ID \#1027]{\Large Submission ID \#1027}
+\author[Tagliasacchi et al.]{
+Andrea Tagliasacchi$^{1*}$
+\quad Matthias Schr\"oder$^{2*}$ % \thanks{Equal contributors.}
+\quad Anastasia Tkach$^{1}$
+\quad Sofien Bouaziz$^{1}$
+\quad Mario Botsch$^{2}$
+\quad Mark Pauly$^{1}$
+\\
+$^{1}$\'Ecole Polytechnique F\'ed\'erale de Lausanne (EPFL) \quad $^{2}$Bielefeld University \quad ($^*$equal contributors)}
+
+%--- HACK: don't intent by default on new paragraph
+\setlength{\parindent}{0pt}%
+
+%-------------------------------------------------------------------------
+\input{sec/tweaks.tex}
+\begin{document}
+\input{sec/teaser.tex}
+\maketitle
+\input{sec/abstract}
+\input{sec/intro}
+\input{sec/related}
+\input{sec/overview}
+\input{sec/technical}
+\input{sec/technical2}
+\input{sec/eval}
+\input{sec/conclusions}
+% \input{sec/acks}
+%-------- BIBLIO
+% \nocite{*} % show all citations
+% \bibliographystyle{eg-alpha-doi}
+\bibliographystyle{eg-alpha}
+\bibliography{htrack}
+%-------- APPENDIXES
+\input{sec/appendix}
+\end{document}
+

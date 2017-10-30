@@ -1,0 +1,40 @@
+\documentclass{egpubl}
+\usepackage{egsgp15}
+\SpecialIssueSubmission
+\electronicVersion
+\PrintedOrElectronic
+\usepackage{t1enc,dfadobe}
+\usepackage{egweblnk}
+\usepackage{cite}
+\usepackage{amsmath}
+
+\title{Robust Articulated-ICP for Real-Time Hand Tracking\\(confidential notes to the reviewers)}
+\author[Submission ID \#1027]{\Large Submission ID \#1027}
+
+%--- HACK: don't intent by default on new paragraph
+\setlength{\parindent}{0pt}%
+
+%-------------------------------------------------------------------------
+\input{sec/tweaks.tex}
+\begin{document}
+\maketitle
+\vspace{-1in}
+\section{Paper length}
+We are aware we exceeded the 10 page (soft) limit of SGP. Changing from TOG to CGF has reduced drastically the layout effectiveness, resulting in three extra pages. We could remove many figures from the paper and satisfy these requirements -- but this would hinder the exposition clarity. \textit{We have already contacted the SGP chair and obtained permission to leave the paper at its current length.}
+
+\section{Comparisons to the state-of-the-art}
+Although a public binary SDK for \cite{oiko_bmvc11} is available we omitted such a comparison. We simply found that the related works we compared to~\cite{sridhar_iccv13,sridhar_14,melax_13,schroeder_icra14,tompson_tog14} \textit{outperformed the PSO demo} in robustness. Regarding~\cite{qian_cvpr14}, we tried our best to include a comparison to the mixed PSO/ICP approach presented therein. We asked the authors to provide the output of their initialization, model calibration, and information on the post-processing of the raw sensor data, but unfortunately \textit{we received no reply}. Without such additional information, we were unable to perform a meaningful comparison.
+
+\section{Correspondence computation}
+We would like to clearly mention that our correspondence computation has a \emph{substantial} impact on tracking quality. Please note that artifacts caused by wrong correspondences in previous methods can be observed in the comparison to \cite[Fig.18]{schroeder_icra14} \cite[Fig.19]{melax_13} as well as in the video. As stressed in the paper, \cite{ganapathi_eccv12} mentions the necessity to consider visibility information, and how \emph{ray casting} constraints are easy to insert in a \emph{hypothesize-and-test} paradigm (i.e. PSO of \cite{qian_cvpr14}), while much more difficult to take into account for iterative optimization techniques (like ours). It is also important to note that we did experiment with what was proposed in \cite{ganapathi_eccv12}, and that this resulted in strong local minima as discussed in Fig.7. It is also \emph{essential} to note that, upon close inspection, out strategy for finding the ICP correspondences is \textit{very different} from those in \cite{wei_siga12} and \cite{zhang_siga14}. More specifically, the complexity of approximating 3D distance transforms in \cite{zhang_siga14} would be prohibitive for real-time tracking; the solution of \cite{wei_siga12} resolves occlusions with a depth-image optical flow resulting in an energy similar to \cite{ganapathi_eccv12}; Fig.7 clearly illustrates systematic issues arising with such an approach (strong local minima of ICP energies).
+
+% \section{Simultaneous submissions}
+% Recently published papers.
+% \todo{Should we mention very recent works like the \cite{sridhar_cvpr15} and \cite{sharp_chi15} and \cite{sun_cvpr15} papers here?}
+% \SB{I think we can ignore these}
+% \AT{}
+
+%-------- BIBLIO
+\bibliographystyle{eg-alpha}
+\bibliography{htrack}
+\end{document}

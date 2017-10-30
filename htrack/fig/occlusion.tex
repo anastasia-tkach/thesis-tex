@@ -1,0 +1,26 @@
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=5]
+{htrack/fig/occlusion/composite.pdf}
+\put(22,-1){\small(a)}
+\put(53,-1){\small(b)}
+\put(85,-1){\small(c)}
+\put(18,14){$c_1$}
+\put(49,14){$c_1$}
+\put(80,14){$c_1$}
+\put(32,6){$c_2$}
+\put(63,14){$c_2$}
+\put(94,14){$c_2$}
+\putfilename
+\end{overpic}
+\caption{
+% We illustrate the necessity to compute correspondences against
+% 
+Illustration of the impact of self-occlusion in correspondences computations. 
+(a) The finger $c_2$ initially occluded by finger $c_1$ becomes visible, which causes new samples to appear. (b)  Closest correspondences to the portion of the model visible from the camera do not generate any constraints that pull $c_2$ toward its data samples. This is the approach in \protect\cite{wei_siga12}, where these erroneous matches are then simply pruned. (c) Our method also considers front-facing portions of the model that are occluded, allowing the geometry to correctly register.      
+%
+}
+\label{fig:occlusion}
+\end{figure}

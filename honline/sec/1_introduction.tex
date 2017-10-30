@@ -1,0 +1,47 @@
+\section{Introduction}
+% AR/VR
+In our everyday life we interact with the surrounding environment using our hands. A main focus of recent research has been to bring such interaction to virtual objects, such as the one projected in virtual reality devices, % (Oculus Rift, HTC Vive)
+or super-imposed as a hologram in AR/MR headsets\hidden{(Microsoft Hololens, Intel Alloy)}. 
+% \MP{I would not list the devices, no need to provide free advertisement for large companies.}
+% \AT{Andrew in part of the hololens team, and Intel provided plenty of sensors, I'll acknowledge only those?}
+%---pre-viz 
+Performance capture is also essential in film and game production for pre-visualization, where motion can be transferred in real-time to a virtual avatar. This allows directors to plan shots more effectively, reduce turn-around times and hence costs.
+%---requirement: seamless integration
+For these applications, it is desirable for the tracking technology to be robust, accurate, and have a \emph{seamless deployment}, since performance capture can happen at an animator's desk, on a movie set, or even ``in the wild'',  where the user might not be aware of its operative requirements (e.g. advertising or security).
+
+% typical structure of tracking pipeline
+\paragraph{Hand tracking from monocular depth}
+Recent developments in hand motion capture technology have brought us a step closer in achieving effective tracking, where hardware solutions such as data-gloves, reflective markers and multi-camera setups have been shelved due to their invasiveness and cumbersome setup.
+% color vs. depth
+Hence, a single camera has become the standard acquisition device, where depth cameras \hidden{(e.g. Intel RealSense SR300)} have taken a solid lead over color imagery to overcome the many challenges of hand-tracking~\cite{supancic2015depth}. 
+% discriminative + generative
+Modern techniques (e.g. \citeN{taylor2016joint}) often rely on \emph{discriminative} techniques~(e.g. \citeN{valentin2016learning}) to identify a coarse pose, followed by a \emph{generative} stage~(e.g. \citeN{tkach2016sphere}) to refine the alignment and obtain a precise pose estimate.
+
+
+% template + personalization
+\paragraph{Tracking templates and personalization}
+% generic calibration
+Since depth imagery provides incomplete 3D data of the tracked object, generative trackers attempt to register a geometric \emph{template}, also referred to as a \emph{tracking model}, to 3D data so to minimize alignement residuals.
+% \MP{the use of template might be confusing. When we talk about personalization, the term template is probably best used for the generic hand model, while we could coin the term user-specific tracking model or calibrated tracking model or something similar for the model that we actually track with.}
+% \AT{I have modified the text below to include your term, but above I am actually referring to the generic template}
+The more accurately a model fits the observed user, the better tracking accuracy can be achieved~\cite{tkach2016sphere,taylor2016joint}. The process of accurately generating a \emph{user-specific tracking model} from input data is referred to in the literature as \emph{calibration} or \emph{personalization}. 
+% calibration methods -> mostly offline
+Calibrating a template from a set of static poses is a standard component in the workflow of facial performance capture~\cite{weise2011realtime,cao2015facial}, and the work of  \citeN{taylor2014user} pioneered it within the realm of hand tracking. However, current methods such as \cite{taylor2016joint} and \cite{tkach2016sphere} suffer a major drawback: the template must be created during a controlled calibration stage, where the hand is scanned in several static poses~(i.e. \emph{offline}). While appropriate for professional use, a calibration session is a severe drawback for seamless deployment in consumer-level applications.
+% online calibration
+Therefore, inspired by recent efforts in facial performance capture that calibrate templates while tracking~\cite{li_sig13,bouaziz2013online}, in this paper we propose a pipeline for \emph{online} model calibration. 
+% \AT{sure, done}
+% \AN{As far as I know, real-time and online are different parameters of the algorithm, an algorithm can be online but not real time and real-time but not online. So, you should probably say \lq\lq{}and online\rq\rq{} instead of \lq\lq{}i. e. online\rq\rq{}}.
+The approach we present has been tailored to monocular acquisition, where we tackle the significant technical challenges created by missing data due to self-occlusions.
+
+\paragraph{Contributions}
+Our core contribution is a principled way to integrate per-frame information into an online real-time pose/shape tracking algorithm: one that estimates the hand's \emph{pose}, while simultaneously refining its \emph{shape}. That is, as more of the user's hand and articulation is observed during tracking, the more the tracking template is progressively adapted to match the performer, which in turns results in more accurate motion tracking. 
+% Due to extensive self-occlusions and the dynamic nature of hand articulation, only a small subset of degrees of freedom can %be inferred from a single isolated frame. \AN{Dynamic nature of hand articulation? This is not a thing.}
+From a single frame only a subset of the shape degrees of freedom can be estimated, for example, it is difficult to estimate the length of a phalanx when observing a straight finger.
+% \AN{ Due to ambiguity of is hand shape parameters only a subset of degrees of freedom can be inferred from a single isolated frame. (For example individual phalanges length and finger attachment height are hard to tell when fingers are straight) }.
+% \AT{See integrated comments above}
+Our technique automatically estimates the \emph{confidence} in per-frame parameter computations, and leverages this information to build a tracking model that selectively \emph{accumulates} confident parameter estimates over time. Assuming a reasonable performance by the user, our system typically constructs a fully calibrated model within a few seconds, while simultaneously tracking the user in real time.  Perhaps more importantly, however, if the user is ``unreasonable'', holding his/her hand in an ambiguous pose (e.g.~fingers unbent), the system maintains its shape uncertainty until a constraining pose is adopted.
+% \AN{a few seconds, while working as a real-time hand tracking system.}%\TODO{ten seconds}.
+The key technical component of our solution is recent tool from control theory -- the Levenberg-Marquardt Kalman Filter (LMKF) of~\cite{skoglund2015extended}.  Although it is long been known~\cite{bell1993iterated,bellaire1995new} that there are strong links between Levenberg-style algorithms and the Kalman filter, and that Kalman filters are useful to maintain uncertainty in visual tracking and SLAM~\cite{strasdat2012visual}, only recently have the advantages of both views been combined.   This paper shows, in both qualitative and quantitative performance evaluations, that the LMKF enables practically useful online calibration.
+Overall, our solution yields a fully automatic, real-time hand tracking system that is well-suited for consumer applications.
+% \MP{We can also mention here how long it usually takes (assuming a reasonable performance by the user) before the calibration is converged.} \AT{Taken care of}
+% \MP{We should probably mention that our system requires a cooperative user, or at least say that (obviously) we can only recover those shape parameters that are sufficiently exposed during tracking. Asking the user to perform a few simple initial poses (not in a precise way) at the beginning in my view is not a significant drawback} \AT{see github issue#9}

@@ -1,0 +1,17 @@
+\input{fig/handmodel/item}
+\section{Conclusions}
+From an application point of view, our approach significantly improves on the usability of real-time hand tracking, as it requires neither controlled calibration scans nor offline processing prior to tracking. This allows easy deployment in consumer-level applications. From a technical point of view, we introduce a principled approach to online integration of shape information of user-specific hand geometry. By leveraging uncertainty estimates derived from the optimization objective function, we automatically determine how informative each input frame is for improving the estimates of the different unknown model parameters. Our approach is general and can be applied to different types of calibration, e.g., for full body tracking. More broadly, we envisage applications to other difficult types of model estimation problems, where unreliable data needs to be accumulated and integrated into a consistent representation. 
+
+\paragraph{Limitations and future works}
+Currently, our optimization relies on heavy parallelization and high-end GPU hardware -- we use a 4GHz i7 equipped with an NVIDIA GTX 1080Ti. In future work we want to reduce computational overhead to facilitate deployment on mobile devices. Our current hand shape prior relies on low-level geometric properties captured in anisotropic scaling penalties.
+%--- priors
+More sophisticated priors could be derived from a database of hand models, in analogy to the morphable face models commonly used in face calibration.
+%--- feedback
+To obtain a complete personalized tracking model, the user needs to perform a suitable series of hand poses. As discussed above, if a finger is never bent, the estimate of phalanx lengths will be unreliable. Currently, the system provides limited visual feedback to the user to guide the calibration. In the future, we aim to design a feedback system that provides visual indication of the most informative hand poses given the current model estimate.
+%--- generalization
+Other interesting avenues for future work include extending our approach to handle hand-object or hand-hand interactions, adapting the method to other tracking scenarios such as full body tracking, and studying the perceptual relevance of tracking accuracy to further optimize the performance of our approach.
+
+
+
+% POTENTIALLY?
+% future works will be able to generate identical synthetic clones of human hands (metrics~$\approx 0$), and thus enable biometric authentication applications.

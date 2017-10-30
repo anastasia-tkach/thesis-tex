@@ -1,0 +1,11 @@
+\begin{abstract}
+% 
+We present a new algorithm for real-time hand tracking on commodity depth-sensing devices. Our method does not require a user-specific calibration session, but rather learns the geometry as the user performs live in front of the camera, thus enabling seamless virtual interaction at the consumer level.
+% tech description
+The key novelty in our approach is an online optimization algorithm that jointly estimates pose and shape in each frame, and determines the uncertainty in such estimates. This knowledge allows the algorithm to integrate per-frame estimates over time, and build a personalized geometric model of the captured user.
+% kalman -> optimality
+Our approach can easily be integrated in state-of-the-art continuous generative motion tracking software. 
+% \todo{Under certain assumptions it can also be considered optimal, as we derive its relationship to the theory of probabilistic Kalman filters.}
+% evaluation + simplify workflow 
+We provide a detailed evaluation that shows how our approach achieves accurate motion tracking for real-time applications, while significantly simplifying the workflow of accurate hand performance capture.
+\end{abstract}

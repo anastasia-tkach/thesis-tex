@@ -1,0 +1,64 @@
+\begin{algorithm}[b]
+\begin{align*}
+&\text{for} \quad i=1... i_{\text{max}} \\
+& \quad \quad
+\begin{aligned}
+F_n^i &= F(\hat{x}_n^i) \Rightarrow {J_n^i}_{[u, v]} = {\partial F^i_{[u]}}(\hat{x}_n^i)/{\partial x_{[v]}} \\
+K_n^i &= P_n^0 {J^{iT}_n}(J_n^i P_n^0 {J^{iT}_n} + R)^{-1} \\
+\hat{x}_n^{i+1} &= \hat{x}_n^0 + K_n^i(z_n - F_n^i -J_n^i(\hat{x}_n^0 - \hat{x}_n^i)) \\
+\end{aligned} 
+\\
+& \text{end} \\
+& \hat{x}_n = \hat{x}_n^i \\   
+& P_n = (I - K_n^\textit{\color{accent}$i$} J_n^i) P_n^0
+\end{align*}
+\caption{Iterated EKF measurement update equations.}
+\label{tab:iekf}
+\end{algorithm}
+
+\endinput % IGNORES WHAT FOLLOWS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{table}[h] 
+\centering
+\resizebox{0.48\textwidth}{!}{
+\begin{tabular}{|l|l|}
+\hline
+Extended Kalman Filter & Iterated Extended Kalman Filter \\
+\hline
+&
+for $i = 1...$ \\
+  
+$F_n = F(\hat{x}_n^0)$ &
+$\:\:\: F_n^\textit{\color{accent}$i$} = F( \hat{x}_n^\textit{\color{accent}$i$})$ \\
+
+${J_n}_{[u, v]} = \frac{ \partial F_{[u]}}{ \partial x_{[v]}}(\hat{x}_n^0)$ & 
+$\:\:\: {J_n}_{[u, v]}^\textit{\color{accent}$i$} = \frac{ \partial F_{[u]}^\textit{\color{accent}$i$}}{ \partial x_{[v]}}(\hat{x}_n^\textit{\color{accent}$i$})$\\
+
+$K_n = P_n^0 J_n^T(J_n P_n^0 J_n^T + R)^{-1}$ &
+$\:\:\: K_n^\textit{\color{accent}$i$} = P_n^0 {J^\textit{\color{accent}$i$}_n}^T(J_n^\textit{\color{accent}$i$} P_n^0 {J^\textit{\color{accent}$i$}_n}^T + R)^{-1}$ \\
+
+$\hat{x}_n = \hat{x}_n^0 + K_n(z_n - F_n)$ &
+$\:\:\: \hat{x}_n^\textit{\color{accent}$i + 1$} = \hat{x}_n^0 + K_n^\textit{\color{accent}$i$}(z_n - F_n^\textit{\color{accent}$i$} - $\\
+
+ &$\:\:\:\:\:\:\:\:\:\:\:\: - \textit{\color{accent} $J_n^i(\hat{x}_n^0 - \hat{x}_n^i)$})$ \\
+
+ &
+end \\
+ 
+ & $\hat{x}_n = \hat{x}_n^\textit{\color{accent}$i$}$ \\
+ 
+$P_n = (I - K_n J_n)P_n^0$ &
+$P_n = (I - K_n^\textit{\color{accent}$i$} J_n^\textit{\color{accent}$i$})P_n^0$ \\
+
+\hline
+\end{tabular}
+}
+\caption{EKF vs. IEKF measurement update equations \label{tab:ekf-iekf}}
+\end{table}

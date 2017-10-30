@@ -1,0 +1,17 @@
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=5]
+{htrack/fig/pca/composite.pdf}
+\put(30,-2.5){\tiny{depth image}}
+\put(55,-2.5){\tiny{without PCA}}
+\put(81,-2.5){\tiny{with PCA}}
+\putfilename
+\end{overpic}
+\caption{
+% 
+Our pose-space regularization using a PCA prior ensures that a meaningful pose is recovered even when significant holes occur in the input data.
+}
+\label{fig:pca}
+\end{figure}

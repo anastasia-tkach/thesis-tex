@@ -1,0 +1,54 @@
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=10]
+{\currfiledir/item.pdf}
+\myfigurename{}
+% 
+\put(18.5,41){\scriptsize $\beta_{[1]}$}
+\put(56,47){\scriptsize $\beta_{[2]}$}
+\put(94,50){\scriptsize $\beta_{[3]}$}
+% 
+\put(75,46){\scriptsize $\theta_{[2]}$}
+\put(37.5,41){\scriptsize $\theta_{[1]}$}
+% 
+\put(3.5,40){\scriptsize \vertical{input data}}
+\put(0,43){\scriptsize \vertical{$d_n$}}
+%
+\put(3.5,23){\scriptsize \vertical{per-frame}}
+\put(0,22){\scriptsize \vertical{$\mathcal{N}(\star{x}_n, \star{\Sigma}_n)$}}
+% 
+\put(3.5,4){\scriptsize \vertical{cumulative}}
+\put(0,3){\scriptsize \vertical{$\mathcal{N}(\hat{x}_n, \hat{\Sigma}_n)$}}
+% 
+\put(12.0,-2){\scriptsize $n=1$}
+\put(30.5,-2){\scriptsize $n=2$}
+\put(49.5,-2){\scriptsize $n=3$}
+\put(68.5,-2){\scriptsize $n=4$}
+\put(87.0,-2){\scriptsize $n=5$}
+% 
+\put(12,06){\scriptsize \color[RGB]{144,144,144} $\bar\beta$}
+\put(12,25){\scriptsize \color[RGB]{144,144,144} $\bar\beta$}
+% frame 1
+\put(16,31){\scriptsize \color[RGB]{51,109,98} $\star\beta_1$}
+\put(16,12){\scriptsize \color[RGB]{158,45,92} $\hat\beta_1$}
+\put(19,02){\scriptsize \color[RGB]{220,137,139} $\hat{\Sigma}_1$}
+\put(18.5,21){\scriptsize \color[RGB]{155,207,183} $\star{\Sigma}_1$}
+% frame 5
+\put(90,31){\scriptsize \color[RGB]{51,109,98} $\star\beta_5$}
+\put(88,11){\scriptsize \color[RGB]{158,45,92} $\hat\beta_5$}
+\put(91,07){\scriptsize \color[RGB]{220,137,139} $\hat{\Sigma}_5$}
+\put(92,21){\scriptsize \color[RGB]{155,207,183} $\star{\Sigma}_5$}
+% 
+\end{overpic}
+\caption{
+% 
+\textbf{(Cumulative regression)} We visualize several temporally sorted frames of input data $d_n$, the uncertainty ellipsoid $\star{\Sigma}_n$ estimated by per-frame regression, and the \emph{online} uncertainty estimate $\hat{\Sigma}_n$. For illustration purposes, we only display the two-dimensional ellipsoids representing the covariance of $\beta_{[1]}$ and $\beta_{[2]}$. Although $\star{\Sigma}_1=\star{\Sigma}_5$, observe how $\hat{\Sigma}_1 \succ \hat{\Sigma}_5$: in the last frame we have a confident estimate as the information from frames {\scriptsize $2:4$} has been integrated.
+%
+{Further, notice how even though the parameter $\beta_{[2]}$ was not observed directly in any of the presented frames, its value was inferred from the highly-certain measurements~$(\beta_{[1]})_{n=2}$~and~$(\beta_{[1]}+\beta_{[2]})_{n=4}$.} 
+%; see also \Figure{merging}.
+%  
+}
+\label{fig:inter}
+\end{figure}

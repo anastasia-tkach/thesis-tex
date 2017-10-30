@@ -1,0 +1,27 @@
+\begin{figure}[b]
+%\flushright
+\begin{overpic} 
+[width=.98\linewidth]
+%[width=.98\linewidth,grid,tics=5]
+{htrack/fig/pcaconv/composite_new.pdf}
+\put(-1,38){\rotatebox{90}{\tiny{with pose prior}}}
+\put(-1,65){\rotatebox{90}{\tiny{w/o pose prior}}}
+
+\put(3.5,4){{\tiny{0}}}
+\put(17.6,4){{\tiny{3}}}
+\put(31.1,4){{\tiny{6}}}
+\put(39.2,4){{\tiny{10}}}
+
+\put(57.4,4){{\tiny{0}}}
+\put(71,4){{\tiny{1}}}
+\put(84.8,4){{\tiny{2}}}
+\put(93.3,4){{\tiny{3}}}
+
+\put(16,0){{\tiny{w/o data term}}}
+\put(69,0){{\tiny{with data term}}}
+\putfilename
+\end{overpic}
+\caption{Beyond favoring natural poses, the data prior term also positively affects convergence speed. Top: With the same number of iterations, only with activated data term does the model fully register to the scan. The illustration below shows how the same final state requires significantly fewer iterations with the data term.
+}
+\label{fig:pcaconv}
+\end{figure}

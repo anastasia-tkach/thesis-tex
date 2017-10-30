@@ -1,0 +1,29 @@
+%!TEX root = ../paper.tex
+\section{Related Works}
+Due to the vast amount of work in the area of body, face and hand tracking we respectively refer the reader to the recent works of \citeN{bogo2015detailed}, \citeN{cao2016real} and \citeN{taylor2016joint} for a complete overview. In this section we focus our attention on generative hand tracking and model calibration. Model personalization is a core ingredient in generative motion tracking \cite{pons2011model}.  Due to the large number of hand self-occlusions, the low signal-to-noise ratio in current depth sensors, a globally unconstrained pose, and the similar appearance of fingers make the personalization of a hand model a harder problem than face or body model calibration; see~\cite{supancic2015depth}.
+% hands are highly articulated, their global pose is unconstrained, and fingers do not only have the same appearance, but they also cause frequent occlusions and self-occlusions
+% \MP{For the related work, we might briefly discuss why hand calibration is significantly different (and harder) than face calibration, to avoid the impression that one could just use the same methods}
+
+\paragraph{Off-line model calibration}
+\citeN{albrecht2003construction} pioneered the construction of realistic (skin, bone and muscles) personalized models. They proposed a pipeline for the registration of a 3D mesh model to RGB data manually pre-processed by the user. Reducing the amount of manual interaction required from the user, \citeN{rhee2006human} showed how skin creases and silhouette images can also be used to guide the registration of a model to color imagery. \citeN{taylor2014user} introduced a more automatic pipeline, generating personalized hand models from input depth sequences where the user rotates his hand while articulating fingers. More closely related to ours is the work by \citeN{tan2016fits}. They show how to robustly personalize a hand model to an individual user from a set of depth measurements using a trained shape basis such the one proposed by~\citeN{khamis2015learning}. The calibration pipeline, although robust and efficient, is not fully automated as the user needs to \emph{manually} pick the set of frames over which the calibration optimization is performed. 
+In facial calibration, \citeN{weise2011realtime} asked users to assume a set of standard facial expressions to match standard poses in the Facial Action Coding System (FACS) of \citeN{facs}.
+Inspired by these approaches, \citeN{taylor2016joint} recently proposed an analogous offline hand calibration session, but which is the set of \emph{optimal} hand poses that allow to properly capture the hand's geometry has yet to be addressed by researchers. Hence, none of the above methods is suitable or easily adaptable to the kind of consumer-level applications that we target.
+% \MP{remove this}
+% \todo{being the absence of complex manual calibration or extensive pre-processing mandatory requirements for our framework.} \AT{see github}
+
+\paragraph{On-line model calibration}
+In \cite{delagorce2011model}, the authors introduced a (non real-time) model-based approach for hand tracking from a monocular RGB video sequence. Hand pose, texture and lighting are dynamically estimated, while shape is determined by optimizing over the first frame only.
+Recently \citeN{makris2015model} proposed a model-based approach to jointly solve the pose tracking and shape estimation problem from depth measurements in an online framework. They solve for the cylindrical geometry of a hand through render-and-compare evaluations over a set of frames with particle swarm optimization (PSO). Their pipeline runs in real-time (30fps), but lacks the degree of robustness and accuracy desirable for consumer level applications, and does not address uncertainty.
+More sophisticated approaches to information agglomeration such as the ones for face tracking/modeling by \citeN{bouaziz2013online} and \citeN{li_sig13}, where shape estimation is performed over the whole set of frames, allow to obtain more accurate results, while guaranteeing real-time performances.
+% Interestingly  designed a pipeline for SLAM in dynamic environments employing a time aggregation technique similar to ours. Map 3D point positions are maintained together with their associate uncertainty through a co-variance matrix, and are refined whenever a new observation is available.
+The work of \citeN{zou2013coslam}, although in a different applicative domain, is also related to ours, as they solve for SLAM by considering uncertainties when aggregating information through time.
+% \AN{In my original draft I have a paragraph of explaining why online is better than batch from several points of view. Can we add it back?}
+% \AT{yes, I picked up what you wrote and integrated it here, very good points, I also added the one about hot-swap, and notice the word "potential"}
+Online algorithms offer other key advantages compared to offline methods: (1)~the ability to offer immediate \emph{feedback} to the user on the quality of the result~\cite{kinfu}, (2)~the potential to dynamically adapt to transparently \emph{hot-swap} users~\cite{bouaziz2013online}, and (3)~reduced storage and computational resources, as information is integrated frame-by-frame, in a \emph{streaming} fashion.
+
+% Moved \overview to section 3.
+
+% \MP{We should probably add a short overview paragraph. It's a bit of a jump from related work here.} \todo{Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.}
+
+% \paragraph{Appearance-based model calibration}
+% We might have to add this if needed

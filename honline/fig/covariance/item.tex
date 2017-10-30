@@ -1,0 +1,29 @@
+\begin{SCfigure}[][b]
+\centering
+\begin{overpic} 
+[width=.5\linewidth]
+% [width=\linewidth,grid,tics=10]
+{\currfiledir/item.pdf}
+\myfigurename{}
+% \put(0,8){\scriptsize $\beta_2$}
+% \put(0,3){\scriptsize $\beta_1$}
+% 
+\put(93,6){\scriptsize $\theta_{[1]}$}
+\put(4,95){\scriptsize $\theta_{[2]}$}
+\put(90,-2){\scriptsize $\pi$}
+\put(-3,91){\scriptsize $\pi$}
+% 
+% \put(89,3){\scriptsize $\theta_1$}
+% \put(5,89){\scriptsize $\theta_2$}
+\end{overpic}
+% \vspace{-.05in}
+\caption{
+% 
+A visualization of the covariance estimate for phalanx lengths $\{\beta_{[1]}, \beta_{[2]}\}$ as we vary phalanx bend angles $\{\theta_{[1]},\theta_{[2]}\}$.
+% 
+A confident measurement of $\beta_{[1]}$ is only available when  $\theta_{[1]}$ is bent, while a confident measurement of $\beta_{[1]} + \beta_{[2]}$ is available when $\theta_{[2]}$ is bent.
+The covariance ellipsoids are centered at the corresponding $\{\theta_{[1]}, \theta_{[2]}\}$ location.
+% \AN{could you please return the drawings? I think, they are very helpful.}
+}
+\label{fig:covariance}
+\end{SCfigure}

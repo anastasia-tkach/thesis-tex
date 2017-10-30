@@ -1,0 +1,96 @@
+
+\usepackage{overpic}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{algpseudocode}
+\usepackage{algorithm,algorithmicx}
+\usepackage{xcolor}
+
+%% 
+%% Better text layout (ONLY ENABLE IN FINAL!!)
+%%
+\usepackage{microtype}
+
+% \usepackage{cite}
+
+
+%% 
+%% Insert symbols on figures
+%%
+\usepackage{overpic}
+\usepackage{currfile} % \currfiledir
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{caption} % \caption*
+
+%% 
+%% More compact paragraphs
+%%
+% \usepackage{stringstrings} %< TitleCase
+\renewcommand{\paragraph}[1]{\textbf{#1.}}
+
+%% 
+%% Bibliography
+%% 
+% \usepackage[backend=biber,sorting=ydnt,style=alphabetic,citestyle=alphabetic,maxbibnames=99]{biblatex}
+
+%%
+%% Rotated text
+%%
+\usepackage{rotating}
+\newcommand{\rotninety}[1]{\begin{turn}{90} #1 \end{turn}}
+
+%%
+%% text layout
+%%
+% Insert whitespace at the end of a paragraph
+\setlength{\parskip}{.5\baselineskip}%
+% Don't intent by default on new paragraph
+\setlength{\parindent}{0pt}%
+
+%%
+%% PDF comments
+%%
+\usepackage{pdfcomment}
+\providecommand{\AnastasiaComment}[1]{\pdfcomment[color=red,icon=Note]{#1}}
+
+%%
+%% margin comments
+%%
+% \usepackage[colorinlistoftodos]{todonotes}
+
+%% 
+%% To define colors
+%% 
+\usepackage{color}
+\definecolor{lightgray}{rgb}{0.64, 0.64, 0.64}
+\definecolor{mygray}{gray}{0.6}
+\definecolor{darkgreen}{rgb}{0.2, 0.35, 0.385}
+\definecolor{lightgreen}{rgb}{0.2, 0.85, 0.385}
+ 
+%% 
+%% Portions that {need major work, comments}
+%% 
+\newenvironment{draft}{\color{red}}{\color{black}}
+\newcommand{\INSTRUCTIONS}[1]{{\textcolor{blue}{[INSTRUCTIONS] #1}}}
+\newcommand{\OK}{{\textcolor{green}{OK!}}}
+\newcommand{\todo}[1]{{\textcolor{red}{#1}}}
+\renewcommand{\todo}[1]{{#1}} % DISABLES TODO
+\newcommand{\accepted}[1]{{\textcolor{green}{#1}}}
+\newcommand{\TODO}[1]{{\textcolor{red}{[TODO: #1]}}}
+\newcommand{\ignore}[1]{}
+\newenvironment{DRAFT}{\color{red}}{\ignorespacesafterend}
+\newcommand{\ATFINISH}{\todo{{----------- ANDREA - FINISHED EDITING HERE -----------}}}
+
+
+%% 
+%% Inlined comments
+%% 
+\newcommand{\Anastasia}[1]{{\textcolor{PineGreen}{[ANA: #1]}}}
+

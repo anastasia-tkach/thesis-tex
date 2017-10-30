@@ -1,0 +1,46 @@
+% !TEX root = ../hmodel.tex
+\input{fig/barchart/item.tex}
+
+\section{Discussion}
+\label{sec:discussion}
+
+% \paragraph{Calibration}
+% \Anastasia{The calibration is still not perfect, there is several components to it, centers position, initial transformations, joint limits and PCA (initial transformations, joint limits and PCA seem to be similar for all humans, but in a perfect world we could try to optimize for all of them).}
+% \Anastasia{Maybe, this goes too far, but we might say that our model calibration has so little degrees of freedom compared to a triangles mesh, that it does not depend on a prior as heavily as triangular mesh-based systems. Those systems cannot work without a prior - too many degrees of freedom. And a prior means acquiring a database of hands. Not any research team can accomplish that.}
+% \AT{Perhaps, we should compare volumetric v.s. surface representations here? How triangle meshes need substantial regularization, the specification of control skeleton, skinning, collision elements, etc... while our models achieve very good visual fidelity by just positions and radii. Mark, if you can see a nice way of saying this, I'd really appreciate it.}
+
+Our analysis demonstrates how \todo{sphere-meshes tracking templates} are particularly well suited for real-time hand-tracking. Our calibration and tracking algorithms are simple to implement, efficient to optimize for, and allow for the geometry to be represented with high fidelity. 
+While the calibration algorithm is currently implemented in Matlab, we are confident real-time performance can be achieved with a simple C++ port of our code. 
+% 
+The \todo{recently proposed system} of Taylor and colleagues~\cite{taylor2016concerto}, has also demonstrated excellent tracking quality. Their formulation employs a triangular mesh model and optimizes it in a semi-continuous fashion. However, as their model is articulated through linear blend skinning, \todo{joint collapse artifacts can occur}. Conversely, our model is volumetric and naturally overcomes this shortcoming; see \VideoNoJointCollapse{}.
+% 
+Although it is difficult to predict whether surface or volumetric models will eventually prevail, we believe the simplicity of our representation will lead to extremely performant articulated tracking algorithms.
+
+\paragraph{Generative tracker}
+% \Anastasia{We can stress again that we do not have re-initialization not because it is somehow fundamentally impossible in our method, but because we want to demonstrate how good our tracking is. It basically only brakes in limitation cases (fast motion, other objects, rotating thumb, out of sensor range.) For that we could totally add some powerful re-initialization to make the system even more robust.} \Anastasia{Also, I think we could mention that our system can be optimized to 120 FPS maybe? The tracking quality degrades with speed of motion, that is with number of frames per some ``quantity of motion''. With faster frame rate the system will definitely get better.} \AT{not fully true, faster frame-rate means more noise!}
+\todo{In this paper we demonstrated a generative algorithm that yields} unprecedented levels of robustness to tracking failure.
+We would like to stress that our real-time tracking algorithm is (almost) \emph{purely} generative: \todo{a discriminative technique~\cite{qian2014realtime} is only employed in the first frame for tracking initialization.}
+We believe our robustness is due to the quality of the calibrated model, and to the ability to optimize at a constant 60Hz rate.
+% 
+Discriminative algorithms could still be necessary to compensate for situations where the hand re-appears from complete occlusions, but their role in real-time tracking will diminish as RGBD sensors will start \todo{offering imaging at frequencies above $60Hz$}.
+% 
+\todo{To highlight our high frame-rate dependancy, in \VideoLimFramerate{} we analyze the performance on the tracker with varying frame-rates (60Hz, 30Hz, 15Hz and 7.5Hz) while the additional material reports the corresponding tracking metrics.}
+% 
+\todo{In \VideoLimOcclusions{} we further investigate tracking failures that include long phases of total occlusion; note how in these scenarios the mean-pose (Probabilistic PCA) regularizer described in \cite[Eq.6]{tagliasacchi2015robust} helps tracking recovery.}
+% REMOVED DURING REVISIONS
+% Currently the only sequences that incur in loss-of-tracking are the ones reported in our limitations \VideoLimitations{}.
+
+
+\paragraph{Downsampling}
+% \Anastasia{Also, I think it is important to mention that in all the sequences the depth data is downsampled 4 times. Otherwise, the reviewers might say that our tracking looks better because the hand is very close to the sensor. It is close than that it can be seen better}
+Although the \realsense{} sensor is a short range camera, in this work we have downsampled the depth image to QVGA format with a median filter, giving an average of 2500 pixels/frame; this is approximatively the number of samples found on a hand in long-range cameras. The recent work of \cite{taylor2016concerto} reports a total of 192 pixels/frame, therefore enabling CPU optimization without significant loss of tracking precision. Inspired by this work, we have experimented with further downsampling and reached analogous conclusions. However, the computational bottleneck of the \emph{htrack} system lies in the overhead caused by render/compute context switching. While this is currently an issue, 
+\todo{it is possible to optimize the \emph{m2d} energies without  rasterizing the model at each iteration. Instead, similarly to \cite{qian2014realtime}, we could compute screen-space coordinates of sphere centers, and then construct our \emph{m2d} registration energies on this subset.}
+
+\newpage
+\paragraph{Reproducibility}
+% 
+The weights of energy terms used in tracking and calibration optimizations have been identified by manually tweaking the runtime until our tracker reached the desired performance level. 
+The parameters of our system are $\tau_{d2m}=1$, $\tau_{m2d}=.5$, $\tau_{rigid}=.3$, $\tau_{valid}=1e2$, $\tau_{pose}=1e4$, $\tau_{limits}=1e7$ and $\tau_{collision}=1e3$. We use 7 iterations for the tracking LM optimization, while $lsqnonlin$ automatically terminates in 5-15 iterations. 
+\todo{Source code and datasets are available at: \emph{\url{http://github.com/OpenGP/hmodel}}.}
+
+% Further, to ensure complete reproducibility of our work, we release our source code with parameters, datasets, as well as the specification of the energy gradients required for optimization~\footnote{\url{http://github.com/OpenGP/hmodel}}.

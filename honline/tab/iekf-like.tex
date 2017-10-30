@@ -1,0 +1,71 @@
+\begin{algorithm}
+\begin{equation*}
+\begin{aligned}
+\hat{x}_n &= \argmax_{x_n} \:
+\underbrace{\log \left( P(d_n|x_n) \: P(x_n |\hat{x}_{n - 1}) \right)}_{L(x_n)}   
+\\
+\end{aligned}
+\end{equation*}
+
+\begin{equation*}
+\begin{aligned}
+P(d_n|x_n) &= \exp \left( -\tfrac{1}{2} (d_n - F(x_n))^T (d_n - F(x_n)) \right)
+\\
+P(x_n |\hat{x}_{n - 1}) &= \exp \left( -\tfrac{1}{2}(x_n - \hat{x}_{n - 1})^T \hat{\Sigma}_{n - 1}^{-1} (x_n - \hat{x}_{n - 1})\right)
+\\
+\hat{\Sigma}_n^{-1} = 
+\left.\tfrac{\partial^2 L}{\partial x_n^2}\right|_{\hat{x}_n} &\approx 
+\left[
+	\begin{array}{cc}
+		- \tfrac{\partial F(\hat{x}_n)} {\partial x_n} \\
+		\sqrt{\hat{\Sigma}_{n - 1}^{-1}} \\
+	\end{array}
+\right]^T 
+\left[
+	\begin{array}{c}
+		-\tfrac{\partial F(\hat{x}_n)} {\partial x_n} \\
+		\sqrt{\hat{\Sigma}_{n - 1}^{-1}} \\
+	\end{array}
+\right] 
+= \Sigma_{n}^{-1} + \hat{\Sigma}_{n-1}^{-1}
+\end{aligned}
+\end{equation*}
+\caption{\emph{Joint} cumulative regression -- Iterated Extended KF (IEKF)}
+\label{alg:interframeplus}
+\label{alg:iekf-like}
+\label{tab:iekf-like}
+\end{algorithm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{table}[t]
+% \centering
+% \resizebox{0.48\textwidth}{!}{
+% \begin{tabular}{|c|}
+% \hline
+% $\hat{x}_n = \operatorname{argmax}_{x_n}
+% \underbrace{\log \left( P(d_n|x_n) P(x_n |\hat{x}_{n - 1}) \right)}_{L(x_n)}$\\
+% with \\
+% $P(d_n|x_n) = \exp \left( \tfrac{1}{2} - (d_n - F(x_n))^T (d_n - F(x_n)) \right)$ \\
+% $P(x_n |\hat{x}_{n - 1}) = \exp \left( \tfrac{1}{2} -(x_n - \hat{x}_{n - 1})^T \hat{\Sigma}_{n - 1}^{-1} (x_n - \hat{x}_{n - 1})\right)$ \\
+% \\
+% $\hat{\Sigma}_n^{-1} =  \left. \tfrac{\partial \partial L(x_n)}{\partial x_n \partial x_n}\right|_{\hat{x}_n} \approx $ \\
+% \\
+% $\left[
+%     \begin{array}{cc}
+%         - \left. \tfrac{\partial F(x_n)} {\partial x_n} \right|_{\hat{x}_n} \\
+%         \left(\hat{\Sigma}_{n - 1}^{-1}\right)^{1/2} \\
+%     \end{array}
+% \right]^T
+% \left[
+%     \begin{array}{c}
+%         -\left. \tfrac{\partial F(x_n)} {\partial x_n} \right|_{\hat{x}_n} \\
+%         \left(\hat{\Sigma}_{n - 1}^{-1}\right)^{1/2} \\
+%     \end{array}
+% \right] = $\\
+% \\
+% $ = \hat{\Sigma}_{n-1}^{-1} + \left. \tfrac{\partial F(x_n)} {\partial x_n} \right|_{\hat{x}_n}^T
+% \left. \tfrac{\partial F(x_n)} {\partial x_n} \right|_{\hat{x}_n} = \hat{\Sigma}_{n-1}^{-1}  + \Sigma_{n}^{-1}$    \\
+% \hline
+% \end{tabular}
+% }
+% \end{table}

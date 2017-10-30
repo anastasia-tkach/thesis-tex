@@ -1,0 +1,36 @@
+\providecommand{\off}{6}
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,height=3in,grid,tics=10]
+{\currfiledir/item.pdf}
+\myfigurename{}
+\put(97,1.5){\small $\varepsilon$}
+% \put(96,45){\small $\varepsilon$}
+\put(0,38){\scriptsize \vertical{$\% (max)$}}
+\put(0,83){\scriptsize \vertical{$\% (avg)$}}
+% ALGORITHMS LEGEND
+% \put(\off,43){\scriptsize \color[RGB]{77,77,77}      Scaled Template (anisotropic)}
+\put(\off,43){\scriptsize \color[RGB]{197,151,53}    \OfflineHard{} -- \Eq{offlinehard}}
+\put(\off,40){\scriptsize \color[RGB]{160,215,190}   \OfflineSoft{} -- \Eq{offlinesoft}}
+\put(\off,37){\scriptsize \color[RGB]{61,131,119}    Per-frame -- \Eq{energies}}
+\put(\off,34){\scriptsize \color[RGB]{217,144,143}   Split cumulative (KF) -- \Tab{kf-like}}
+\put(\off,31){\scriptsize \color[RGB]{178,68,117}    Joint cumulative (IEKF) -- \Tab{iekf-like}}
+\put(\off,28){\scriptsize \color[RGB]{150,29,29}     \cite{taylor2016joint}}
+\put(\off,25){\scriptsize \color[RGB]{30,150,30}     \cite{tompson2014real}}
+\put(\off,22){\scriptsize \color[RGB]{150,149,30}    \cite{htrack}}
+\put(\off,19){\scriptsize \color[RGB]{29,30,150}     \cite{sridhar2015fast}}
+\put(\off,16){\scriptsize \color[RGB]{150,30,150}    \cite{oberweger2015hands}}
+\put(\off,13){\scriptsize \color[RGB]{29,150,150}     \cite{tang2015opening}}
+\put(\off,10){\scriptsize \color[RGB]{150,150,150}    \cite{tan2016fits}} 
+\end{overpic}
+% \vspace{-.3in}
+\caption{
+% 
+Evaluation on the NYU dataset from \protect\cite{tompson2014real} reporting the percentage of frames with average (top) and max (bottom) ground-truth marker-error  less than $\varepsilon$.
+% The tracking sequences corresponding to these plots can be observed in our \VideoNYU{}.
+% 
+}
+\label{fig:evalnyu}
+\end{figure}

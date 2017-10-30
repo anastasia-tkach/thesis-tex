@@ -1,0 +1,24 @@
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=10]
+{\currfiledir/item.pdf}
+\myfigurename{}
+\put(19,-2){\small Pose DOFs $\theta_{[i]}$}
+\put(69,-2){\small Shape DOFs $\beta_{[i]}$}
+\end{overpic}
+\caption{
+% 
+The degrees of freedom of our optimization, where use a cartesian right-handed coordinate frame for translational DOFs. 
+For pose parameters, global translation is represented by ${\theta_i | | i \in [0,1,2]}$ and rotation by ${\theta_i | | i \in [3,4,5]}$. We then color code DOFs according to whether they represent {\color[RGB]{53,120,109} flexion}, {\color[RGB]{212,144,133} twist}, and {\color[RGB]{172,72,100} abduction}. 
+For shape parameters, we color code DOFs for
+{\color[RGB]{172,72,100} lengths}, 
+{\color[RGB]{212,144,133} radii}, 
+{\color[RGB]{53,120,109} 3DOFs vertices (x,y,z)}, 
+{\color[RGB]{129,190,163} 2DOFs vertices (x,y)}, and 
+{\color[RGB]{120,120,120} passive DOFs (linearly dependent).}
+% 
+}
+\label{fig:handmodel}
+\end{figure}

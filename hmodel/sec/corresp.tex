@@ -1,0 +1,65 @@
+\subsection{Correspondences}
+\label{sec:corresp}
+% \paragraph{Surface Correspondences: $\proj_\surface(\point)$}
+Our correspondence search leverages the structure of \Eq{convsurf}, by decomposing the surface into several elementary elements $\element$, where $e$ indexes the 30 elements of our template; see \VideoElements{}. As illustrated in \Figure{corresp}, elements are classified into 
+\emph{pill} and \emph{wedge} implicit primitives, with an associated implicit functions $\implicit_e$.
+Given a point $\point$ in space, the implicit function of the whole surface can be written by evaluating the expression:
+\begin{equation}
+\implicit_\surface(\point) = \argmin_{e=1 \dots E} \implicit_e(\point)
+\label{eq:piecewise}
+\end{equation}
+%
+Given a query point $\point$, we can first compute the closest-points $\footpoint_e = \proj_{\element}(\point)$ to each element independently; within this set, the closest-point projection to the full model $\footpoint = \proj_\surface(\point)$ is the one with the smallest associated implicit function value $\implicit_e(\point)$. In a tracking session with an average of 2500 points/frame the computation of closest-point correspondences takes 250 $\mu s$/iteration. 
+%
+We now describe in detail how the projection is evaluated on each element in closed form. 
+\input{fig/visibility/item.tex}
+
+\paragraph{Pill correspondences: $\footpoint=\proj_\text{pill}(\point)$}
+A pill is defined by two spheres $\ball_1(\ballcenter_1,r_1)$ and $\ball_2(\ballcenter_2,r_2)$. By construction the closest point correspondence lies on the plane passing through the triplet $\{ \ballcenter_1, \ballcenter_2, \point \}$, thus allowing us to solve the problem in 2D; see \Figure{corresp}-(left). 
+% 
+We compute the intersection point $\skewproj$ of the ray $\mathbf{r}(t) = \point + t\mathbf{n}$ with the segment $\segment$ and parametrize its location in barycentric coordinates as $\skewproj = \alpha\ballcenter_1 + (1-\alpha)\ballcenter_2$. If $\alpha \in [0,1]$, our closest point correspondence is given by $\footpoint=\proj_\mathcal{L}(\point)$, that is, the intersection of $\segment$ and $\mathbf{r}(t)$.  If $\alpha<0$ or $\alpha>1$, then the closest point will be $\footpoint=\proj_{\ball_1}(\point)$ or $\footpoint=\proj_{\ball_2}(\point)$, respectively. 
+
+\paragraph{Wedge correspondences: $\footpoint=\proj_\text{wedge}(\point)$}
+A wedge is defined by three spheres $\ball_i = \{\ballcenter_i, r_i\}$.  \Figure{convsurf} illustrates how a wedge element can be decomposed in three parts: \emph{spherical}, \emph{conical}, and \emph{planar} elements, associated with vertices, edges, and faces of the sphere-mesh skeleton. For the planar element $\mathcal{P}(\mathbf{t}_1,\mathbf{n})$ with normal $\mathbf{n}$ and tangent $\mathbf{t}_1$ to $\ball_1$
+%
+we compute the skewed projection $\skewproj$ by finding the intersection of the ray $\mathbf{r}(t) = \point + t\mathbf{n}$ with the triangle $\mathcal{T}$ formed by $\ballcenter_1$, $\ballcenter_2$, $\ballcenter_3$. 
+% 
+According to the position of $\skewproj$ we have two possible solutions:
+If $\skewproj$ lies inside the triangle $\mathcal{T}$, then our footpoint is $\footpoint = \proj_\mathcal{P}(\point)$. Otherwise, we use the barycentric coordinates of $\skewproj$ in $\mathcal{T}$ to identify the closest pill element and compute $\footpoint=\proj_\text{pill}(\point)$.
+
+\paragraph{Monocular Correspondences}
+In monocular acquisition (i.e.\ single sensor), an oracle registration algorithm aligns the portion of the model that is \emph{visible} from the sensor viewpoint to the available data. Hence, when computing ICP's closest-point correspondences, only the portion of the model currently visible by the camera should be considered~\cite{tagliasacchi2015robust}. Given the camera direction $\camdir$, we can test whether the retrieved footpoint $\footpoint$ is back-facing by testing the sign of $\camdir \cdot \mathcal{N}_\surface(\footpoint)$, where the second term is the object's normal at $\footpoint$. As illustrated in 2D in \Figure{visibility}, whenever this test fails, there are additional candidates for closest point that must be checked: (1)~the closest-point on the silhouette of the model (e.g. $\point_{2,3,6,7}$), and (2)~the front facing planar portions of elements (e.g. $\point_{5}$). These additional correspondences for the query point are computed, and the one closest to $\point$ becomes our front-facing footpoint $\footpoint$. The additional computational cost caused by front-facing correspondences with an average of 2500 points/frame is 100 $\mu s$/iteration.
+
+\paragraph{Silhouette computation}
+The \emph{object-space silhouette} $\partial \surface$ is a (3D) curve separating front-facing from back-facing portions of a shape~\cite[Sec.1]{olson2006eg}. 
+To simplify the silhouette computation we approximate the perspective camera of the sensor with an orthographic one. 
+We then offset all elements on the 2D camera plane, and perform a cross-section with this plane: spheres are replaced with circles and planes/cylinders with segments; see~\Figure{silhouette}-(left). 
+We then compute an \emph{arrangement}, splitting curves whenever intersection or tangency occurs; see~\Figure{silhouette}-(center). 
+We traverse this graph, starting from a point that is guaranteed to be on the outline (e.g.\ a point on the bounding box). 
+The traversal selects the next element as the one whose tangent forms the smallest counter-clockwise angle thus identifying the silhouette. Once the 2D silhouette has been computed, it can be re-projected to 3D; see \Figure{silhouette}-(right). 
+Note the process described above would compute the \emph{image-space silhouette} of our model. 
+Therefore, we apply the process to palm and fingers separately, and merge them in a second phase. 
+The merge process simply checks whether vertices $v \in \partial \surface$ are contained within the model, which means it discards those where $\implicit_\surface(v)<0$. 
+In our experiments the average computation of the silhouette on the CPU takes 150 $\mu$s/iteration.
+
+\input{fig/silhouette/item.tex}
+
+\subsection{Rendering}
+\label{sec:rendering}
+Rendering the \todo{sphere-meshes} in real time is not only employed for visual verification of tracking performance; e.g. \Figure{coarsemodel}. The real-time tracking algorithm reviewed above performs a 2D registration in the image plane that requires the computation of an (image-space) silhouette. There are two alternatives for rendering a sphere-mesh model like the one shown in \Figure{topology}. One possibility is to explicitly extract the surface of individual elements by computing the convex hull of pairs or triplets of spheres; see \Figure{convsurf}.
+% \todo{and \cite{ando2013liquid}}.
+While this process would be suitable in applications where the model is fixed, it is hardly appropriate in our scenario where we want to calibrate the model to the user. Therefore, similarly to~\cite{thiery2016spheremesh}, we ray-trace the model on the GPU. We render a unit fullscreen quad and in the fragment shader use the camera intrinsics to compute the camera ray $\mathbf{r}(\mathbf{x})$ associated with each pixel $\mathbf{x}$. Each ray is intersected with each element of our model, and the closest intersection point is retained. Tests are performed with the planar, conical, and spherical primitives that compose each element. 
+% 
+% Surface normals at the intersection point are also computed for shading purposes.
+% 
+Rendering at a resolution of $320 \times 240$ pixels provides the best trade-off between accuracy and performance, leading to a total rendering time of $\approx 3$ms for visualization and $\approx 500 \mu$s/iteration for the evaluation of $E_{m2d}$.
+
+\endinput
+
+%Ray tracing our surface on a framebuffer of size $1280 \times 960$ would consume in average \todo{$\approx 4$ ms/iteration}. However, our optimization requires in the order of 10 iterations to converge, thus upper-bounding the performance of the tracker to 25 \FPS{}. We overcome this issue by rendering the model to a smaller $320 \times 240$ framebuffer texture (the same resolution of textures fetched from the sensor) and up-sampling it with linearly interpolation whenever necessary. This process allows us to reduce the rendering time to~\todo{$\approx.6$~ms/iteration}.
+
+% It is required to render the model for silhouette energy and for visualization purposes. The full rendering process is done in fragment shader, the vertex shader only provides a quad.
+% In fragment shader, given the fragment coordinates gl\_FragCoord, we compute the camera ray corresponding to the current pixel, but de-applying the transformations done by the rasterizer to the points $\{$gl\_FragCoord.x, gl\_FragCoord.y, 0$\}$ and $\{$gl\_FragCoord.x, gl\_FragCoord.y, 1$\}$ that correspond to the points on the near and far camera plane in the world coordinates.
+% Once we have the ray, we intersect it with each block of the model. The intersection points of a ray with a sphere, plane and conic surface are found in closed form.
+% \textbf{Optimization.}
+% We also compute the normals at intersection points for shading. This takes 20 milliseconds for a window size $1280 \times 960$ which is prohibitively show. To speed up the rendering, we first render an indicator texture of size $320 \times 240$ that contains model silhouette with the number of each model block and a value 255 for background. Once the texture is accessed from the fragment shader, it is automatically interpolated for the window size  $1280 \times 960$.

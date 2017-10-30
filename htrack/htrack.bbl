@@ -1,0 +1,219 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{\uppercase{dLGFP11}}
+
+\bibitem[BDS{\etalchar{*}}12]{Bouaziz_sgp12}
+\textsc{Bouaziz S., Deuss M., Schwartzburg Y., Weise T., Pauly M.}:
+\newblock Shape-up: Shaping discrete geometry with projections.
+\newblock \emph{Computer Graphics Forum (Proc. of the Symposium on Geometry
+  Processing)} (2012).
+
+\bibitem[BTG{\etalchar{*}}12]{ballan_eccv13}
+\textsc{Ballan L., Taneja A., Gall J., Van~Gool L., Pollefeys M.}:
+\newblock Motion capture of hands in action using discriminative salient
+  points.
+\newblock In \emph{Proc. of the European Conference on Computer Vision} (2012),
+  IEEE.
+
+\bibitem[BTP13]{bouaziz_sgp13}
+\textsc{Bouaziz S., Tagliasacchi A., Pauly M.}:
+\newblock Sparse iterative closest point.
+\newblock \emph{Computer Graphics Forum (Proc. of the Symposium on Geometry
+  Processing)} (2013).
+
+\bibitem[BTP14]{Bouaziz_eg2014}
+\textsc{Bouaziz S., Tagliasacchi A., Pauly M.}:
+\newblock Dynamic {2D/3D} registration.
+\newblock \emph{Eurographics Tutorial} (2014).
+
+\bibitem[Bus04]{buss_04}
+\textsc{Buss S.~R.}:
+\newblock Introduction to inverse kinematics with {J}acobian transpose,
+  pseudoinverse and damped least squares methods.
+\newblock \emph{IEEE Journal of Robotics and Automation} (2004).
+
+\bibitem[BWP13]{bouaziz_sig13}
+\textsc{Bouaziz S., Wang Y., Pauly M.}:
+\newblock Online modeling for realtime facial animation.
+\newblock \emph{ACM Trans. Graph. (Proc. SIGGRAPH)} (2013).
+
+\bibitem[CD95]{chan_95}
+\textsc{Chan T.~F., Dubey R.~V.}:
+\newblock A weighted least-norm solution based scheme for avoiding joint limits
+  for redundant joint manipulators.
+\newblock \emph{IEEE Transactions on Robotics and Automation} (1995).
+
+\bibitem[CHZ14]{cao_sig14}
+\textsc{Cao C., Hou Q., Zhou K.}:
+\newblock Displaced dynamic expression regression for real-time facial tracking
+  and animation.
+\newblock \emph{ACM Trans. Graph. (Proc. SIGGRAPH)} (2014).
+
+\bibitem[dLGFP11]{delagorce_pami11}
+\textsc{de~La~Gorce M., Fleet D.~J., Paragios N.}:
+\newblock Model-based {3D} hand pose estimation from monocular video.
+\newblock \emph{Pattern Analysis and Machine Intelligence} (2011).
+
+\bibitem[EBN{\etalchar{*}}07]{erol_cviu07}
+\textsc{Erol A., Bebis G., Nicolescu M., Boyle R.~D., Twombly X.}:
+\newblock {Vision Based Hand Pose Estimation: A Review}.
+\newblock \emph{Computer Vision Image Understanding} (2007).
+
+\bibitem[FH12]{felzenszwalb_12}
+\textsc{Felzenszwalb P.~F., Huttenlocher D.~P.}:
+\newblock Distance transforms of sampled functions.
+\newblock \emph{Theory of Computing} (2012).
+
+\bibitem[GPKT12]{ganapathi_eccv12}
+\textsc{Ganapathi V., Plagemann C., Koller D., Thrun S.}:
+\newblock Real-time human pose tracking from range data.
+\newblock In \emph{Proc. of the European Conference on Computer Vision} (2012),
+  Springer, pp.~738--751.
+
+\bibitem[HRMO12]{Hoyet_i3d12}
+\textsc{Hoyet L., Ryall K., McDonnell R., O'Sullivan C.}:
+\newblock Sleight of hand: Perception of finger motion from reduced marker
+  sets.
+\newblock In \emph{Proc. of the Symposium on Interactive 3D Graphics and Games}
+  (2012).
+
+\bibitem[KKKA12]{keskin_eccv12}
+\textsc{Keskin C., K{\i}ra{\c{c}} F., Kara Y.~E., Akarun L.}:
+\newblock Hand pose estimation and hand shape classification using
+  multi-layered randomized decision forests.
+\newblock In \emph{Proc. of the European Conference on Computer Vision} (2012),
+  IEEE.
+
+\bibitem[KVK{\etalchar{*}}14]{krupka_cvpr14}
+\textsc{Krupka E., Vinnikov A., Klein B., Hillel A.~B., Freedman D., Stachniak
+  S.}:
+\newblock Discriminative ferns ensemble for hand pose recognition.
+\newblock In \emph{Computer Vision and Pattern Recognition} (2014), IEEE.
+
+\bibitem[MKO13]{melax_13}
+\textsc{Melax S., Keselman L., Orsten S.}:
+\newblock Dynamics based {3D} skeletal hand tracking.
+\newblock \emph{Proceedings of the ACM SIGGRAPH Symposium on Interactive 3D
+  Graphics and Games} (2013).
+
+\bibitem[OKA11a]{oiko_bmvc11}
+\textsc{Oikonomidis I., Kyriazis N., Argyros A.~A.}:
+\newblock Efficient model-based {3D} tracking of hand articulation using
+  kinect.
+\newblock In \emph{British Machine Vision Conference} (2011), BMVA.
+
+\bibitem[OKA11b]{oiko_iccv11}
+\textsc{Oikonomidis I., Kyriazis N., Argyros A.~A.}:
+\newblock Full {DOF} tracking of a hand interacting with an object by modeling
+  occlusions and physical constraints.
+\newblock In \emph{International Conference on Computer Vision} (2011), IEEE.
+
+\bibitem[OKA12]{oiko_cvpr12}
+\textsc{Oikonomidis I., Kyriazis N., Argyros A.~A.}:
+\newblock Tracking the articulated motion of two strongly interacting hands.
+\newblock In \emph{Computer Vision and Pattern Recognition} (2012), IEEE.
+
+\bibitem[OLA14]{oiko_cvpr14}
+\textsc{Oikonomidis I., Lourakis M.~I., Argyros A.~A.}:
+\newblock Evolutionary quasi-random search for hand articulations tracking.
+\newblock In \emph{Computer Vision and Pattern Recognition} (2014), IEEE.
+
+\bibitem[QSW{\etalchar{*}}14]{qian_cvpr14}
+\textsc{Qian C., Sun X., Wei Y., Tang X., Sun J.}:
+\newblock Realtime and robust hand tracking from depth.
+\newblock In \emph{Computer Vision and Pattern Recognition} (2014), IEEE.
+
+\bibitem[RKEK13]{romero_13}
+\textsc{Romero J., Kjellström H., Ek C.~H., Kragic D.}:
+\newblock Non-parametric hand pose estimation with object context.
+\newblock \emph{Proc. Image and Vision Computing} (2013).
+
+\bibitem[SFC{\etalchar{*}}11]{shotton_cvpr11}
+\textsc{Shotton J., Fitzgibbon A., Cook M., Sharp T., Finocchio M., Moore R.,
+  Kipman A., Blake A.}:
+\newblock Real-time human pose recognition in parts from single depth images.
+\newblock In \emph{Computer Vision and Pattern Recognition} (2011), IEEE.
+
+\bibitem[SMRB14]{schroeder_icra14}
+\textsc{Schr{\"o}der M., Maycock J., Ritter H., Botsch M.}:
+\newblock Real-time hand tracking using synergistic inverse kinematics.
+\newblock In \emph{International Conference on Robotics and Automation} (2014),
+  IEEE.
+
+\bibitem[SOT13]{sridhar_iccv13}
+\textsc{Sridhar S., Oulasvirta A., Theobalt C.}:
+\newblock Interactive markerless articulated hand motion tracking using {RGB}
+  and depth data.
+\newblock In \emph{International Conference on Computer Vision} (2013), IEEE.
+
+\bibitem[SRS{\etalchar{*}}14]{sridhar_14}
+\textsc{Sridhar S., Rhodin H., Seidel H.-P., Oulasvirta A., Theobalt C.}:
+\newblock Real-time hand tracking using a sum of anisotropic gaussians model.
+\newblock In \emph{International Conference on 3D Vision (3DV)} (2014), IEEE.
+
+\bibitem[TCTK14]{tang_cvpr14}
+\textsc{Tang D., Chang H.~J., Tejani A., Kim T.-K.}:
+\newblock Latent regression forest: Structured estimation of {3D} articulated
+  hand posture.
+\newblock In \emph{Computer Vision and Pattern Recognition} (2014), IEEE.
+
+\bibitem[TSLP14]{tompson_tog14}
+\textsc{Tompson J., Stein M., Lecun Y., Perlin K.}:
+\newblock Real-time continuous pose recovery of human hands using convolutional
+  networks.
+\newblock \emph{ACM Trans. Graph.} (2014).
+
+\bibitem[TSR{\etalchar{*}}14]{Taylor_cvpr14}
+\textsc{Taylor J., Stebbing R., Ramakrishna V., Keskin C., Shotton J., Izadi
+  S., Hertzmann A., Fitzgibbon A.}:
+\newblock User-specific hand modeling from monocular depth sequences.
+\newblock In \emph{Computer Vision and Pattern Recognition} (2014).
+
+\bibitem[TYK13]{tang_iccv13}
+\textsc{Tang D., Yu T.-H., Kim T.-K.}:
+\newblock Real-time articulated hand pose estimation using semi-supervised
+  transductive regression forests.
+\newblock In \emph{International Conference on Computer Vision} (2013), IEEE.
+
+\bibitem[WMZ{\etalchar{*}}13]{wang_sig13}
+\textsc{Wang Y., Min J., Zhang J., Liu Y., Xu F., Dai Q., Chai J.}:
+\newblock Video-based hand manipulation capture through composite motion
+  control.
+\newblock \emph{ACM Trans. Graph. (Proc. SIGGRAPH)} (2013).
+
+\bibitem[WP09]{wang_sig09}
+\textsc{Wang R.~Y., Popovic J.}:
+\newblock Real time hand tracking with a colored glove.
+\newblock \emph{ACM Trans. Graph. (Proc. SIGGRAPH)} (2009).
+
+\bibitem[WPP11]{wang_uist11}
+\textsc{Wang R.~Y., Paris S., Popovic J.}:
+\newblock {6D} hands: Markerless hand tracking for computer aided design.
+\newblock \emph{Proc. of the Symposium on User Interface Software and
+  Technology} (2011).
+
+\bibitem[WZC12]{wei_siga12}
+\textsc{Wei X., Zhang P., Chai J.}:
+\newblock Accurate realtime full-body motion capture using a single depth
+  camera.
+\newblock \emph{ACM Trans. Graph. (Proc. SIGGRAPH Asia)} (2012).
+
+\bibitem[YZW{\etalchar{*}}13]{ye_13}
+\textsc{Ye M., Zhang Q., Wang L., Zhu J., Yang R., Gall J.}:
+\newblock A survey on human motion analysis from depth data.
+\newblock \emph{Time-of-Flight and Depth Imaging. Sensors, Algorithms, and
+  Applications} (2013).
+
+\bibitem[ZCX12]{zhao_sca12}
+\textsc{Zhao W., Chai J., Xu Y.-Q.}:
+\newblock Combining marker based mocap and {RGBD} camera for acquiring
+  high-fidelity hand motion data.
+\newblock In \emph{Proc. of the EG/SIGGRAPH Symposium on Computer Animation}
+  (2012).
+
+\bibitem[ZSZ{\etalchar{*}}14]{zhang_siga14}
+\textsc{Zhang P., Siu K., Zhang J., Liu C.~K., Chai J.}:
+\newblock Leveraging depth cameras and wearable pressure sensors for full-body
+  kinematics and dynamics capture.
+\newblock \emph{ACM Trans. Graph. (Proc. SIGGRAPH Asia)} (2014).
+
+\end{thebibliography}

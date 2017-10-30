@@ -1,0 +1,287 @@
+%!TEX root = ../paper.tex
+\input{fig/intra/item}
+
+\section{Online model calibration}
+\label{sec:technical}
+
+We now describe our \emph{joint} calibration and tracking algorithm, which combines the Levenberg-style optimization of previous hand trackers with the uncertainty maintenance framework of Kalman filtering.   Previous hand tracking work has made use of temporal smoothing priors to propagate {\em pose} information from previous frames, without the use of filtering.  However this approach cannot be used for {\em shape} because it is so weakly constrained in any given frame, and because its temporal prior is so strong, as shape parameters are \emph{persistent} over time: we observe the same user performing in front of the camera for thousands of frames. However, sufficient information to estimate certain shape parameters is simply not available in certain frames. For example, by observing a straight finger like the one in \Figure{intra}-(left), it is difficult to estimate the length of a phalanx. Therefore, knowledge must be 
+gathered from a \emph{collection} of frames capturing the user in different poses. 
+
+As we illustrate in \Figure{intra} and \Figure{covariance}, the confidence in regressed \emph{shape} parameters is conditional on the \emph{pose} of the current frame.
+Rather than manually picking a few frames in different poses as in~\cite{taylor2016joint}, we show how propagation of not just the shape estimate, but also its uncertainty allows reliable calibration even if the initial poses fail entirely to constrain some shape dimensions.  Additionally, the temporal priors of previous work are easily incorporated in the LMKF formulation.
+
+\input{fig/inter/item}
+\input{fig/covariance/item}
+
+\paragraph{Input data and shape model}
+The input data are a sequence of depth frames $\mathcal{D}_n$, which are segmented via a wristband~\cite{htrack} to produce a point cloud $d_n \subset \mathbb R^3$.   The pose vector in frame~$n$ is $\theta_n$, and our shape model $\mathcal{M}(\theta; \beta)$ is the sphere mesh of \citeN{tkach2016sphere}.   Shape is encoded via scalar length parameters $\beta$ instead of sphere positions; see \Figure{handmodel} and \cite{edoardo}.
+
+\paragraph{Estimation}
+Let $x_n = [\theta_n; \beta_n]$ denote the model {\em state}: the vector of coalesced pose and shape parameters at frame $n$.  
+Our goal in tracking is to produce the best estimate $\hat{x}_n$, at frame~$n$, of the state~$x_n$, given all the data seen previously, $d_1, ..., d_n$.
+What is more, we want to estimate not just the state, but the parameters of the {\em probability distribution} over the state $p(x_n|d_{1..n})$.  Thus, if we write
+\begin{equation}
+p(x_n|d_{1..n}) \approx \mathcal N(x_n \mid \hat{x}_n, \hat{\Sigma}_n),
+\end{equation}
+we are saying that $x_n$ approximately follows a normal distribution with mean ~$\hat x_n$ and covariance~$\hat\Sigma_n$.  When we display a tracked hand to the user, we will most likely just draw the hand with pose and shape parameters~ $\hat x_n$, which sometimes leads to ~$\hat x_n$ being called ``the estimate of $x_n$'', but it is more correctly ``the estimate of the mean of the distribution $p(x_n)$'', and similarly with $\hat\Sigma_n$.
+
+It is generally computationally intractable to estimate the parameters conditioned on all the previous history~$d_{1..n}$ at every frame (although in~\Section{offline} we compute some related quantities as a baseline), so the estimation is typically expressed in terms of an {\em per-frame} term $p(x_n|d_n)$, which describes the components due only to information in frame~$d_n$ and {\em cumulative} term $p(x_n|d_1, ..., d_{n-1})$.  Different approximations for this term leads to different methods, denoted {\em split cumulative} and {\em joint cumulative} below.
+
+% AF: These points are now above..
+% To achieve online \emph{joint} calibration and tracking, we introduce  two fundamental components which we refer to as \emph{intra-} and \emph{inter-frame} regression. The former gathers estimates from a single frame (see \Section{independent}), while the latter integrates this knowlege across frames. We first demonstrate how inter-frame regression can be interpreted as a Kalman Filter (KF) (see \Section{split}), highlight its shortcomings, and finally propose a \emph{joint} inter-/intra-frame regression. We show how this approach can be interpreted as an Iterative Extended Kalman Filter (IEKF)~(see \Section{joint}).
+%\begin{edit}
+%In \Section{offline}, we conclude by describing two \emph{offline} calibration procedures that will be used as baselines for comparisons to our online calibration solutions.    
+%\end{edit}
+
+
+
+\subsection{Per-frame estimate -- $p(x_n|d_n)$}
+\label{sec:independent}
+\label{sec:intra}
+The distribution $p(x_n|d_n)$ is, by Bayes' rule, proportional to the product of a data term and a prior $p(d_n|x_n)p(x_n)$, which is naturally related to the traditional energy formulations by identifying the negative log likelihood with the energy.  Consider the energy:
+% 
+\begin{equation}
+E(x_n) = \sum_{\tau \in \mathcal{T}} E_{\tau}(d_n, x_n) 
+\label{eq:energies}
+\end{equation}
+% 
+Where the terms $\mathcal{T}$ ensure that:
+%
+% \vspace{-.5\parskip}
+\begin{equation*}
+\setlength{\jot}{0pt}
+\begin{aligned}
+\text{\textbf{d2m}} & \quad \text{data points are explained by the model} \\ 
+\text{\textbf{m2d}} & \quad \text{model lies in the sensor visual-hull} \\
+\text{\textbf{smooth}} & \quad \text{recorded sequence is smooth} \\
+\text{\textbf{pose-prior}} & \quad \text{calibrated hand pose is likely} \\
+\text{\textbf{shape-prior}} & \quad \text{calibrated hand shape is likely} \\
+\text{\textbf{pose-valid}} & \quad \text{semantics: collisions and joint limits} \\
+\text{\textbf{shape-valid}} & \quad \text{semantics: finger order and connectivity}
+\end{aligned}
+\end{equation*}
+The energy terms in the objective function are detailed in~\cite{tkach2016sphere} and~\cite{htrack}, with the exception of \emph{shape-prior} and \emph{shape-valid} that are discussed in \Section{shapeprior}.
+% 
+\input{tab/kf-like}
+% \paragraph{Laplace approximation}
+% \subsection{Posterior distribution of parameters after taking a measurement into account}
+% \label{sec:posterior}
+Given $E$ as above, we can write
+\begin{equation}
+p(x_n|d_n) \propto \exp(-E(x_n)), 
+\label{eq:p_from_E}
+\end{equation}
+but to perform propagation, we will need a more compact form, for example a Gaussian approximation.   A natural choice is the \emph{Laplace approximation}: a Gaussian with its mean at the mode of~(\ref{eq:p_from_E}) (see \Appendix{laplace-approximation}) and covariance chosen to match a second-order expansion of~$E$ about that mode. 
+The mode computation is the standard energy minimization
+\begin{equation}
+\star x_n = \argmin_{x_n} E(x_n)
+\label{eq:xmin}
+\end{equation}
+which can be solved by nonlinear optimization given an initialization $x_n^0$ (obtained from a discriminative method or from the solution of the previous time-step), and indeed this is the same minimization performed by current state-of-the-art hand trackers.
+The covariance matrix~$\star\Sigma_n$ of the Laplace approximation is the inverse of the Hessian of~$E$, and as we are using a Gauss-Newton solver, $E(x)$ is of the form $\|d_n - F(x_n)\|^2$, so we may make the G-N approximation of the Hessian in terms of the Jacobian of~
+%$F$
+$\bar{F}(x_n) = d_n - F(x_n)$, yielding
+\begin{equation}
+{\star{\Sigma}_n} = \left(\tfrac{\partial \bar{F}(x^*)}{\partial x}^\top \tfrac{\partial \bar{F}(x^*)}{\partial x}\right)^{-1}.
+\end{equation}
+Thus, after processing the information in a frame $d_n$, the sought-after quadratic approximation of posterior distribution of model parameters is 
+%a \emph{normal} distribution $\mathcal{N}\left(x_n^*, \star\Sigma_n \right)$.
+%Its mean $x^*$ is the solution of the (iterative) optimization in \Equation{energies}; its covariance  $\star\Sigma_n$ is computed according to \Equation{taylor-hessian}, that is, from the Hessian of the objective function evaluated at the optimal solution~$x^*$.
+%Jacobians of the energy terms $\{E_{\text{d2m}}, E_{\text{m2d}}\} at the optimal solution.$ \AN{for $E_{\text{d2m}}$ Equation 6 is an approximation of the hessian, not jacobian, since E = F^T * F}
+\begin{align}
+\tilde{p}(x_n|d_n) \approx \mathcal{N}\left(\star{x}_n, \star{\Sigma}_n \right),
+\end{align}
+so the ``per-frame'' posterior parameters are $\hat x_n = \star x_n, \hat\Sigma_n = \star\Sigma_n$.
+
+
+%
+%Rather than deriving this relationship via hard-coded rules,  we follow the ideas in ~\todo{\cite{?} and derive how this distribution can be approximated by a Gaussian  $\mathcal{N}(\star{x}_n, \star{\Sigma}_n)$.} %\AN{How can one derive hard-coded rules?}
+% \AN{We use Laplace Appriximation to find a Gaussian distribution $\mathcal{N}(\star{x}_n, \star{\Sigma}_n)$ that best approximates the posterior of the parameters optimized for the current frame  $\mathcal{D}_n$.}
+% We also discuss why a covariance matrix $\star{\Sigma}_n$, as opposed to per-measurement variances, is necessary
+% Through the example in , it is possible to notice the fundamental role of , as opposed to
+
+\iffalse
+%While the optimization problem in \Equation{energies} estimates pose/shape parameters, information regarding the confidence of the estimate is not directly available. To derive our uncertainties, we start by converting the data terms \emph{d2m} and \emph{m2d} of \Equation{energies} into probabilistic form:
+%
+%The data terms \emph{d2m} and \emph{m2d} can be written as posterior distributions: \AN{this is not a posterior distribution yes, and why distributions in plural?}
+% 
+%
+% \begin{DRAFT}
+% Towards this goal, we rewrite the \emph{d2m} and \emph{m2d} terms in \Eq{energies} as:
+% \begin{align}
+% E_{\tau}(d_n, x_n) = \|I_{\tau} d_n - F_{\tau} (x_n)\|_2^2,
+% \end{align}
+% where $I_\tau$ are identity matrices, and $I_{m2d}(i,i)=0$ if the rasterized 2D template pixel $\mathbf{p}_i$ lies within the sensor silhouette image; see \cite{htrack}. We also concatenate the two terms in pair of column vectors:
+% \begin{align*}
+% F(x_n) = \left[F_{d2m}(x_n); F_{m2d}(x_n)\right]
+% \:\:\text{and}\:\:
+% d_n = \left[(I_{d2m} d_n); (I_{m2d} d_n) \right],
+% \end{align*}
+% \end{DRAFT}
+% leading to a compact posterior distribution representation:
+% \AN{As we discussed last time, could you please remove this part with indicator variables since I am not using all energies anyway? It takes time to understand it and it does not add anything for the value of the paper.}
+% 
+\begin{align}
+P(d_n|x_n) &= \exp \left( - \tfrac{1}{2}(d_n - F(x_n))^T (d_n - F(x_n)) \right)
+\label{eq:posterior}
+\end{align}
+% 
+By temporarily omitting the frame index $n$ for conveniency, our problem is rewritten as a maximum likelihood optimization:
+%
+\begin{align}
+x^* &= \argmax_{x} \underbrace{\log  P(d|x)}_{L(x)}
+\label{eq:independent}
+\end{align}
+%
+We now perform a second-order Taylor expansion of the log-likelihood of the data $L(x)$ around the \emph{optimal} solution $x^*$:
+%
+\begin{align}
+L(x) \approx \tilde{L}(x) = L(x^*)   
++ \tfrac{\partial L(x^*) }{\partial x}  \Delta x 
++ \tfrac{1}{2} \Delta x^T\tfrac{\partial^2 L(x^*)}{{\partial x}^2} \Delta x + \text{h.o.t.}
+\label{eq:taylor}
+\end{align}
+%
+where $\Delta x=x - x^*$, and let {\small $\partial f(\star{x})/\partial x$} indicate the partial derivative of $f(x)$ evaluated at $\star{x}$  with an abuse of notation. We rewrite {\small $\bar{F}(x_n) = d_n - F(x_n)$} for brevity. Note how the Jacobian and the Hessian are respectively zero and positive definite at our optimal point $x^*$ (see \cite[Sec.~10.2]{nocedal2006numerical}):
+%
+\begin{align}
+\tfrac{\partial L(x^*)}{\partial x} &= - \bar{F}(x^*)^T 
+\tfrac{\partial \bar{F}(x^*)}{\partial x} = 0 
+\label{eq:taylor-jacobian}
+\\
+\tfrac{\partial^2 L(x^*)}{\partial x^2} 
+% = 2 \left.\tfrac{\partial F(x)}{\partial x}\right|_{x^*}^T \left.\tfrac{\partial F(x)}{\partial x}\right|_{x^*} + \\ 2 F(x^*)^T  \left. \tfrac{\partial \partial F (x^*) }{\partial \partial x} \right|_{x^*}
+& \approx - \tfrac{\partial \bar{F}(x^*)}{\partial x}^T \tfrac{\partial \bar{F}(x^*)}{\partial x}
+\triangleq %< DEFINED AS
+-{\star{\Sigma}}^{-1} \prec 0
+\label{eq:taylor-hessian}
+\end{align}
+% 
+From \Equation{taylor}, using $\tilde P(d|x) = \exp (\tilde{L}(x))$, we can then derive the \emph{approximated} posterior distribution:
+%
+\begin{align}
+\tilde{P}(d|x) = \exp\left(- \tfrac{1}{2}(x - x^*)^T {\star{\Sigma}}^{-1}  (x - x^*) \right) = \mathcal{N}\left(\star{x}, \star{\Sigma} \right)
+\end{align}
+\fi
+
+\input{tab/iekf-like}
+\input{fig/realtrack/item}
+\subsection{Split cumulative estimate -- $p(x_n|d_{1..n})$}
+% -- $\mathcal{N}(\hat{x}_n, \hat{\Sigma}_n) | \mathcal{N}(\star{x}_n, \star{\Sigma}_n)$ } 
+\label{sec:split}
+The per-frame distribution in \Section{independent} encodes the uncertainty in pose and shape solely due to the data in frame~$n$.  To aggregate information from previous frames, we would like a simple form of the distribution $p(x_n|d_{1..n}) $, for example a Gaussian:
+\begin{equation}
+p(x_n|d_{1..n}) \approx \mathcal{N}(\hat{x}_n, \hat{\Sigma}_n)
+\end{equation}
+Then, given values of the parameters $\hat{x}_{n-1}, \hat{\Sigma}_{n-1}$ at the previous timestep, we must update them to incorporate the new information in frame $n$.   
+%
+This leads to the following pair of inductive update equations:
+\begin{align}
+\mathcal{N}(x_n|\hat{x}_1, \hat{\Sigma}_1) &= \mathcal{N}(x_n|\star{x}_1, \star{\Sigma}_1) \\
+\mathcal{N}(x_n | \hat{x}_n, \hat{\Sigma}_n) &= \mathcal{N}(x_n | \hat{x}_{n-1}, \hat{\Sigma}_{n-1}) \mathcal{N}(x_n |\star{x}_n, \star{\Sigma}_n)
+\end{align}
+By applying the product of Gaussians rule~\cite{petersen2008matrix}, we obtain update equations for $\hat{x}_n$ and $\hat{\Sigma}_n$:
+% 
+\begin{align}
+\begin{split}
+\hat{x}_{n} &= \star\Sigma_{n} (\hat{\Sigma}_{n-1} + \star\Sigma_{n})^{-1} \hat{x}_{n-1} + 
+\hat{\Sigma}_{n-1} (\hat{\Sigma}_{n-1} + \star\Sigma_n)^{-1} x_n^*
+\\
+\hat{\Sigma}_n &= \hat{\Sigma}_{n-1} (\hat{\Sigma}_{n-1} + {\star\Sigma_n})^{-1} \star\Sigma_n = \left({\star{\Sigma}_n}^{-1} + \hat{\Sigma}_{n-1}^{-1}\right)^{-1}
+\label{eq:combining}
+\end{split}
+\end{align}
+% 
+In \Appendix{proof-kalman}, we shown how \Equation{combining} is equivalent to the~Kalman Filter (KF) update equations in \Table{interframe}, with measurement $x_n^*$, and measurement noise covariance $\star\Sigma_n$. 
+%This observation is fundamental as, under the same assumptions we make in \Appendix{kalman}, \cite[Pg. 7]{maybeck1979stochastic} noted how a KF is provably \emph{optimal}.
+%
+This optimization, which we refer to as \emph{split cumulative} is arguably the simplest way of achieving an online parameter regression: by treating the results of the per-frame solve $\mathcal{N}(\star{x}_n, \star{\Sigma}_n)$ as the measurements in a KF.
+
+\subsection{Joint cumulative estimate -- $p(x_n|d_{1..n})$}
+\label{sec:joint}
+% Note that the best-fitting parameters $x_n^*$ for the given the single input frame $d_n$ are computed using local LM optimization. Thus, it is crucial that optimization starts in a sensible region of parameters space.
+The optimization in \Tab{interframe} does not provide any information about the current estimate of the parameters $\hat{x}_n$ to the independent solve described in \Section{independent}. This could be problematic, as in this case \Eq{energies} does not leverage any temporal information aside from initialization, while relying on a sufficiently good initialization to compute $\mathcal{N}(\star{x}_n, \star{\Sigma}_n)$. 
+%
+%One potential way to increase the robustness of the algorithm would be to include this information in \Eq{independent}:
+% 
+%\begin{align}
+%x_n^* &= \argmax_{x_n} \log  P(d_n|x_n) P(x_n |\hat{x}_{n - 1}) 
+%\label{eq:independenttemp}
+%\end{align}
+% 
+%Instead, 
+%\AN{Why do you discuss one potential way that we never use or refer to afterwards?}
+%
+We propose to coalesce the cumulative and per-frame optimization resulting in the \emph{joint} cumulative regression scheme in~\Table{iekf-like}. 
+The optimization in ~\Table{iekf-like} can be expressed in least-squares form, and embedded in \Equation{energies} through the term:
+% 
+\begin{equation}
+E_\text{iekf} = \| \hat{\Sigma}^{-1/2}_{n - 1}(x_n - \hat{x}_{n - 1})\|_2^2 
+\label{eq:iekflm}   
+\end{equation}
+%
+In \Appendix{ieif-lm} we link this update to LM \cite{skoglund2015extended}, demonstrating that optimizing the objective in \Table{iekf-like} with a Levenberg Marquardt method is equivalent to an Iterated Extended Kalman Filter (IEKF) with measurement update $d_n$.   In a practical setting, this observation creates a very simple way to encode IEKF-like behavior within existing LM optimization codebases.  
+
+% \AN{Thus in \Appendix{ieif-lm} we have proven that adding a  $E_\text{iekf}$ to a standard LM sum of energies optimization (that is used in our field all the time) turns the entire system into Iterated Extended Kalman Filter. If you already have an LM system, this can be literally coded in hours at most including debug time :). To our knowledge, this trick was not known/used before. }
+%Notice how this optimization, representing our online tracking/modeling system, jointly considers the measurement $d_n$ as %well as past estimates $\mathcal{N}(\hat{x}_n, \hat{\Sigma}_n)$.
+
+\input{fig/interreal/item}
+
+\subsection{Joint multiframe (batch/offline) estimate}
+\label{sec:batch}
+\label{sec:offline}
+While we focus on an online/streaming algorithm, we also describe an offline baseline calibration procedure -- inspired by the work of~\cite{taylor2014user} -- where multiple frames in the input sequence are simultaneously considered. 
+
+\paragraph{Offline-Hard}
+To achieve this, \Equation{energies} is modified to consider $N$ frames, each with its own pose parameters $\theta_n$, but with the same underlying shape $\beta$, resulting in what we refer to as \emph{\OfflineHard{}} calibration:
+% 
+\begin{equation}
+\argmin_{\beta, \{\theta_n\} } \sum_{n=1}^N \sum_{\tau \in \mathcal{T}} E_{\tau}(d_n, [\theta_n, \beta]) 
+\label{eq:offlinehard}
+\end{equation}
+% 
+Such optimization is initialized with a single $\beta^0$, and in our experiments, we noticed how this resulted in reduced convergence performance and a propensity for the optimization to fall into local minima. 
+
+\newpage
+\paragraph{Offline-Soft}
+Therefore, we introduce the \emph{\OfflineSoft{}} calibration, where the constraint that a single $\beta$ should be optimized is enforced through a soft penalty:
+% 
+\begin{equation}
+\argmin_{\beta, \{\theta_n\} } \sum_{n=1}^N \sum_{\tau \in \mathcal{T}} E_{\tau}(d_n, [\theta_n, \beta_n]) + \omega_{\beta} \sum_{n=1}^N \| \beta_n - \beta \|^2
+\label{eq:offlinesoft}
+\end{equation}
+%
+The initializations $\beta_n^0$ is derived from the per-frame optimization of \Equation{energies}, while the penalty weight is set to a large value ($\small \omega_{\beta}=10e4$). The advantage of \OfflineSoft{} over \OfflineHard{} can be clearly observed in \Figure{evalnyu}, where the former achieves a performance comparable to the one of the (overfitting) per-frame optimization. Finally, note that in practice we do not consider every frame as this large problem would not fit into memory, but instead we sub-sample at a $\approx 1/20$ rate, the same subsampling is used for Kalman \emph{measurement} updates in our online solution to avoid a bias in the comparisons.
+% \AN{This sounds like our online algorithm runs only every 20th frame. THIS IS NOT THE CASE. KF and IEKF measurements are taken every 20th frame to satisfy independent measurements assumption of the Kalman filter. The neighboring frames are not independent, they are too similar to each other.}
+% \AT{see github issue }
+
+\subsection{Shape regularizers}
+\label{sec:shapeprior}
+Hand shape variation can be explained in a low dimensional space whose fundamental degrees of freedom include variation like uniform scale, palm width, and finger thickness \cite{khamis2015learning}. In our paper we follow the ideas presented in~\cite{edoardo}, and build a latent-space encoding hand shape variability through \emph{anisotropic scaling}. By setting $\omega_\text{shape-space}{\ll}1$,
+% \AN{actually, $\omega = 5 - 10$, it still makes very week influence}.
+this prior acts as a soft regularizer and does not prevent the algorithm from computing a tight fit:
+% to the observed user:
+% 
+\begin{equation}
+E_\text{shape-space} = \|\beta - (\bar{\beta} \circ \mathcal{I}\tilde{\beta}) \|^2
+\label{eq:shapespace}
+\end{equation}
+% 
+where $\tilde\beta \in \mathbb{R}^3$ is a latent vector encoding relative changes in hand \emph{height}, \emph{width} and sphere \emph{thickness} with respect to the default template $\bar\beta$, while $\mathcal{I}$ is a matrix mapping latent DOFs to the corresponding full-dimensional DOFs $\beta_{[i]}$; see \Figure{handmodel}. 
+% 
+%While this regularizer effectively sub-spaces our calibration problem, it cannot detect unfeasible shape-space \AN{we are not solving in a subspace and shape prior is totally against the wierd stuff, it just has too small weight to prevent it from happening.}
+% \AN{Thanks to our sphere-meshes hand model representation, the shape parameters are already nearly as compact as it gets, thus the last thing we want is to solve our optimization in shape-subspace; hence the small weight on $E_\text{shape-space}$. However, we still need a way to prevent inhumane configurations, }
+%While such prior can produce \emph{likely} hand shapes,
+Since our shape-prior has a small weight, unfeasible hand-shape configurations are still possible, such as a finger floating in mid-air, or when the natural order of fingers $\{\text{index},\text{middle},\text{ring},\text{pinky}\}$ has been compromised. 
+We overcome this problem by a set of quadratic \emph{barrier} constraints that are conditionally enabled in the optimization when unfeasible configurations are detected (encoded via $\chi_c(\beta) \in \{ 0,1 \}$):
+% 
+\begin{equation}
+E_\text{shape-valid} = \sum_{c=1}^C \chi_c(\beta) \| \left< \beta, \kappa \right> \|_2^2
+\label{eq:valideshape}
+\end{equation}
+% 
+For example to avoid middle and index fingers from permuting, one such constraint is written in the following form, and $\chi_0(\beta)=1$ only when an invalid configuration is detected:
+% 
+\begin{equation*}
+\chi_0(\beta) \| \beta_\text{idx-base-x} - \beta_\text{idx-base-rad} - \beta_\text{mid-base-x} + \beta_\text{mid-base-rad} \|_2^2
+\end{equation*}

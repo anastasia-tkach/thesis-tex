@@ -1,0 +1,96 @@
+% !TEX root = ../hmodel.tex
+
+\section{Results}
+\label{sec:results}
+We evaluate our technique on a variety of sequences across a number of users, and performe qualitative as well as quantitative comparisons of our method to the state-of-the-art~\cite{qian2014realtime,sridhar2015fast,tagliasacchi2015robust,sharp2015accurate,taylor2016concerto}. We also propose new algorithm-agnostic metrics tailored to high-precision tracking evaluation, and introduce the \handy{} dataset.
+% associated with these metrics.
+
+\paragraph{Template Calibration}
+The calibration of our model to a collection of 3D data frames is illustrated in \Figure{calibration}; note the same model is rigidly articulated to fit to multiple poses. While for this user we build a model from multi-view stereo data (omni-directional, complete), it is important to notice that the use of multiple frames in different poses is a necessity. Only in this situation can the centers $\posedcenters$ be \todo{jointly} adjusted to create an articulated model that \todo{consensually} fits the whole dataset. We refer the reader to \VideoMVS{} for a visualization of our iterative calibration procedure. The calibration from RGBD datasets can be seen at \VideoCalibRGB{}, and the resulting models are illustrated in \Figure{topology}. 
+
+\paragraph{Kinematic Calibration}
+The importance of adjusting kinematic chain transformations is shown in \Figure{posing}, as well as the first images pair in \Figure{teaser}. With incorrect  transformations, joint limits and the articulation restrictions of the kinematic chain can prevent the model from being posed correctly; see a dramatization in \VideoKinematic{}. In our experiments we discovered it was crucial to identify the \emph{typical} kinematic chain structure using the dataset in \Figure{calibration}; user-specific calibration optimization used these transformations as initialization.
+
+\newpage
+\input{fig/comp1a/item.tex}
+\paragraph{Comparison metrics}
+Taylor and colleagues \shortcite{taylor2016concerto} have recently reported how state-of-the-art hand tracking algorithms have reached human precision in determining the location of key features (e.g. fingertips and wrist position). 
+Therefore, publicly available datasets like \cite{tompson2014real} and \cite{sridhar2013multicam}, often relying on human labeling of data, \todo{are now unsuitable to quantitatively evaluate the quality of high-precision tracking.}
+% 
+We propose two easy-to-compute metrics to evaluate the quality of generative tracking algorithms. A core element that makes these metrics appealing is that, much like key feature positions, they are completely \emph{algorithm agnostic}: \todo{they can be evaluated as far as a depth map of the tracking model can be synthesized}. This is essential, as it will enable the research community to validate and compare results through quantitative analysis. 
+% 
+We achieve this goal by expressing these metrics exclusively as a function of the acquired depth image $\depth_n$ and of the depth image $\depthrend_{n}$ of the rendered model. 
+Below we drop the subscript $n$ for notational brevity and only consider points  $\point$ within the RoI.
+% 
+The data-to-model metric is: % evaluated in 3D: 
+% 
+\begin{equation}
+\metricone = |\depth|^{-1} \sum_{\point \in \depth} \| \point - \proj_\depthrend(\point) \|_2^1
+\label{eq:metric1}
+\end{equation}
+% 
+Differently from before, $\proj_\depthrend$ computes the (kd-tree accelerated) closest point correspondence to the rendered model \emph{point cloud}, rather than to the model itself. 
+% 
+The model-to-data metric is: % evaluated in 2D projective space:
+\begin{eqnarray}
+\metrictwo = |\depthrend \setminus \partial\depth|^{-1} 
+\sum_{\pixel \in \depthrend \setminus \partial\depth} \| \pixel - \proj_{\partial\depth}(\pixel) \|^1_2
+% &=& |\depthrend \setminus \partial\depth|^{-1}
+% \sum_{\pixel \in \depthrend \setminus \partial\depth} \text{DT}(\pixel)
+\label{eq:metric2}
+\end{eqnarray}
+%
+Each summation term above can be evaluated efficiently by pre-computing the 2D Euclidean distance transform of the RoI's (image-space) silhouette $\partial \depth$~\cite{tagliasacchi2015robust}, where the transform evaluates to zero for a pixel inside the silhouette.
+% 
+\todo{Another algorithm agnostic metric is the \emph{golden energy} from Sharp et al.~\shortcite{sharp2015accurate}, but this distance does not encode a monocular Hausdorff like ours do.}
+
+\newpage
+\input{fig/comp1b/item.tex}
+\paragraph{Handy dataset}
+We create the new \handy{} tracking dataset for the evaluation of high-precision generative tracking algorithms. Our dataset contains $\approx$ 30k depth and color images recorded with an \realsense{} SR300 sensor. The dataset is designed to cover the entire range of motions that has been surveyed in recent techniques. As detailed in \Figure{motiontypes}, we identified three main axes of complexity in the hand tracking literature, and devised the \textsc{teaser} dataset to thoroughly sample this space; see~\VideoSpace{}. 
+% 
+% \AnastasiaComment{We should add, that there is at least one more axis of complexity, which is quality of sensor data. Sharp et. all have explored that axis a lot. They have sequences for far away (which our sensor does not allow) and sequence where the hand is only partially visible (not possible for us, because we use purely model base tracking). Anyway, system is not intended to be used in such scenarios, if a person wants to have a hand tracked, he or she should make sure that the sensor can see the hand. AT: I think it's quite ok, perhaps we can add it to the revised version (after reviews)?}
+% 
+
+Further, to enable qualitative comparisons to motions from state-of-the-art papers we also devised an additional set of sequences:
+\begin{description}[labelsep=0em,labelwidth=1.6in,labelindent=1cm,itemsep=-.6em]
+    \item[\VideoExtraTaylOne{} -- \textsc{tayl1}] rigid and clenching
+    \item[\VideoExtraSridOne{} -- \textsc{srid1}] fingers extension 
+    \item[\VideoExtraSridTwo{} -- \textsc{srid2}] fingers contact
+    \item[\VideoExtraSridThree{} -- \textsc{srid3}] crossing fingers
+    \item[\VideoExtraSridFour{} -- \textsc{srid4}] pinching
+    \item[\VideoExtraSharOne{} -- \textsc{shar1}] fast and complex
+    \item[\VideoExtraSharTwo{} -- \textsc{shar2}] fast rigid 
+    \item[\VideoExtraSharThree{} -- \textsc{shar3}] rotating fist
+\end{description}
+The sequences marked as \emph{tayl*}, \emph{srid*}, and \emph{shar*} are respectively designed to emulate the motions in~\cite{taylor2016concerto}, \cite{sridhar2015fast} and~\cite{sharp2015accurate}. We do not devise sequences for~\cite{qian2014realtime} and \cite{tompson2014real}, as the previous datasets already covered the motion space.
+
+\input{fig/motiontypes/item.tex}
+
+% \vspace{-\parskip}
+\paragraph{Self evaluation}
+% \AnastasiaComment{In figure 12, the X axis numerical values are not visible for E3D and are visible for E2D. You decided to remove ``no data energy'' from the plots. It was at bottom limit for E3D and at top limit for E2D. I think, it illustrates nicely why silhouette energy makes E3D metric worse, since data energy also make E2D metrics MUCH worse.}
+% 
+In~\Figure{comp2}, we adopt the self-evaluation visualization proposed by \cite{taylor2016concerto}. We study the changes in algorithm performance as we disable the tracking energy terms in \Equation{htrack} on the \handyseq{teaser} sequence -- in all tests, the \emph{d2m} term is never disabled, as otherwise immediate loss of tracking occurs. Not surprisingly, we identify the \emph{m2d} and \emph{pose} terms to be the ones dominating tracking performance.
+Similarly to \cite{taylor2016concerto}, while the contribution of other terms is small, we found that it still yields a visually noticeable improvement.
+
+\paragraph{Quantitative comparison}
+Our algorithm has been tested with the \realsense{} SR300 (QVGA@60Hz).  We have tailored the method of~\cite{tagliasacchi2015robust} to support this sensor to enable quantitative comparisons. In \Figure{comp1a}, our two metrics are plotted per-frame \todo{as multiple tracking algorithms} are executed on the \handyseq{teaser} sequence, \todo{while \Figure{comp1b} reports aggregated errors;} see \VideoHTrack{}. 
+\todo{It is important to note our metrics are designed to evaluate fitting precision; the method of~\cite{sharp2015accurate} still achieves good tracking robustness on the test sequences, but the lack of user calibration heavily biases this metric.}
+Aggregated performance comparisons are also reported in \Figure{barchart} for each sequence in the \handy{} dataset; see \VideoExtra{}. These metrics reveal a consistent and significant increase in performance. \Figure{calibeval} quantitatively illustrates the tracking benefits of template calibration.
+
+\paragraph{Qualitative comparison}
+We employ the \handy{} sequences to perform a qualitative comparison to~\cite{qian2014realtime,sridhar2015fast,sharp2015accurate,taylor2016concerto}. As it can be observed in~\VideoExtra{}, our calibrated tracker is capable to replicate any of the motions benchmarked by state-of-the-art techniques with excellent accuracy.
+
+\paragraph{Further comparisons}
+Given a sufficiently rich annotated data sample, it is generally possible to adapt a discriminative tracker to a different sensor from what it was originally designed for. However, for generative algorithms the task requires some parameter tweaking, \todo{a challenging task} to achieve without direct access to each sensor variant. 
+\todo{For these reasons, comparisons to datasets developed on different sensors like \dexter{}~\cite{sridhar2013multicam} or \fingerpaint{} \cite{sharp2015accurate} would be misleading.}
+Most importantly, these datasets were acquired at 30Hz, while our generative algorithm is specifically designed to execute at 60Hz. To enable a fair comparison, we would require the  per-frame re-initializer employed by the authors, but no source code for these algorithms is available.
+
+% \paragraph{Golden Energy}
+% Another metric we consider is the golden energy from Sharp and colleagues~\shortcite{sharp2015accurate} that was employed to drive their PSO real-time tracker:
+% \begin{equation}
+% E_{\text{Au}} = \sum_{ij} \rho(\depth(i,j) - \depthrend(i,j))
+% \label{eq:golden}
+% \end{equation}
+% where $\rho(e)=\min(|e|,\tau)$ is a truncated $\ell_1$ distance to make the metric less sensitive to outliers ($\tau=100mm$). Pixels outside the region of interest are mapped to the far plane $\depth^\text{max}$.

@@ -1,0 +1,50 @@
+% \documentclass[acmtog, review, anonymous]{acmart}
+% \documentclass[acmtog, anonymous]{acmart}
+\documentclass[acmtog, anonymous, review]{acmart}
+
+\acmJournal{TOG}
+\acmVolume{9}
+\acmNumber{4}
+\acmArticle{39}
+\acmYear{2010}
+\acmMonth{3}
+
+% Copyright
+\setcopyright{none}
+%\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+%\setcopyright{rightsretained}
+%\setcopyright{usgov}
+%\setcopyright{usgovmixed}
+%\setcopyright{cagov}
+%\setcopyright{cagovmixed}
+
+% DOI
+% \acmDOI{0000001.0000001_2}
+\citestyle{acmauthoryear}
+\setcitestyle{square}
+
+\input{sec/tweaks}
+\input{sec/math}
+
+\begin{document}
+\title{Online Generative Model Personalization for Hand Tracking}
+\input{sec/0_authors}
+% \input{sec/0_keywords}
+\input{sec/0_abstract}
+\input{fig/teaser/teaser}
+\maketitle
+\input{sec/0_autogen}
+\input{sec/1_introduction}
+\input{sec/2_related}
+\input{sec/3_technical}
+\input{sec/4_evaluation}
+\input{sec/5_conclusions}
+% % \input{sec/acks}
+\bibliographystyle{ACM-Reference-Format}
+% \nocite{*} %prints all citations (unreferenced)
+\bibliography{paper}
+\clearpage
+\input{sec/appendix}
+\clearpage
+\end{document}

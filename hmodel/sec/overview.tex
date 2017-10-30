@@ -1,0 +1,61 @@
+% !TEX root = ../hmodel.tex
+
+\input{fig/corresp/item.tex}
+\section{Tracking}
+\label{sec:tracking}
+Given a calibrated hand model $\model$, our real-time tracking algorithm optimizes the 28 degrees of freedom $\parpose$ (i.e. joint angles) so that our hand model matches the sensor input data; the generation of a calibrated model $\model$ for a user is detailed in \Section{modeling}. Directly extending the open source \emph{htrack} framework of \cite{tagliasacchi2015robust}, we write our tracking optimization in Gauss-Newton/Levenberg-Marquardt form:
+% 
+\begin{eqnarray}
+\parpose_t = \argmin_{\parpose}
+\sum_{\mathcal{T} \in \termstrack} 
+w_\mathcal{T} E_\mathcal{T}(\depth_t,\parpose,\parpose_{t-1})
+\label{eq:htrack}
+\end{eqnarray}
+% 
+where fitting energies are combined with a number of priors to regularize the solution and ensure the estimation of plausible poses. 
+
+The energy terms $\termstrack$ in our optimization are:
+% 
+\begin{description}[labelsep=0em,labelwidth=.6in,labelindent=.25cm,itemsep=-.6em]
+    \item[d2m]          each data point is explained by the model
+    \item[m2d]          the model lies in the sensor visual-hull
+    \item[pose]         hand poses sample a low-dimensional manifold
+    \item[limits]       joint limits must be respected
+    \item[collision]    fingers cannot interpenetrate
+    \item[temporal]     the hand is moving smoothly in time
+\end{description}
+% 
+We limit our discussion to the computational elements that need to be adapted to support sphere-meshes, while referring the reader to \cite{tagliasacchi2015robust} for other details.
+
+\newpage
+\paragraph{Hausdorff distance} 
+% Generally speaking,
+\todo{The similarity of two geometric models can be measured }by the symmetric Hausdorff distance $\metric_{X \leftrightarrow Y}$:
+% 
+\begin{eqnarray*}
+\metric_{X \rightarrow Y} =& \max_{x \in X} \left[ \min_{y \in Y} \metric(x,y) \right] \\
+\metric_{Y \rightarrow X} =& \max_{y \in Y} \left[ \min_{x \in X} \metric(x,y) \right] \\
+\metric_{X \leftrightarrow Y} =& \max \{ d_{X \rightarrow Y}, \metric_{Y \rightarrow X} \}
+\end{eqnarray*}
+We therefore interpret our terms $E_{d2m}$ and $E_{m2d}$ as approximations to the asymmetric Hausdorff distances $\metric_{X \rightarrow Y}$ and $\metric_{Y \rightarrow X}$, where the difficult to differentiate \emph{max} operators are replaced by arithmetic means, and a robust $\ell_1$ distance is used~\cite{regcourse}.
+% for $d(x,y)$.
+
+\input{fig/posing/item.tex}
+
+\paragraph{Data $\rightarrow$ Model}
+The first asymmetric distance minimizes the average closest point projection of each point $\point$ in the \todo{depth} frame $\depth$:
+%
+\begin{equation}
+E_{d2m} = |\depth|^{-1} \sum_{\point \in \depth} \| \point - \proj_{\model(\pars)}(\point)\|_2^1
+\label{eq:d2m}
+\end{equation}
+% 
+Adapting this energy, as well as its derivatives, to sphere-meshes requires the specification of the projection operator $\proj_\model$ that is described in \Section{corresp}.
+
+\paragraph{Model $\rightarrow$ Data}
+The second asymmetric distance considers how our monocular acquisition system does not have a complete view of the model. While the 3D location is unknown, we can penalize the model from lying outside the sensor's \emph{visual hull}:
+\begin{equation}
+E_{m2d} = |\model(\pars)|^{-1} \int_{\pixel \in \model(\pars)} \| \pixel - \proj_{\depth}(\pixel)\|_2^1
+\label{eq:m2d}
+\end{equation}
+In the equation above, \todo{the integral is discretized as a sum over the set of pixels obtained through rasterization; see ~\Section{rendering}. The rasterization renders the model to the image plane using the intrinsic and extrinsic parameters of the sensor's depth camera.}

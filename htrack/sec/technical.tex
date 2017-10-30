@@ -1,0 +1,513 @@
+% !TEX root = ../htrack.tex
+
+
+\input{htrack/fig/frontcorr.tex}
+
+\section{Optimization}
+\label{sec:optimization}
+In this section we derive the objective functions of our model-based optimization method
+and provide the rationales for our design choices. 
+Let $\DataSensor$ be the sensor input data consisting of a 3D point cloud $\PointsSensor$ and 2D silhouette $\SilhoSensor$ (see \Figure{data}). Given a 3D hand model $\handmodel$ with joint parameters $\pars = \{ \theta_1, \theta_2,\hdots, \theta_{26} \}$, we aim at recovering the pose $\pars$ of the user's hand, matching the sensor input data $\DataSensor$. 
+To achieve this goal, we solve the optimization 
+problem
+% 
+%\begin{equation}
+%\label{eq:tracking_optimization}
+%\argmin_{\pars} E_{\text{fit}} + E_{\text{prior}},
+%\end{equation}
+%
+\begin{equation}
+\label{eq:tracking_optimization}
+\min_{\pars} \:\: \underbrace{E_{\text{3D}} + E_{\text{2D}} \new{+ E_{\text{wrist}}}}_{\text{Fitting terms}} + \underbrace{E_{\text{pose}} + E_{\text{kin.}} + E_{\text{temporal}}}_{\text{Prior terms}},
+\end{equation}
+%
+combining fitting terms that measure how well the hand parameters~$\pars$ represent the data frame $\DataSensor$, with prior terms that regularize the solution to ensure realistic hand poses. For brevity of notation we omit the arguments $\pars, \PointsSensor,\SilhoSensor$ of the energy terms. We first introduce the fitting terms and present our new solution to compute tracking correspondences. Then we discuss the prior terms and highlight their benefits in terms of tracking accuracy and robustness. 
+%
+More details on the  implementation of the optimization algorithm will be given in \Section{implementation} and the appendix.
+
+
+
+\subsection{Fitting Energies}
+\label{sec:fitting}
+
+
+%\input{fig/fitting.tex}
+
+%Our fitting energy $E_{\text{fit}}$ captures the alignment of the hand model with the 3D point cloud and the 2D silhouette by combining two distinct energies
+%% 
+%\begin{equation}
+%E_{\text{fit}} =  E_{\text{3D}} + E_{\text{2D}}.
+%\label{eq:fitting}
+%\end{equation}
+%
+%
+% Our data fitting performs a joint 2D-3D op- timization. Our 3D alignment ensures that every point measured by the sensor Xs is sufficiently close to the tracked model M. Si- multaneously, as we cannot create such constraints for occluded portions of the hand, we optimize for a 2D registration that ensures the tracked M lies in the sensor visual hull Ss. O
+%
+%
+% Our priors regularize the solution to ensure the recovered pose remains likely. We determined that retaining realistic hand postures is critical, as erroneous postures can result in establishing erroneous closest-point correspondences and cause catastrophic loss of tracking.
+%
+
+
+\paragraph*{Point cloud alignment.}
+%The quality of the point cloud alignment is measured using $E_{\text{3D}}$. 
+The term $E_{\text{3D}}$ models a 3D geometric registration in the spirit of ICP as
+%. The energy is defined as
+%
+\begin{equation}
+    E_{\text{3D}}  = \omegacloud \sum_{\point \in \PointsSensor} \| \point - \proj_{\handmodel}(\point,\pars) \|_2,
+\label{eq:align3d}
+\end{equation}
+%
+where $\|\cdot\|_2$ denotes the $\ell_2$ norm, $\point$ represents a 3D point of $\PointsSensor$, and $\proj_{\handmodel}(\point,\pars)$ is the projection of $\point$ onto the hand model $\handmodel$ with hand pose $\pars$. 
+%This projection defines the correspondence of $\point$ on the model. For brevity of notation, we define this correspondence as $\mathbf{y} = \proj_{\handmodel}(\point,\pars)$.
+%
+ Note that we compute a sum of absolute values of the registration residuals, not their squares. This corresponds to a mixed $\ell_{2}/\ell_{1}$ norm of the stacked vector of the residuals. For 3D registration such a sparsity-inducing norm has been shown to be more resilient to noisy point clouds containing a certain amount of outliers
+such as the ones produced by the Creative sensor (\Figure{data}). We refer to~\cite{bouaziz_sgp13} for more details.
+
+% \SB{not sure if we should say that here: As the 3D hand model is simply composed of cylinders, we compute the projections in close form ignoring back facing correspondences.}
+
+\input{htrack/fig/occlusion.tex}
+\input{htrack/fig/occnrg.tex}
+
+\paragraph*{3D correspondences.}
+% The projection operators are now decoupled from the optimization and can be evaluated, rather than differentiated.
+% The optimization problems in Step.1 can be solved in close form. The computation of 3D correspondences in \Equation{cp3d} can be performed either by exhaustively computing the distances to the underlying cylinder model, or by first rendering the point cloud with the same viewport of the sensor and then fetching closest points with a spatial data structure (kdtree or octree). \AT{Note that the first way of computing closest points is trivially parallelizable}
+The 3D registration term involves computing the corresponding point  $\mathbf{y} = \proj_{\handmodel}(\point,\pars)$ on the cylinder model~$\handmodel$ for each sensor point $\point \in \PointsSensor$. 
+In contrast to standard closest point search, we define the correspondence $\mathbf{y}$  as the closest point on the \emph{front-facing} part $\visiblehand$ of $\handmodel$. This includes parts of the model that are oriented towards the camera but occluded by other parts. 
+ In our experiments we learned that this seemingly simple extension proved absolutely essential to obtain high-quality tracking results.
+ Only considering model points that are visible from the sensor viewpoint, i.e., matching to the rendered model, is not sufficient for handling occlusions or instances of disappearing and reappearing sensor data; see \Figure{frontcorr} and \Figure{occlusion}. 
+ 
+To calculate $\mathbf{y}$, we first compute the closest points $\point_\mathcal{C}$ of $\point$ to each cylinder $\mathcal{C}\in\handmodel$. Recall that our hand model consists of sphere-capped cylinders so these closest points can be computed efficiently in closed form and in parallel for each $\point \in \PointsSensor$.
+We then identify back-facing points using the dot product of the cylinder surface normal $\mathbf{n}$ at $\point_\mathcal{C}$ and the view ray vector $\mathbf{v}$. 
+%
+For efficiency reasons, we use a simplified orthographic camera model where the view rays are constant, i.e., $\mathbf{v} = [0~0~1]^T$. If a point on a cylinder is back-facing ($\mathbf{n}^T\mathbf{v}>0$), we project $\point$ onto the cylinder's silhouette contour line from the camera perspective, whose normals are orthogonal to $\mathbf{v}$.
+
+%We first compute the orthogonal projection of $\point$ onto the cylinder's center line segment. The point on the cylinder's surface is then found by moving back along the projection axis by the cylinder radius.
+
+
+%As the sensor data only contains points that are visible from the camera's point of view, we only project to the parts of the cylinder that are front-facing with respect to the camera. This includes parts of the model that are oriented towards the camera but occluded by other parts of the model. Only considering model points that are visible from the sensor viewpoint, i.e., matching to the rendered model point cloud, is not sufficient for handling occlusions or instances of disappearing and reappearing sensor data (see \Figure{frontcorr} and \Figure{occlusion}). 
+
+
+
+% 
+% Conversely, to establish closest point correspondences to $\SilhoSensor$, we first compute its distance transform in linear time using~\cite{felzenszwalb_12} (1ms on a 320x240 image).
+ 
+A different strategy to address visibility issues has been introduced \new{ in~\cite{qian_cvpr14}. These methods} propose an energy that penalizes areas of the model falling in front of the data, which is then optimized using particle swarms. This energy can be integrated into our optimization following the formulation in \cite[Eq. 15]{wei_siga12}. However, such an energy is prone to create local minima in gradient-based optimization, as illustrated in \Figure{occnrg}. Here the thumb has difficulty entering the palm region, as it must occlude palm samples before reaching its target~configuration. Our correspondence search avoids such problems.
+\new{Furthermore, note how~\cite{qian_cvpr14} follows a \emph{hypothesize-and-test} paradigm where visibility constraints in the form of \emph{ray-casting} are easy to include. As discussed in  \cite{ganapathi_eccv12}, such constraints are much more difficult to include in iterative optimization techniques like ours. However, our front-facing correspondences computation provides a simple and elegant way to deal with such shortcomings.}
+
+
+% takes the energy formulation of~, which was optimized by particle swarm optimization, and adapts it to our gradient-based formulation; see~.
+
+% \MP{Does this make more sense? I would still like to give an explanation of what is happening here. People might not know Qian. Can we say in one sentence what the difference is?}
+
+%\AT{this is a dangerous statement. We implement the energy proposed in \cite{qian_cvpr14} and then linearize it. It's the gradient of this energy that is f'd, but if you follow a particle swarm strategy it does work `ok'}, highlighting the improved tracking accuracy of our approach.
+
+\input{htrack/fig/push.tex}
+
+\paragraph*{Silhouette alignment.}
+The 3D alignment energy $E_{\text{3D}}$ robustly measures the distance between every point in the 3D point cloud~$\PointsSensor$ to the tracked model $\handmodel$. However, as hands are highly articulated, significant self-occlusions are common during tracking. Such self-occlusions are challenging, because occluded parts will not be constrained when only using a 3D alignment energy. For this reason, we use a 2D silhouette term $E_{\text{2D}}$ that models the  alignment of the 2D silhouette of our rendered hand model with the 2D silhouette extracted from the sensor data as 
+%
+%The second term $E_{\text{2D}}$ models a 2D geometric alignment in a similar manner than the $E_{\text{3D}}$ energy as
+%
+\begin{equation}
+    E_{\text{2D}} = \omegasilhouette \sum_{\pixel \in \SilhoRender} \| \pixel - \proj_{\SilhoSensor}(\pixel,\pars) \|_2^2,
+\label{eq:align2d}
+\end{equation}
+%
+% where $\pixel$ is a 2D point of the rendered silhouette $\SilhoRender$, and $\proj_{\SilhoSensor}(\pixel,\pars)$ denotes the projection of $\pixel$ onto $\SilhoSensor$.
+where $\pixel$ is a 2D point of the \emph{rendered} silhouette $\SilhoRender$, and $\proj_{\SilhoSensor}(\pixel,\pars)$ denotes the projection of $\pixel$ onto the \emph{sensor} silhouette $\SilhoSensor$.
+%over the 2D silhouette extracted from the sensor data $\SilhoSensor$. 
+% \SB{not sure if we should say that here: The projections are computed using the 2D distance transform of $\SilhoSensor$~\cite{....}.}
+%
+\Figure{push} shows why the silhouette term is crucial to avoid erroneous poses when parts of the model are occluded. 
+Without the silhouette energy, the occluded fingers can mistakenly move to wrong locations, since they are not constrained by any samples in the depth map.
+
+
+
+
+
+
+
+%\subsection{Correspondence Search}
+%
+%The 3D and 2D registration energies of Equations~\ref{eq:align3d} and~\ref{eq:align2d} require the computation of point correspondences from the data to the model. Our solution improves upon existing correspondence algorithms without compromising computational efficiency.
+%
+%
+
+
+
+\paragraph*{2D correspondences.}
+In \Equation{align2d}, we compute the silhouette image $\SilhoRender$ by first rendering the hand model $\handmodel$ from the viewpoint of the sensor, caching the bone identifier and the 3D location associated with each pixel in a texture.
+% for the computation of the Jacobian in \Equation{jacobian2d} are cached in a texture. 
+The projection function $\proj_{\SilhoSensor}(\pixel,\pars)$ to compute the
+% For each pixels in $\SilhoRender$, we then identify
+ closest corresponding point to the sensor silhouette is evaluated efficiently using the 2D distance transform of $\SilhoSensor$.
+ We use the linear time algorithm of~\cite{felzenszwalb_12} and store at every pixel the index to the closest correspondence.
+% To perform this task efficiently, we compute the 2D distance transform of $\SilhoSensor$ with a linear time algorithm~\cite{felzenszwalb_12}, i.e., at every pixel we store the distance transform value and the index to the closest correspondence.
+% simple to evaluate in close form, as they simply require us to compute the closest point to either the tracking model $\handmodel$ or the silhouette of the sensor data $\SilhoSensor$.
+% At each iteration we render $\handmodel$ from the viewpoint of the sensor
+% We employ the color of each pixel to uniquely identify the originating bone. This information, as well as its 3D position are necessary to compute the gradient of~\Equation{align2d}.
+% Step 2 can now be approached by Gauss-Newton optimization; we perform Taylor expansion of the residuals $\mathbf{r}$ of each energy term in \Equation{icp} as $\mathbf{r} \approx \mathbf{r}_0 + \J(\mathbf{r}_0) \delta\pars$, where $\J=\partial \mathbf{r} / \partial \pars$ is the Jacobian of the residuals, and then compute the optimal update as:
+% %
+% \begin{eqnarray}
+% \delta\pars = (\J^t \J + \alpha \mathbf{I})^{-1} \J^t (\mathbf{r} - \mathbf{r_0})
+% \label{eq:gaussnewton}
+% \end{eqnarray}
+% %
+% A description of the rows that assemble $\J$, altogether with a description of the chain-rule derivatives is given in the appendix. In the equation above, the term weighted by $\alpha$ both ensures the system remains well conditioned and stabilizes the optimization by reducing the magnitude of the computed update.
+
+
+
+% \brief{Convergence Speed}
+
+\input{htrack/fig/shapespace.tex}
+
+\paragraph*{Wrist alignment.}
+\new{The inclusion of the forearm for hand tracking has been shown beneficial in~\cite{melax_13}. Our wrist alignment energy encodes a much simplified notion of the forearm in the optimization that enforces the wrist joint to be located along its axis.}
+\begin{equation}
+    E_\text{wrist} = \omegawrist \| \proj_\text{2D}(\mathbf{k}_0(\pars)) - \proj_{\ell}(\mathbf{k}_0(\pars)) \|_2^2,
+\end{equation}
+\new{
+Minimizing this energy helps preventing the hand from erroneously rotating/flipping during tracking; an occurrence of this can be observed at 04:03 in the accompanying video.
+% 
+Here $\mathbf{k}_0$ is the 3D position of the wrist joint, and $\ell$ is the 2D line extracted by PCA of the 3D points associated with the wristband; see \Figure{wristband}. Note that $\proj_\text{2D}$ causes residuals to be minimized in screen-space, therefore the optimization of this energy will be analogous to the one of \Equation{align2d}. 
+We optimize in screen space because, due to occlusion, we are only able to observe half of the wrist and this causes its axis to be shifted toward the camera.}
+
+\input{htrack/fig/shapespaceproj.tex}
+\input{htrack/fig/pcaconv.tex}
+\subsection{Prior Energies}
+\label{sec:prior}
+Minimizing the fitting energies alone easily leads to unrealistic or unlikely hand poses, due to the deficiencies in the input data caused by noise, occlusions, or motion blur. We therefore regularize the registration with data-driven, kinematic, and temporal priors to ensure that the recovered hand poses are plausible. Each of these terms plays a fundamental role in the stability of our tracking algorithm, as we illustrate below.
+
+%% and is composed of three terms
+%% 
+%\begin{equation}
+%E_{\text{prior}} = E_{\text{pose}} + E_{\text{kinematic}} + E_{\text{temporal}}.
+%\label{eq:prior}
+%\end{equation}
+%%
+
+
+%The $E_{\text{kinematic}}$ energy aims at generating a plausible hand posture by finding a hand pose respecting some kinematic constraints, i.e., angle bounds and the avoidance of self-collisions. The $E_{\text{temporal}}$ term enforces temporal smoothness to avoid jittering and in order to predict hand parameters in  case of missing data. Finally, to achieve a tracking that produces  postures realizable by a human hand we employ a data-driven energy $E_{\text{pose}}$. 
+
+
+\paragraph*{Pose Space prior (data-driven).}
+\input{htrack/fig/pca.tex}
+
+The complex and highly coupled articulation of human hands is difficult to model directly with geometric or physical constraints. Instead, we use a publicly available database of recorded hand poses~\cite{schroeder_icra14} to create a data-driven prior $E_{\text{pose}}$ that encodes this coupling.
+% To achieve a tracking that produces hand postures which are realizable by a human hand (e.g. we cannot bend a finger on itself), we employ a data-driven regularizer. As a simple example, it is difficult to bend the \emph{distal phalanx} without simultaneously bending the \emph{proximal phalanx}.
+We construct a low-dimensional subspace of plausible poses by performing dimensionality reduction using PCA (see \Figure{shapespace}). 
+% 
+%\begin{eqnarray}
+%E_{\text{pose}} = E_{\text{projection}} + E_{\text{mean}}.
+%\end{eqnarray}
+%
+We enforce the hand parameters~$\pars$ to lie close to this low-dimensional linear subspace using a 
+ data term
+$E_{\text{pose}} = E_{\text{projection}} + E_{\text{mean}}$.
+%
+To define the data term, we introduce auxiliary variables $\parssub$, i.e, the PCA weights, representing the (not necessarily orthogonal) projection of the hand pose $\pars$ onto the subspace; see \Figure{shapespaceproj}.
+%\MB{If $\parssub$ is the projection of $\pars$ to the PCA space, then it is \emph{not} an auxiliary variable, since it is not free to be chosen differently. It is fully defined by $\pars$ and the PCA matrix $P$ as $\parssub = P P^T (\pars-\boldsymbol{\mu}$. You seem to really use it as an auxiliary variable, but then the above statement is wrong, and I don't see why you have to add the extra variables.}
+The projection energy  measures the distance between the hand parameters and the linear subspace as
+% 
+\begin{eqnarray}
+E_{\text{projection}}  = \omegapcaproj \|(\pars - \boldsymbol{\mu}) - \proj_\posespace \parssub \|_2^2,   
+\label{eq:pcaproj}
+\end{eqnarray}
+% 
+where $\boldsymbol{\mu}$ is the PCA mean. The matrix $\proj_\posespace$, i.e., the PCA basis,
+%\MB{The PCA matrix (let's call it $P$), with the PCA basis vectors in its columns, is \emph{not} a projection. The projection matrix onto the PCA subspace is $PP^T$.}
+reconstructs the hand posture from the low-dimensional space. 
+%\MB{Why not simply measure the distance of $\pars$ from the subspace? This should by $\| (I-PP^T)(\theta-\mu) \|$. For \Eq{pcaproj} there's no need for an extra $\parssub$. }
+To avoid unlikely hand poses in the subspace, we regularize the PCA weights $\parssub$ using an energy
+% 
+\begin{eqnarray}
+E_{\text{mean}} = \omegapcareg \|\boldsymbol{\Sigma} \parssub \|_2^2. 
+\label{eq:pcareg}
+\end{eqnarray}
+% 
+$\boldsymbol{\Sigma}$ is a diagonal matrix containing the inverse of the standard deviation of the PCA basis.
+Our tracking optimization is modified to consider the pose space by introducing the auxiliary variable $\tilde\pars$ and then jointly minimizing over $\pars$ and $\tilde\pars$. \new{The difference between our approach and optimizing directly in the subspace is further discussed in~\Appendix{pca}}.
+% 
+\new{Note how the regularization energy in \Equation{pcareg} helps the tracking system recover from tracking failures. When no sensor constraints are imposed on the model, the optimization will attempt to push the pose toward the mean -- a statistically likely pose from which tracking recovery is highly effective.}
+
+\Figure{pca} illustrates how the PCA data prior improves tracking by avoiding unlikely poses, in particular when the input data is incomplete.
+We found that even when data  coverage is sufficient to recover the correct pose, the data term improves the convergence of the optimization as illustrated in \Figure{pcaconv}.
+% 
+\Figure{pcafail} shows how our regularized projective PCA formulation outperforms the direct subspace optimization proposed in previous work.
+
+
+
+
+% \todo{Explain why this is better than measuring the distance to the projection.}
+
+\paragraph*{Kinematic prior.}
+The PCA data term is a computationally efficient way of approximating the space of plausible hand poses.
+However, the PCA model alone cannot guarantee that the recovered pose is realistic. In particular, since the PCA is symmetric around the mean, fingers bending backwards beyond the physically realistic joint angle limits are not penalized by the data prior. Similarly, the PCA model is not descriptive enough to avoid self-intersections of fingers. These two aspects are addressed by the kinematic prior $E_{\text{kinematic}} = E_{\text{collision}} + E_{\text{bounds}}$.
+%
+%\begin{eqnarray}
+%E_{\text{kinematic}} = E_{\text{collision}} + E_{\text{bounds}}.
+%\label{eq:kinematic}
+%\end{eqnarray}
+%
+Under the simplifying assumption of a cylinder model, we can define an energy $E_{\text{collision}}$ that accounts for the inter-penetration between each pair of (sphere-capped) cylinders:
+% 
+\begin{equation}
+    E_{\text{collision}} = \omegacollision \sum_{\{i,j\}} {\chi(i,j)}(d(\cyl_i, \cyl_j) - r)^2,
+\end{equation} 
+%
+where the function $d(\cdot,\cdot)$ measures the Euclidean distance between the cylinders axes $\cyl_i$ and $\cyl_j$, and $r$ is the sum of the cylinder radii. ${\chi(i,j)}$ is an indicator function that evaluates to one if the cylinders $i$ and $j$ are colliding, and to zero otherwise.
+% \MB{I don't like the $\chi$, it messes up the equation. Why not use truncated powers, as people playing with compact kernels use: $(r-d(c_i,c_j))_+^2$, where $(x)_+^2$ is $x^2$ for $x>0$ and $0$ otherwise. It's clear what you want to model, but the $\chi$ just makes the equation (appear) unnecessarily complicated.}
+The top row of \Figure{posepriors} shows how this term avoids interpenetrations of the fingers.
+% \MP{Should add a figure that shows this effect} DONE
+% 
+
+\input{htrack/fig/pcafail.tex}
+
+%computed in close form as the shortest segment between the two cylinders axes
+% \SB{To prevent fingers inter-penetrating each other during tracking we instantiate collision constraints. Similarly to \cite{oiko_?}, to retain real-time performance, we only instantiate constraints between nearby finger segments.}
+To prevent the hand from reaching an impossible posture by overbending the joints, we limit the joint angles of the hand model:
+\begin{equation}
+   E_{\text{bounds}} = \omegabounds \sum_{\theta_i \in \pars}
+        \underline{\chi}(i)(\theta_i - \underline{\theta}_i)^2
+            +
+        \overline{\chi}(i)(\theta_i - \overline{\theta}_i)^2,
+        \label{eq:bound}
+\end{equation}
+%
+% \MB{Same suggestion here: Replace $\chi$ by a truncated power, then you don't need to introduce two new $\chi$s}
+where each hand joint is associated with conservative bounds $\left[ \underline{\theta}_i,\overline{\theta}_i\right]$. For the bounds, we use the values experimentally determined by \cite{chan_95}.  {$\underline{\chi}(i)$} and {$\overline{\chi}(i)$} are indicator functions. {$\underline{\chi}(i)$} evaluates to one if $\theta_i < \underline{\theta}_i$, and to zero otherwise. $\overline{\chi}(i)$ is equal to one if $\theta_i > \overline{\theta}_i$, and  zero otherwise.
+% \AT{should we say something about the fact that they lose meaning unless the palm is aligned correctly? This would make}
+The bottom row of \Figure{posepriors} illustrates the effect of the joint angle bounds.
+
+\input{htrack/fig/posepriors.tex}
+
+
+
+\input{htrack/fig/temporal.tex}
+\paragraph*{Temporal prior.}
+
+A common problem in particular with appearance-based methods are small-scale temporal oscillations that cause the tracked hand to jitter. A standard way to enforce temporal smoothness is to penalize the change of model parameters~$\pars$ through time, for example, by penalizing a quadratic energy accounting for velocity $\|\dot \pars\|^2$ and acceleration $\|\ddot \pars\|^2$~\cite{wei_siga12}. 
+% 
+% \MP{Please verify that it's ok to cite them here} \AT{it's correct}
+% 
+However, if we consider a perturbation of the same magnitude, it would have a much greater effect if applied at the root, e.g., global rotation, than if applied to an element further down the kinematic tree, e.g., the last phalanx of a finger. 
+%\AT{we should say that this was what was done in ?} \MP{What did they do, our method, or the standard approach described above?}
+%\AT{they do the standard approach. Never seen what we do around...}
+% \todo{Also, it is not intuitive to understand how to tune its weighting parameter... compare angles with translations, and then to other energies... little meaning!!}
+Therefore, we propose a solution that measures the velocity and acceleration of a set of points attached to the kinematic chain. We consider the motion of vertices $\skelpoint$ of the kinematic chain $\mathcal{K}$ (\Figure{handmodel}) and build an energy penalizing the velocity and acceleration of these points:
+% \MB{I would call the vertices $\skelpoint_i$ to match the figure}
+\begin{eqnarray}
+    E_{\text{temporal}} = \omegatemporalst \sum_{\skelpoint_i \in \mathcal{K}} \| \dot \skelpoint(\pars) \|_2^2 + \omegatemporalnd \sum_{\skelpoint_i \in \mathcal{K}} \| \ddot \skelpoint(\pars) \|_2^2.
+\end{eqnarray}
+%
+% \MB{Mention how you compute the time-derivatives.}
+\Figure{temporal} illustrates how the temporal prior reduces jitter and improves the overall robustness of the tracking; see also accompanying video.
+
+% $E_{\text{fit}}$ defines a \emph{temporal smoothness} energy, attempting to identify a solution whose trajectory is temporally smooth.
+% using the tracking history $\history=\{\pars_{t-1}, \pars_{t-2}, ...\}$. 
+% We will also take advantage of recent advances in commodity RGBD sensing devices that allow concurrent acquisition of geometry and texture. A novel registration method that combines articulated 3D alignment with high-quality optical flow will be specifically designed for hand geometry and texture.
+
+
+
+% Let $\DataSensor_t =\{\PointsSensor, \SilhoSensor\}$ be the input data at the current frame $t$ consisting of a 3D point cloud $\PointsSensor$ and 2D silhouette $\SilhoSensor$ (see Figure~\ref{...}).
+% % \MP{We should refer to a figure showing the data to give people an early impression of the low data quality.}
+% From $\DataSensor_t$ we want to infer the most likely hand pose $\pars_t$ given the tracking history $\history=\{\pars_{t-1}, \pars_{t-2}, ...\}$ and the 3D hand model $\handmodel$. Dropping the index $t$ for notational brevity, we formulate the inference problem as a maximum a posteriori (MAP) estimation
+% %
+% % \begin{equation}
+% % \argmax_{\pars, \parssub} p(\pars, \parssub|\DataSensor,\history,\handmodel),
+% % \end{equation}
+% %
+% %
+% \begin{equation}
+% \label{eq:tracking}
+% \argmax_{\pars} p(\pars|\DataSensor,\history,\handmodel),
+% \end{equation}
+% %
+% where $p(\cdot|\cdot)$ denotes the conditional probability. Using Bayes’ rule, we reformulate the optimization (see Appendix~\ref{}) as
+% %
+% % \begin{equation}
+% % \argmax_{\pars, \parssub} p(\DataSensor|\pars) \: p(\pars|\history)p(\pars|\handmodel)p(\pars|\parssub)p(\parssub)
+% % \end{equation}
+% %
+% %
+% \begin{equation}
+% \label{eq:MAP}
+% \argmax_{\pars} p(\DataSensor|\pars)p(\pars|\history)p(\pars|\handmodel).
+% \end{equation}
+% %
+% In this equation $p(\DataSensor|\pars)$ represents the \emph{likelihood}, aiming at estimating the tuple $\pars$ that best justifies the considered data frame $\DataSensor$. The $p(\pars|\history)$ term is our \emph{temporal prior}, attempting to identify a solution whose trajectory is temporally smooth. The $p(\pars|\handmodel)$ term is our \emph{pose prior} that aims at generating a plausible hand posture by finding a pose respecting kinematic constraints, i.e, angle bounds and self-collisions.
+%
+% In order to solve the MAP problem as defined by Equation~\ref{eq:MAP} we minimize its negative logarithm leading to
+% %
+% \begin{equation}
+% \argmin_{\pars} -\ln p(\DataSensor|\pars) -\ln p(\pars|\history) -\ln p(\pars|\handmodel).
+% \end{equation}
+% %
+% % \paragraph*{Data Likelihood.} By assuming conditional independence, we can model the likelihood distribution $p(\DataSensor|\pars)$ as the product
+% % $p(\DataSensor|\pars) = p(\PointsSensor|\pars)p(\SilhoSensor|\pars)$. The two factors capture the alignment of the hand model with the 3D point cloud and the 2D silhouette, respectively.
+% %
+% % \AT{check the DT term fits here}:
+% % \begin{itemize}
+% % \item 3D: depth + kdtree
+% % \item 2D: dtform
+% % \end{itemize}
+% %
+% % \paragraph*{Temporal Prior.} By assuming ... independence, $p(\pars|\history,\posespace)$ can be written as the product $p(\pars|\history,\posespace) = p(\pars|\history)p(\pars|\posespace)$.
+% %
+% % \AT{check bounds and collision fit here}:
+% % \begin{itemize}
+% % \item collision + bounds $p(\pars)$
+% % \item temporal $p(\pars|\history)$
+% % \item pose $p(\pars|\posespace)$
+% % \end{itemize}
+% %
+% % \SB{this should go to the optimization section}
+% % \todo{Finally, and taking the negative log of the likelihood of this problem allows us to express it as the minimization of a set of least-squares energies.}
+% % % These terms will be now described in further details.
+% %
+% % \AT{For the regularizers we should say here \emph{why} we need so many. For example, joint bounds \emph{cannot} be encoded by PCA, simply because the latent space is symmetric by the mean. That is, if we allow fingers to bend forward, then the latent space would also allow them to bend backwards. Global rotation is also not encoded by the PCA model, and that's why we need to separately take it into account account in the coherence energy.}
+% %
+% % \paragraph*{Latent Space Prior.}
+%
+% %-------------------------------------------------------------------------------
+% %-------------------------------------------------------------------------------
+% \subsection{Data Likelihood}
+% %-------------------------------------------------------------------------------
+% %-------------------------------------------------------------------------------
+% \input{fig/fitting.tex}
+% By assuming conditional independence given the hand pose $\pars$, we can model the likelihood distribution $p(\DataSensor|\pars)$ as the product $p(\DataSensor|\pars) = p(\PointsSensor|\pars)p(\SilhoSensor|\pars)$. The two factors capture the alignment of the hand model with the 3D point cloud and the 2D silhouette, respectively.
+% % We represent the distribution of each likelihood term as a product of Gaussians.
+% %, treating each ... independently.
+% % By assuming conditional independence across the channels in each input frame, we can rewrite the likelihood as \todo{$p(\DataSensor|\pars)=p(\PointsSensor|\pars) p(\SilhoSensor|\pars)$.}
+% % Therefore, our optimization addresses two different aspects of registration one of which is better expressed in 3D while the other in 2D.  \AT{figure explaining why the second term is necessary (i.e. finger popping out)}. Note how each pixel in the data, either belonging to $\SilhoRender$ or to $\SilhoSensor$, generates a data-fitting constraint in our optimization; see \Fig{constraints}.
+%
+% \paragraph*{3D alignment.}
+% The likelihood term $p(\PointsSensor|\pars)$ models a geometric registration in the spirit of ICP by assuming a Gaussian distribution treating each point of the 3D point cloud $\PointsSensor$ independently. The negative logarithm of $p(\PointsSensor|\pars)$ is expressed as
+% % of the per-vertex point-plane distances
+% % On one side, we must ensure that each 3D point in the measured data $\point \in \PointsSensor$ is well explained by our rendered model (aka small distance residuals):
+% %
+% \begin{equation}
+%     -\ln p(\PointsSensor|\pars)  = \weight_{1} \sum_{\point \in \PointsSensor} \| \point - \proj_{\handmodel}(\point,\pars) \|_2^2,
+% \label{eq:align3d}
+% \end{equation}
+% %
+% where $\point$ is a 3D point of $\PointsSensor$, and $\proj_{\handmodel}(\point,\pars)$ denotes the projection of $\point$ over the hand model $\handmodel$ with hand pose $\pars$. As the 3D hand model is simply composed of cylinders, we compute the projections in close form ignoring back facing correspondences.
+%
+% \paragraph*{2D alignment.}
+% Similar to the 3D alignment, the likelihood term $p(\SilhoSensor|\pars)$ models a geometric registration in the spirit of ICP. The alignment is performed in 2D requiring the silhouette of our rendered hand model to align with the 2D silhouette extracted from the sensor data.
+% %ensures that each pixel of our rendered hand model is occluded by the 2D silhouette extracted from the sensor data.
+% We assume a Gaussian distribution treating each point of the 2D rendered silhouette $\SilhoRender$ independently. The negative logarithm of $p(\SilhoSensor|\pars)$ is expressed as
+% %
+% \begin{equation}
+%     -\ln p(\SilhoSensor|\pars) = \weight_{2} \sum_{\pixel \in \SilhoRender} \| \pixel - \proj_{\SilhoSensor}(\pixel,\pars) \|_2^2,
+% \label{eq:align2d}
+% \end{equation}
+% %
+% where $\pixel$ is a 2D point of the rendered silhouette $\SilhoRender$, and $\proj_{\SilhoSensor}(\pixel,\pars)$ denotes the projection of $\pixel$ over the 2D silhouette extracted from the sensor data $\SilhoSensor$. The projections are computed using the 2D distance transform of $\SilhoSensor$~\cite{....} .
+%
+% % \AT{mention non-linearity of these energies and that more details will be provided in ``technical2''}
+%
+% % By also assuming noise with a zero mean normal distribution $p(x) = \normal(x,\sigma)$ and declaring $d(.)$ as a metric measuring the distance from our posed model $\mathcal{M}(\pars)$ to the 3D acquired data $X$ our likelyhood becomes:
+% %
+% % \begin{equation}
+% % p(\DataSensor|\pars) = \normal( d(\mathcal{M}(\pars),X), \sigma_{ICP})
+% % \end{equation}
+% %-------------------------------------------------------------------------------
+% %-------------------------------------------------------------------------------
+% \subsection{Temporal Prior}
+% %-------------------------------------------------------------------------------
+% %-------------------------------------------------------------------------------
+% % \paragraph*{Temporal smoothness: $p(\pars|\history)$.}
+% A trivial way to enforce temporal smoothness would be to penalize the change of model parameters $\pars$ through time, for example, by penalizing a quadratic energy accounting for velocity $\|\dot \pars\|^2$ or acceleration $\|\ddot \pars\|^2$. However, if we consider a perturbation of the same magnitude, it would have a much greater effect if applied at the root, e.g., global rotation, than if applied to an element deep down the kinematic tree, e.g., last phalanx of a finger.
+% % \todo{Also, it is not intuitive to understand how to tune its weighting parameter... compare angles with translations, and then to other energies... little meaning!!}
+% Therefore, we propose a solution that measures the acceleration of a set of points attached to the kinematic chain. For simplicity, we build this energy by simply taking into account the motion of vertices of the skeleton graph~$\point \in \mathcal{K}$. \MP{Maybe we want to have a figure for this (or show it in the hand model figure).} We assume a Gaussian distribution treating each vertex independently. The negative logarithm of $p(\pars|\history)$ is expressed as
+% %
+% \begin{eqnarray}
+%     -\ln p(\pars|\history) = \weight_3 \sum_{\point \in \mathcal{K}} \| \ddot \point(\pars) \|_2^2.
+% \end{eqnarray}
+% %-------------------------------------------------------------------------------
+% %-------------------------------------------------------------------------------
+% \subsection{Pose Prior}
+% %-------------------------------------------------------------------------------
+% %-------------------------------------------------------------------------------
+% Let $\handmodel = \{\mathcal{C}, \mathcal{B}\}$ be the 3D hand model consisting of a set of cylinders $\mathcal{C}$ and a set of angle bounds $\mathcal{B}$.
+% \MP{We need to introduce the model earlier (with a figure).}
+% We decompose the pose prior $p(\pars|\handmodel)$ as a product $p(\pars|\handmodel)  = p(\pars|\mathcal{C})p(\pars|\mathcal{B})$. $p(\pars|\mathcal{C})$ is defined as a \emph{collision prior} which aims at avoiding self-collisions, and $p(\pars|\mathcal{B})$ as a \emph{joint angle prior} preventing the joints from rotating in an unlikely manner.
+% % In this equation $p(\DataSensor|\pars)$ represents the \emph{likelihood}, aiming at estimating the tuple $\pars$ that best justifies the considered data frame $\DataSensor$.
+%
+% % By assuming conditional independence, the regularizers can again be split into several energy terms. Let us first consider the priors that are intrinsically defined (aka only depend on $\pars$):
+% % %
+% % \begin{eqnarray}
+% %     -\ln p(\pars|\handmodel) = \weight_{3} E_{bounds} + \weight_{4} E_{collision}
+% % \end{eqnarray}
+%
+% \paragraph*{Collision prior.}
+% To prevent fingers inter-penetrating each other during tracking we instantiate collision constraints. Similarly to \cite{oiko_?}, to retain real-time performance, we only instantiate constraints between nearby finger segments. Under the simplifying assumption of a cylinder model, we can define an energy that accounts for the inter-penetration between two cylinders. We formulate the negative logarithm of the probability $p(\pars|\mathcal{C})$ as
+% %
+% \begin{equation}
+%     -\ln p(\pars|\mathcal{C}) = \weight_4 \sum_{\{i,j\}} \| \min(d(\cyl_i, \cyl_j), 0) \|_2^2,
+% \end{equation}
+% %
+% where the function $d(\cdot,\cdot)$ measures the signed distance between two (sphere-capped) cylinders $\cyl_i$ and $\cyl_j$.
+%
+% \paragraph*{Joint angle prior.}
+% To prevent the hand from reaching an undesired posture we limit the joint angles of the hand model. We formulate the negative logarithm of the probability $p(\pars|\mathcal{B})$ as
+% % \AT{should we say here why this is way better than clamping at the end of the optimization? actually better doing it in the tech2 section!}
+% %
+% % \begin{equation}
+% %     -\ln p(\pars|\mathcal{B}) = \weight_5 \sum_{\pars_i \in \pars}
+% %         \|\min(\pars_i - \underline{\pars}_i, 0)
+% %             + \min(\overline{\pars}_i - \pars_i,0)\|_2^2,
+% % \end{equation}
+% %
+% \begin{equation}
+%     -\ln p(\pars|\mathcal{B}) = \weight_5 \sum_{\pars_i \in \pars}
+%         \|\min(\pars_i - \underline{\pars}_i, 0)\|_2^2
+%             +
+%         \|\min(\overline{\pars}_i - \pars_i,0)\|_2^2,
+% \end{equation}
+% %
+% Each hand joint is associated with conservative bounds $\left[ \underline{\pars}_i,\overline{\pars}_i\right]$. We use the values that have been experimentally determined by \todo{\cite{?}}. \AT{should we say something about the fact that they lose meaning unless the palm is aligned correctly?}
+%
+%
+%
+% %-------------------------------------------------------------------------------
+% %-------------------------------------------------------------------------------
+% \subsection{Latent Space Prior}
+% %-------------------------------------------------------------------------------
+% \input{fig/shapespace.tex}
+% %-------------------------------------------------------------------------------
+% % \paragraph*{Shape shape constraints: : $p(\pars|\posespace)$.}
+% % Joint names: http://www.infovisual.info/03/027_en.html
+% To achieve a tracking that produces hand postures which are realizable by a human hand (e.g. we cannot bend a finger on itself), we employ a data-driven regularizer. As a simple example, it is difficult to bend the \emph{distal phalanx} without simultaneously bending the \emph{proximal phalanx}.
+% \MP{I have no idea what these are. Why are they italic?}
+%  \todo{Say something about studies that analyzed the sub-dimensionality of hand articulation~\cite{???}}. We construct a low dimensional subspace of feasible poses performing dimensionality reduction on a publicly available database of recorded hand postures~\cite{schroeder_icra14}. Then, to enforce posture feasibility constraints, we simply require the posture parameters to lie close to this low-dimensional subspace. To do so we make use of an auxiliary variable $\parssub$ representing the projection of the hand pose $\pars$ onto the low-dimensional subspace. We increment Equation~\ref{eq:tracking} with this auxiliary variable leading to
+% %
+% \begin{equation}
+% \argmax_{\pars, \parssub} p(\pars, \parssub|\DataSensor,\history,\handmodel),
+% \end{equation}
+% %
+% As previously, using Bayes’ rule, we reformulate the optimization (see Appendix~\ref{}) as
+%
+% \begin{equation}
+% \argmax_{\pars, \parssub} p(\DataSensor|\pars) \: p(\pars|\history)p(\pars|\handmodel)p(\pars|\parssub)p(\parssub)
+% \end{equation}
+%
+% %
+% \begin{eqnarray}
+% -\ln p(\pars|\parssub) = \weight_6 \|\pars - \proj_\posespace \parssub \|_2^2
+% \end{eqnarray}
+% %
+% %
+% \begin{eqnarray}
+% -\ln p(\parssub) = \weight_7 \|\boldsymbol{\Sigma} \parssub \|_2^2
+% \end{eqnarray}
+% %
+% Note that by setting $\weight_6=\infty$ we would essentially force the solution to lie in the latent space. When $\proj_\posespace$ is a simple linear projection (latent space is a PCA model), this term will be equivalent to the variable performed by~\cite{schroeder_icra}. In \Section{eval}, we will demonstrate how restricting the solution to lie in this subspace can be detrimental in terms of tracking quality.
+
+
+%%% Local Variables:  
+%%% mode: latex 
+%%% TeX-master: "../htrack" 
+%%% End: 

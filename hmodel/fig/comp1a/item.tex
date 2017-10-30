@@ -1,0 +1,28 @@
+\definecolor{hmodel}{rgb}{0.52, 0.23, 0.58}
+\definecolor{htrack}{rgb}{0, 0.44, 0.74}
+\definecolor{taylor}{rgb}{0.94, 0.73, 0.235}
+\definecolor{sharp}{rgb}{0.85, 0.325, 0.1}
+
+\begin{figure}[t!]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=10]
+{\currfiledir/item.pdf}
+% \put(0,-3){\todo{\currfiledir}}
+\put(0.75,93){{\small \rotninety{$E_{3D}$} }}
+\put(0.75,42.5){{\small \rotninety{$E_{2D}$} }}
+% \put(69.4,96.8){{\tiny \cite{tagliasacchi2015robust}}}
+% \put(74,94.7){{\tiny [Proposed Method]}}
+% \put(69.5,46.5){{\tiny \cite{tagliasacchi2015robust}}}
+% \put(74.1,44.5){{\tiny [Proposed Method]}}
+\end{overpic}
+\caption{
+% 
+%
+% The {\color{hmodel}\citeme{}} is quantitatively compared over time to the ones in~{\color{htrack}\protect\cite{tagliasacchi2015robust}}, {\color{sharp}\protect\cite{sharp2015accurate}} and  {\color{taylor}\protect\cite{taylor2016concerto}} on the \handyseq{teaser} sequence.
+The {\color{hmodel}\citeme{}} is quantitatively compared over time to~{\color{htrack}[Tagliasacchi~et~al.~2015]}, {\color{sharp}[Sharp~et~al.~2015]} and  {\color{taylor}[Taylor et al. 2016]} on the \handyseq{teaser} sequence.
+%
+}
+\label{fig:comp1a}
+\end{figure}

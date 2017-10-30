@@ -1,0 +1,24 @@
+\begin{abstract}
+We present a robust method for capturing articulated hand motions in realtime using a single depth camera. Our system is based on a realtime registration process that accurately reconstructs hand poses by fitting a 3D articulated hand model to depth images.
+%--- what do we do
+We register the hand model using depth, silhouette, and temporal information. To effectively map low-quality depth maps to realistic hand poses, we regularize the registration with kinematic and temporal priors, as well as a data-driven prior built from a database of realistic hand poses.
+%--- priors
+We present a principled way of integrating such priors into our registration optimization to enable robust tracking without severely restricting the freedom of motion.
+%--- correspondences
+A core technical contribution is a new method for computing tracking correspondences that directly models occlusions typical of single-camera setups.
+%--- Source code
+To ensure reproducibility of our results and facilitate future research, we fully disclose the source code of our implementation.
+
+% \begin{classification} % according to http://www.acm.org/class/1998/
+% \CCScat{Computer Graphics}{I.3.7}{Three-Dimensional Graphics and Realism}{Animation}
+% \CCScat{Information interfaces and presentation}{I.3.7}{User Interfaces}{Input devices and strategies}
+% \end{classification}
+\end{abstract}
+
+
+
+\brief{compare: appearance}
+% We demonstrate how our geometric registration achieves accuracy comparable to the state-of-the-art appearance based approaches for tracking hands in isolation, while outperforming them in tracking situations when the hand is not isolated from other elements in the scene.
+\brief{compare: model based}
+%We also demonstrate the substantial increase in robustness of our method when compared to recently proposed registration-based techniques.
+% \MP{I would be less specific here, it sounds a bit defensive. Maybe just say: A core technical contribution is a new method to compute correspondences for tracking. (Maybe add something else, e.g. how we integrate the prior, etc.) We demonstrate how these innovations lead to significant improvements in tracking accuracy in robustness compared to existing solutions (we don't have to be precise as to which ones). 

@@ -1,0 +1,22 @@
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=5]
+{htrack/fig/data/composite.pdf}
+\put(55,2){$\PointsSensor$}
+\put(55,21){$\PointsSensor$}
+\put(75,2){$\PointsSensor$}
+\put(75,21){$\PointsSensor$}
+\put(95,2){$\SilhoSensor$}
+\put(95,21){$\SilhoSensor$}
+\putfilename
+\end{overpic}
+\caption{
+%
+The two different sensors used in our experiments provide data with substantially different characteristics. Top: Intel's Creative Interactive Gesture camera (time of flight) provides a complete silhouette image \revision{$\SilhoSensor$}, but low quality depth measurements, resulting in severe noise in the point cloud \revision{$\PointsSensor$}. Bottom: Point clouds acquired by the PrimeSense camera (structured light) are much smoother, but the silhouette image can contain significant gaps.
+\vspace{-.2in}
+% 
+} % caption
+\label{fig:data}
+\end{figure}

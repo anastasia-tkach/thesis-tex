@@ -1,0 +1,104 @@
+% !TEX root = ../htrack.tex
+\input{htrack/fig/dexter.tex}
+
+\section{Evaluation}
+\label{sec:eval}
+
+We refer to the video to best appreciate the realtime tracking performance of our method. Here we analyze its performance by providing a comparison to several state-of-the art solutions.
+
+\paragraph*{Dexter-1 Dataset~[SRS*14].}
+% \paragraph*{Dexter-1 Dataset~\cite{sridhar_iccv13}.}
+\Figure{dexter} shows a quantitative comparison with several existing methods on a publicly available data set acquired at 25 Hz. As the graph illustrates, our solution clearly outperforms the method of~\cite{tang_cvpr14} that uses regression forest classifiers in an appearance-based approach to estimate hand poses. We also significantly improve upon the gradient-based optimization methods of~\cite{sridhar_iccv13,sridhar_14} that, in addition to the depth information, use RGB data from five additional video cameras.
+% 
+As the dataset is acquired at 25 Hz, the performance of our algorithm (red) is suboptimal. In particular, in a single frame fingers are occasionally displaced by 2 to 3 times their radii, thus corrupting ICP correspondences. By re-initializing with finger detection as in~\protect\cite{qian_cvpr14} our performance considerably improves, as shown in the figure.
+
+\input{htrack/fig/schroeder.tex}
+\paragraph*{Subspace ICP~[SMRB14].}
+% \paragraph*{Subspace ICP~\cite{schroeder_icra14}.}
+\Figure{schroeder} shows a comparison to the model-based approach of~\cite{schroeder_icra14}. The recorded sequences were directly processed by the authors and employed to pose our cylinder model for ease of comparison.  As the figure illustrates, our method clearly outperforms this previous work.
+A key difference is that they optimize directly in a PCA subspace, which tends to over-constrain the solution, while we introduce a PCA data term as a regularizer, which preserves the full expressiveness of the tracking model.
+In addition, we introduce collision handling, apply robust norms for automatic outlier detection, and
+employ a more advanced correspondence search that handles self-occlusions.
+In combination, these factors lead to substantial improvements in tracking accuracy and robustness without compromising computational efficiency.
+
+% \MP{I shortened it down. I think the subsampling aspect is not so relevant. below is the old text.}
+% \TODO{
+% Their method uses a PCA pose-space as a subspace, which significantly reduces the number of optimization variables and helps in reconstructing feasible poses, but also over-constrains the solution; see~\Figure{pcafail}. Our approach retains the efficiency and regularization of the PCA formulation without limiting the expressiveness of the tracking model.
+% %
+% This method respects joint bounds, but does offer any collision management strategy. Conversely, our approach robustly handles both types of kinematic constraints.
+% %
+% In addition, our improved correspondence search takes into account silhouette constraints and self-occlusions, thus resolves many difficult tracking situations where fingers are occluded. By not considering back-facing parts of the hand model for 3D correspondences, our method significantly improves data fitting quality. In turn this results in significant improvements in tracking robustness; see \Figure{schroeder}.
+% %
+% In the approach of~\cite{schroeder_icra14}, the sensor point cloud was subsampled for efficiency, whereas we make use of the entire available data. Our use of robust norms stabilizes the tracking by reducing susceptibility to data noise and outliers, thus making our approach applicable to ToF cameras where depth noise is substantial; see~\Figure{data}.
+% }
+%
+%\todo{\begin{itemize}
+%\item joint limits are dealt by slowing updates near joint bounds and then clamping if overshoot happens. But this can still cause instability in solve!
+%\item does not take account of collision 
+%\item does not have re-weighting
+%\item does not have re-init strategy
+%\end{itemize}}
+%
+%\begin{itemize}
+%\item joint angles bounding is not a constraint, this causes the optimization to become unstable, reason for which they need backtracking
+%\item they use the pose-space as a subspace. Therefore, the only degree of control is the number of PCA basis used.
+%\item the data fitting energy they use is a data-to-model, that does not take into account of the visual hull (points mapped to the back rather than the front), nor ensures the model is within the silhouette of the data.
+%\item \TODO{create sequence to illustrate PCA ``stiffness''}
+%\item \TODO{create sequence to illustrate loss of tracking}
+%\end{itemize}
+%
+
+\input{htrack/fig/melax.tex}
+\input{htrack/fig/tompsonfail.tex}
+\input{htrack/fig/tompson.tex}
+
+\paragraph*{Convex body solver~[MKO13].}
+% \paragraph*{Convex body solver~\cite{melax_13}.}
+\definecolor{violet}{rgb}{0.725,0.388,0.886}
+
+We compare to this algorithm by employing the precompiled binaries from the Intel Perceptual Computing SDK. We modifed the demo application to save the recorded depth/color frames to disk while tracking. We then re-tracked this data from scratch using our technique. As illustrated in the video, as well as \Figure{melax}, our method offers a substantial increase in tracking  robustness compared to~\cite{melax_13}. 
+% 
+This can be attributed to any of the improvements we presented, but it is difficult to quantitatively identify the causes, because no control on tracking parameters nor source code is given. 
+% 
+Their approach computes closest correspondences to the entire model, therefore not explicitly handling occlusion. 
+%
+The authors also proposed a technique to ensure that the model is fully contained in the 3D convex hull of the data. Note that in camera space, this amounts to constraints similar to the ones enforced by our 2D registration (\Equation{align2d}), except that the distance transform would be computed from the 2D convex hull of the silhouette image. \Figure{melax} (Frame 448) illustrates how our 2D registration better constrains feasible solutions. 
+% 
+While in~\cite{melax_13} correlation between fingers is manually introduced as a \emph{grasping bias}, our optimization is data driven and encodes correlation in a more principled way. As illustrated in \Figure{melax} and the video, this approach often loses tracking during complex motion. However, it is sometimes capable of recovering by sampling and then evaluating a reduced set of poses, with an approach that is similar in spirit to~\cite{oiko_bmvc11}.
+% 
+One advantage of their method is the higher geometric fidelity of their convex bodies hand model compared to our cylinder model. Furthermore, our evaluation demonstrated how their more precise representation of the hand's Thenar eminence, as well as the thumb articulation, can result in more natural fitting in these regions.
+ % todo
+
+
+\paragraph*{Convolutional Networks~[TSLP14].}
+% \paragraph*{Convolutional Networks~\cite{tompson_tog14}.}
+\Figure{tompson} shows a quantitative comparison with the appearance-based method of~\cite{tompson_tog14} on a dataset provided by the authors of that paper. Overall, the tracking quality is comparable, with a somewhat lower average error for our method. However, our solution avoids many of the high-error peaks of~\cite{tompson_tog14} where tracking is lost completely.
+%
+An additional advantage of our approach in comparison to any of the existing appearance-based methods is that we can handle more complex interactions of two hands, since such configurations are not part of the training data sets of existing methods; see \Figure{tompsonfail}. 
+
+
+
+
+
+
+
+\brief{I doubt this will happen!!}
+% \paragraph*{Particle Swarm Optimization~\cite{oiko_bmvc11}.}
+% \AT{depending time availability Sofien might be able to run another test using the Win32 binaries from Forth.}
+
+%Despite our best efforts, we were not able to provide more evaluative comparisons. 
+%
+%, as neither appropriate data sets \AT{this is dangerous w.r.t. \cite{qian_cvpr14}; their dataset although interesting simply lacks a calibrated tracking model} nor source code of most existing methods are publicly available. We hope to improve this situation by releasing all our source code and data, so that all results in the paper can be independently reproduced.
+
+
+
+% \paragraph*{PSO + ICP \cite{qian_cvpr14}.}
+% \input{htrack/fig/chen.tex} %<<< NOT FEASIBLE WITHOUT THEIR MODEL/INITIALIZATION
+% \todo{This method first detects fingertip position using clever heuristics~\cite{plagemann_icra10}, then refines the registration with a model-based approach that \emph{combines} particle swarm optimization~\cite{oiko_iccv11} with a simplified articulated ICP step~\cite{pellegrini_08}. The authors propose to evaluate the quality of this two-phase refinement step by perturbing each frame of the ground truth alignment and observing the capability to recover correct alignment.
+% In \Figure{chen}, we perform this comparison on data provided by the authors. Observe how our performance is comparable, without the need to combine two different registration techniques. 
+% Comparisons with this method are difficult, as the authors neither provide their calibrated hand model, nor the output of their coarse initialization. \AT{also they only provide depth maps for their sensor, which have radial distortion and a per-pixel confidence measure we do not have access to.} \AT{We can also compare with an ICP implementation of the energy they provide, and show how it has strong local minima away from the optima!}}
+
+\brief{ColorGlove: abandoned as matt's data is not good}
+% \paragraph*{Color glove \cite{schroeder_12}.} \AT{Here we show comparison with a \emph{color glove} . We can both take the immediate guess from the glove, or just refine it with our algorithm afterwards. Our algorithm by itself should generally outperform both. We have to demonstrate giving up on temporal coherence immediately is not a good idea.}
+
+

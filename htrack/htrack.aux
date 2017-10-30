@@ -1,0 +1,318 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{shotton_cvpr11,wei_siga12}
+\citation{cao_sig14}
+\citation{oiko_bmvc11,melax_13,sridhar_14,schroeder_icra14,tompson_tog14}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
+\@writefile{brf}{\backcite{shotton_cvpr11,wei_siga12}{{1}{1}{section.1}}}
+\@writefile{brf}{\backcite{cao_sig14}{{1}{1}{section.1}}}
+\@writefile{brf}{\backcite{oiko_bmvc11,melax_13,sridhar_14,schroeder_icra14,tompson_tog14}{{1}{1}{section.1}}}
+\citation{wei_siga12,zhang_siga14,qian_cvpr14}
+\citation{tompson_tog14}
+\citation{qian_cvpr14}
+\citation{ye_13}
+\citation{erol_cviu07}
+\citation{wang_uist11}
+\citation{wang_sig09}
+\citation{wei_siga12}
+\citation{melax_13,schroeder_icra14}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  The two different sensors used in our experiments provide data with substantially different characteristics. Top: Intel's Creative Interactive Gesture camera (time of flight) provides a complete silhouette image {$\mathcal  {S}_{s}$}, but low quality depth measurements, resulting in severe noise in the point cloud {$\mathcal  {X}_{s}$}. Bottom: Point clouds acquired by the PrimeSense camera (structured light) are much smoother, but the silhouette image can contain significant gaps. \vspace  {-.2in} }}{2}{figure.1}}
+\newlabel{fig:data}{{1}{2}{The two different sensors used in our experiments provide data with substantially different characteristics. Top: Intel's Creative Interactive Gesture camera (time of flight) provides a complete silhouette image \revision {$\SilhoSensor $}, but low quality depth measurements, resulting in severe noise in the point cloud \revision {$\PointsSensor $}. Bottom: Point clouds acquired by the PrimeSense camera (structured light) are much smoother, but the silhouette image can contain significant gaps. \vspace {-.2in}}{figure.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  A visualization of the template hand model with the number and location of degrees of freedom of our optimization. From left to right: The cylinder model used for tracking, the skeleton, the BVH skeleton exported to Maya to drive the rendering, the rendered hand model. }}{2}{figure.2}}
+\newlabel{fig:handmodel}{{2}{2}{A visualization of the template hand model with the number and location of degrees of freedom of our optimization. From left to right: The cylinder model used for tracking, the skeleton, the BVH skeleton exported to Maya to drive the rendering, the rendered hand model}{figure.2}{}}
+\@writefile{brf}{\backcite{wei_siga12,zhang_siga14,qian_cvpr14}{{2}{1}{section.1}}}
+\@writefile{brf}{\backcite{tompson_tog14}{{2}{1}{section.1}}}
+\@writefile{brf}{\backcite{qian_cvpr14}{{2}{1}{section.1}}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{2}{section.2}}
+\newlabel{sec:related}{{2}{2}{Related Work}{section.2}{}}
+\@writefile{brf}{\backcite{ye_13}{{2}{2}{section.2}}}
+\@writefile{brf}{\backcite{erol_cviu07}{{2}{2}{section.2}}}
+\citation{wang_sig09,wang_uist11,romero_13}
+\citation{keskin_eccv12,tang_iccv13,tang_cvpr14,krupka_cvpr14}
+\citation{tompson_tog14}
+\citation{Hoyet_i3d12}
+\citation{zhao_sca12}
+\citation{sridhar_iccv13,sridhar_14}
+\citation{oiko_iccv11,ballan_eccv13,wang_sig13}
+\citation{oiko_bmvc11}
+\citation{oiko_cvpr12}
+\citation{oiko_cvpr14}
+\citation{qian_cvpr14}
+\citation{melax_13}
+\citation{schroeder_icra14}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Overview of our algorithm. For each acquired frame we extract a 3D point cloud of the hand and the 2D distance transform of its silhouette. From these we compute point correspondences to align a cylinder model of the hand to best match the data. This registration is performed in an ICP-like optimization that incorporates a number of regularizing priors to ensure accurate and robust tracking. }}{3}{figure.3}}
+\newlabel{fig:overview}{{3}{3}{Overview of our algorithm. For each acquired frame we extract a 3D point cloud of the hand and the 2D distance transform of its silhouette. From these we compute point correspondences to align a cylinder model of the hand to best match the data. This registration is performed in an ICP-like optimization that incorporates a number of regularizing priors to ensure accurate and robust tracking}{figure.3}{}}
+\@writefile{brf}{\backcite{wang_uist11}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{wang_sig09}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{wei_siga12}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{melax_13,schroeder_icra14}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{wang_sig09,wang_uist11,romero_13}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{keskin_eccv12,tang_iccv13,tang_cvpr14,krupka_cvpr14}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{tompson_tog14}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{Hoyet_i3d12}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{zhao_sca12}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{sridhar_iccv13,sridhar_14}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{oiko_iccv11,ballan_eccv13,wang_sig13}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{oiko_bmvc11}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{oiko_cvpr12}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{oiko_cvpr14}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{qian_cvpr14}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{melax_13}{{3}{2}{section.2}}}
+\@writefile{brf}{\backcite{schroeder_icra14}{{3}{2}{section.2}}}
+\citation{oiko_bmvc11,schroeder_icra14}
+\citation{melax_13}
+\citation{oiko_cvpr12,schroeder_icra14}
+\citation{tompson_tog14}
+\citation{shotton_cvpr11}
+\citation{qian_cvpr14}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Overview}{4}{section.3}}
+\@writefile{brf}{\backcite{oiko_bmvc11,schroeder_icra14}{{4}{3}{figure.4}}}
+\@writefile{brf}{\backcite{melax_13}{{4}{3}{figure.4}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  We first identify the wristband mask by color segmentation, then compute the 3D orientation of the forearm as the PCA axis of points in its proximity. Offsetting a 3D sphere from the wristband center allows isolating the region of interest. The obtained silhouette image and sensor point clouds are shown on the right. \vspace  {-.2in} }}{4}{figure.4}}
+\newlabel{fig:wristband}{{4}{4}{We first identify the wristband mask by color segmentation, then compute the 3D orientation of the forearm as the PCA axis of points in its proximity. Offsetting a 3D sphere from the wristband center allows isolating the region of interest. The obtained silhouette image and sensor point clouds are shown on the right. \vspace {-.2in}}{figure.4}{}}
+\newlabel{sec:tech}{{3}{4}{Overview}{figure.4}{}}
+\@writefile{brf}{\backcite{oiko_cvpr12,schroeder_icra14}{{4}{3}{figure.4}}}
+\@writefile{brf}{\backcite{tompson_tog14}{{4}{3}{figure.4}}}
+\@writefile{brf}{\backcite{shotton_cvpr11}{{4}{3}{figure.4}}}
+\@writefile{brf}{\backcite{qian_cvpr14}{{4}{3}{figure.4}}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Optimization}{4}{section.4}}
+\newlabel{sec:optimization}{{4}{4}{Optimization}{section.4}{}}
+\citation{bouaziz_sgp13}
+\citation{wei_siga12}
+\citation{wei_siga12}
+\citation{qian_cvpr14}
+\citation{wei_siga12}
+\citation{qian_cvpr14}
+\citation{wei_siga12}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  Illustration of correspondences computations. The circles represent cross-sections of the fingers, the small black dots are samples of the depth map. (a) A configuration that can be handled by standard closest point correspondences. (b) Closest point correspondences to the back of the cylinder model can cause the registration to fall into a local minimum. Note that simply pruning correspondences with back-pointing normals would not solve this issue, as no constraints would remain to pull the finger towards the data. (c) This problem is resolved by taking visibility into account, and computing closest points only to the portion $\mathaccentV {invbreve}810\mathcal  {M}$ of $\mathcal  {M}$ facing the camera. }}{5}{figure.5}}
+\newlabel{fig:frontcorr}{{5}{5}{Illustration of correspondences computations. The circles represent cross-sections of the fingers, the small black dots are samples of the depth map. (a) A configuration that can be handled by standard closest point correspondences. (b) Closest point correspondences to the back of the cylinder model can cause the registration to fall into a local minimum. Note that simply pruning correspondences with back-pointing normals would not solve this issue, as no constraints would remain to pull the finger towards the data. (c) This problem is resolved by taking visibility into account, and computing closest points only to the portion $\visiblehand $ of $\handmodel $ facing the camera}{figure.5}{}}
+\newlabel{eq:tracking_optimization}{{1}{5}{Optimization}{equation.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Fitting Energies}{5}{subsection.4.1}}
+\newlabel{sec:fitting}{{4.1}{5}{Fitting Energies}{subsection.4.1}{}}
+\newlabel{eq:align3d}{{2}{5}{Fitting Energies}{equation.4.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces  Illustration of the impact of self-occlusion in correspondences computations. (a) The finger $c_2$ initially occluded by finger $c_1$ becomes visible, which causes new samples to appear. (b) Closest correspondences to the portion of the model visible from the camera do not generate any constraints that pull $c_2$ toward its data samples. This is the approach in \cite {wei_siga12}, where these erroneous matches are then simply pruned. (c) Our method also considers front-facing portions of the model that are occluded, allowing the geometry to correctly register. }}{5}{figure.6}}
+\@writefile{brf}{\backcite{wei_siga12}{{5}{6}{figure.6}}}
+\newlabel{fig:occlusion}{{6}{5}{Illustration of the impact of self-occlusion in correspondences computations. (a) The finger $c_2$ initially occluded by finger $c_1$ becomes visible, which causes new samples to appear. (b) Closest correspondences to the portion of the model visible from the camera do not generate any constraints that pull $c_2$ toward its data samples. This is the approach in \protect \cite {wei_siga12}, where these erroneous matches are then simply pruned. (c) Our method also considers front-facing portions of the model that are occluded, allowing the geometry to correctly register}{figure.6}{}}
+\@writefile{brf}{\backcite{bouaziz_sgp13}{{5}{4.1}{equation.4.2}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces  Correspondence computations. The top row shows the strategy used in\nobreakspace  {}\cite {qian_cvpr14} adapted to our gradient-based framework according to the formulation given in\nobreakspace  {}\cite {wei_siga12}. The bottom row shows the improved accuracy of our new approach. }}{5}{figure.7}}
+\@writefile{brf}{\backcite{qian_cvpr14}{{5}{7}{figure.7}}}
+\@writefile{brf}{\backcite{wei_siga12}{{5}{7}{figure.7}}}
+\newlabel{fig:occnrg}{{7}{5}{Correspondence computations. The top row shows the strategy used in~\protect \cite {qian_cvpr14} adapted to our gradient-based framework according to the formulation given in~\protect \cite {wei_siga12}. The bottom row shows the improved accuracy of our new approach}{figure.7}{}}
+\citation{qian_cvpr14}
+\citation{wei_siga12}
+\citation{qian_cvpr14}
+\citation{ganapathi_eccv12}
+\citation{felzenszwalb_12}
+\citation{melax_13}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces  Our 2D silhouette registration energy is essential to avoid tracking errors for occluded parts of the hand. When no depth data is available for certain parts of the model, a plausible pose is inferred by ensuring that the model is contained within the sensor silhouette image $\mathcal  {S}_{s}$. }}{6}{figure.8}}
+\newlabel{fig:push}{{8}{6}{Our 2D silhouette registration energy is essential to avoid tracking errors for occluded parts of the hand. When no depth data is available for certain parts of the model, a plausible pose is inferred by ensuring that the model is contained within the sensor silhouette image $\SilhoSensor $}{figure.8}{}}
+\@writefile{brf}{\backcite{qian_cvpr14}{{6}{4.1}{figure.7}}}
+\@writefile{brf}{\backcite{wei_siga12}{{6}{4.1}{figure.7}}}
+\@writefile{brf}{\backcite{qian_cvpr14}{{6}{4.1}{figure.7}}}
+\@writefile{brf}{\backcite{ganapathi_eccv12}{{6}{4.1}{figure.7}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces An illustration of the PCA pose-space used to regularize the optimization. Black dots denote the samples of the data base. High likelihood poses are located nearby the mean of the latent space (dark red). The eigenvalues of the PCA define the metric in the low-dimensional space, skewing it in certain directions. Poses that, according to this metric, are far from the mean are likely to be unnatural and will be penalized in the optimization. }}{6}{figure.9}}
+\newlabel{fig:shapespace}{{9}{6}{An illustration of the PCA pose-space used to regularize the optimization. Black dots denote the samples of the data base. High likelihood poses are located nearby the mean of the latent space (dark red). The eigenvalues of the PCA define the metric in the low-dimensional space, skewing it in certain directions. Poses that, according to this metric, are far from the mean are likely to be unnatural and will be penalized in the optimization}{figure.9}{}}
+\newlabel{eq:align2d}{{3}{6}{Fitting Energies}{equation.4.3}{}}
+\@writefile{brf}{\backcite{felzenszwalb_12}{{6}{4.1}{equation.4.3}}}
+\@writefile{brf}{\backcite{melax_13}{{6}{4.1}{figure.9}}}
+\citation{schroeder_icra14}
+\citation{schroeder_icra14}
+\citation{schroeder_icra14}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces  An illustration of the energies involved in our pose-space prior. For illustration purposes the full dimensional parameter vector $\boldsymbol  {\theta }\in \mathbb  {R}^3$, while latent space variable $\mathaccentV {tilde}07E\boldsymbol  {\theta }\in \mathbb  {R}^2$. The PCA optimization in \cite {schroeder_icra14} constrains the pose parameters $\boldsymbol  {\theta }$ to lie on the subspace\nobreakspace  {}$\mathcal  {P}$. Conversely, we penalize the distance of our pose from\nobreakspace  {}$\mathcal  {P}$\nobreakspace  {}(Equation\nobreakspace  {}\ref  {eq:pcaproj}); simultaneously, we ensure our pose remains likely by preventing it from diverging from the mean of the distribution\nobreakspace  {}(Equation\nobreakspace  {}\ref  {eq:pcareg}). }}{7}{figure.10}}
+\@writefile{brf}{\backcite{schroeder_icra14}{{7}{10}{figure.10}}}
+\newlabel{fig:shapespaceproj}{{10}{7}{An illustration of the energies involved in our pose-space prior. For illustration purposes the full dimensional parameter vector $\pars \in \mathbb {R}^3$, while latent space variable $\tilde \pars \in \mathbb {R}^2$. The PCA optimization in \protect \cite {schroeder_icra14} constrains the pose parameters $\pars $ to lie on the subspace~$\posespace $. Conversely, we penalize the distance of our pose from~$\posespace $~(\Equation {pcaproj}); simultaneously, we ensure our pose remains likely by preventing it from diverging from the mean of the distribution~(\Equation {pcareg})}{figure.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Prior Energies}{7}{subsection.4.2}}
+\newlabel{sec:prior}{{4.2}{7}{Prior Energies}{subsection.4.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Beyond favoring natural poses, the data prior term also positively affects convergence speed. Top: With the same number of iterations, only with activated data term does the model fully register to the scan. The illustration below shows how the same final state requires significantly fewer iterations with the data term. }}{7}{figure.11}}
+\newlabel{fig:pcaconv}{{11}{7}{Beyond favoring natural poses, the data prior term also positively affects convergence speed. Top: With the same number of iterations, only with activated data term does the model fully register to the scan. The illustration below shows how the same final state requires significantly fewer iterations with the data term}{figure.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces  Our pose-space regularization using a PCA prior ensures that a meaningful pose is recovered even when significant holes occur in the input data. }}{7}{figure.12}}
+\newlabel{fig:pca}{{12}{7}{Our pose-space regularization using a PCA prior ensures that a meaningful pose is recovered even when significant holes occur in the input data}{figure.12}{}}
+\@writefile{brf}{\backcite{schroeder_icra14}{{7}{4.2}{figure.12}}}
+\newlabel{eq:pcaproj}{{5}{7}{Prior Energies}{equation.4.5}{}}
+\newlabel{eq:pcareg}{{6}{7}{Prior Energies}{equation.4.6}{}}
+\citation{schroeder_icra14}
+\citation{schroeder_icra14}
+\citation{chan_95}
+\citation{wei_siga12}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces  Optimizing directly in the PCA subspace\nobreakspace  {}\cite {schroeder_icra14} can lead to inferior registration accuracy. We replicate this behavior by setting $\omega _4$ in Equation\nobreakspace  {}\ref  {eq:pcaproj} to a large value. Even when increasing the number of PCA bases to cover $99\%$ of the variance in the database, the model remains too stiff to conform well to the input. Our approach is able to recover the correct hand pose by optimizing for projection distances even with a very limited number of bases (right).}}{8}{figure.13}}
+\@writefile{brf}{\backcite{schroeder_icra14}{{8}{13}{figure.13}}}
+\newlabel{fig:pcafail}{{13}{8}{Optimizing directly in the PCA subspace~\protect \cite {schroeder_icra14} can lead to inferior registration accuracy. We replicate this behavior by setting $\omegapcaproj $ in Equation~\ref {eq:pcaproj} to a large value. Even when increasing the number of PCA bases to cover $99\%$ of the variance in the database, the model remains too stiff to conform well to the input. Our approach is able to recover the correct hand pose by optimizing for projection distances even with a very limited number of bases (right)}{figure.13}{}}
+\newlabel{eq:bound}{{8}{8}{Prior Energies}{equation.4.8}{}}
+\@writefile{brf}{\backcite{chan_95}{{8}{4.2}{equation.4.8}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Kinematic priors augment the data prior to account for inconsistencies in the pose space. The collision term avoids self-collisions (top row), while the term for joint angle bounds avoids overbending of the finger joints. }}{8}{figure.14}}
+\newlabel{fig:posepriors}{{14}{8}{Kinematic priors augment the data prior to account for inconsistencies in the pose space. The collision term avoids self-collisions (top row), while the term for joint angle bounds avoids overbending of the finger joints}{figure.14}{}}
+\@writefile{brf}{\backcite{wei_siga12}{{8}{4.2}{figure.15}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces The effect of the temporal prior. The graph shows the trajectory of the $y$-coordinate of the fingertip over time as the index finger is bend up and down repeatedly. The temporal prior reduces jitter, but also helps avoiding tracking artifacts that arise when fragments of data pop in and out of view. }}{8}{figure.15}}
+\newlabel{fig:temporal}{{15}{8}{The effect of the temporal prior. The graph shows the trajectory of the $y$-coordinate of the fingertip over time as the index finger is bend up and down repeatedly. The temporal prior reduces jitter, but also helps avoiding tracking artifacts that arise when fragments of data pop in and out of view}{figure.15}{}}
+\citation{qian_cvpr14}
+\citation{tompson_tog14}
+\citation{wei_siga12}
+\citation{sridhar_iccv13}
+\citation{tang_cvpr14}
+\citation{sridhar_14}
+\citation{sridhar_iccv13}
+\citation{tang_cvpr14}
+\citation{sridhar_14}
+\citation{tang_cvpr14}
+\citation{sridhar_iccv13,sridhar_14}
+\citation{qian_cvpr14}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces  During fast motion, optimizing directly for a fully articulated hand can lead to incorrect correspondences and cause loss of tracking (middle row). By compensating for the rigid motion ahead of solving for joint angles, our system can better capture fast movements (bottom row). }}{9}{figure.16}}
+\newlabel{fig:rigid}{{16}{9}{During fast motion, optimizing directly for a fully articulated hand can lead to incorrect correspondences and cause loss of tracking (middle row). By compensating for the rigid motion ahead of solving for joint angles, our system can better capture fast movements (bottom row)}{figure.16}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Implementation}{9}{section.5}}
+\newlabel{sec:implementation}{{5}{9}{Implementation}{section.5}{}}
+\@writefile{brf}{\backcite{qian_cvpr14}{{9}{5}{figure.16}}}
+\@writefile{brf}{\backcite{tompson_tog14}{{9}{5}{figure.16}}}
+\@writefile{brf}{\backcite{wei_siga12}{{9}{5}{figure.16}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces  We quantitatively evaluate our algorithm on the \textbf  {Dexter-1} dataset from \cite {sridhar_iccv13}. The measurements report the root mean square errors of fingertip placements. The acquisition setup consists of several calibrated video cameras and a single depth camera. For our results and the method of\nobreakspace  {}\cite {tang_cvpr14}, only the depth image is used for tracking, while the algorithms of Sridhar and colleagues also use the video streams. The blue, green, and purple bars are reproduced from\nobreakspace  {}\cite {sridhar_14}. For our algorithm we report results without (red) and with (orange) reinitialization. }}{9}{figure.17}}
+\@writefile{brf}{\backcite{sridhar_iccv13}{{9}{17}{figure.17}}}
+\@writefile{brf}{\backcite{tang_cvpr14}{{9}{17}{figure.17}}}
+\@writefile{brf}{\backcite{sridhar_14}{{9}{17}{figure.17}}}
+\newlabel{fig:dexter}{{17}{9}{We quantitatively evaluate our algorithm on the \textbf {Dexter-1} dataset from \protect \cite {sridhar_iccv13}. The measurements report the root mean square errors of fingertip placements. The acquisition setup consists of several calibrated video cameras and a single depth camera. For our results and the method of~\protect \cite {tang_cvpr14}, only the depth image is used for tracking, while the algorithms of Sridhar and colleagues also use the video streams. The blue, green, and purple bars are reproduced from~\protect \cite {sridhar_14}. For our algorithm we report results without (red) and with (orange) reinitialization}{figure.17}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Evaluation}{9}{section.6}}
+\newlabel{sec:eval}{{6}{9}{Evaluation}{section.6}{}}
+\@writefile{brf}{\backcite{tang_cvpr14}{{9}{6}{section.6}}}
+\citation{schroeder_icra14}
+\citation{schroeder_icra14}
+\citation{schroeder_icra14}
+\citation{schroeder_icra14}
+\citation{melax_13}
+\citation{melax_13}
+\citation{melax_13}
+\citation{melax_13}
+\citation{melax_13}
+\citation{tompson_tog14}
+\citation{tompson_tog14}
+\citation{tompson_tog14}
+\citation{tompson_tog14}
+\citation{tompson_tog14}
+\citation{tompson_tog14}
+\citation{tompson_tog14}
+\citation{tompson_tog14}
+\citation{melax_13}
+\citation{melax_13}
+\citation{oiko_bmvc11}
+\@writefile{brf}{\backcite{schroeder_icra14}{{10}{6}{section.6}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces A few comparison frames illustrating the difference in performance of our method compared to\nobreakspace  {}\cite {schroeder_icra14} (results provided by the authors of that paper). From left to right we can observe problems related to: correspondences to the back of the model, lack of silhouette energy (3 times) and loss of tracking due to fast motion. }}{10}{figure.18}}
+\@writefile{brf}{\backcite{schroeder_icra14}{{10}{18}{figure.18}}}
+\newlabel{fig:schroeder}{{18}{10}{A few comparison frames illustrating the difference in performance of our method compared to~\protect \cite {schroeder_icra14} (results provided by the authors of that paper). From left to right we can observe problems related to: correspondences to the back of the model, lack of silhouette energy (3 times) and loss of tracking due to fast motion}{figure.18}{}}
+\@writefile{brf}{\backcite{sridhar_iccv13,sridhar_14}{{10}{6}{section.6}}}
+\@writefile{brf}{\backcite{qian_cvpr14}{{10}{6}{section.6}}}
+\@writefile{brf}{\backcite{schroeder_icra14}{{10}{6}{figure.18}}}
+\@writefile{brf}{\backcite{melax_13}{{10}{6}{figure.18}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Comparison to the method of\nobreakspace  {}\cite {melax_13}. The full sequence can be seen in the accompanying video. We highlight a few frames that are not resolved correctly by this method, but that can be handled successfully with our solution. The last frame shows the better geometric approximation quality of the convex body model used in \cite {melax_13} compared to our simpler cylinder model. }}{10}{figure.19}}
+\@writefile{brf}{\backcite{melax_13}{{10}{19}{figure.19}}}
+\@writefile{brf}{\backcite{melax_13}{{10}{19}{figure.19}}}
+\newlabel{fig:melax}{{19}{10}{Comparison to the method of~\protect \cite {melax_13}. The full sequence can be seen in the accompanying video. We highlight a few frames that are not resolved correctly by this method, but that can be handled successfully with our solution. The last frame shows the better geometric approximation quality of the convex body model used in \protect \cite {melax_13} compared to our simpler cylinder model}{figure.19}{}}
+\@writefile{brf}{\backcite{melax_13}{{10}{6}{figure.21}}}
+\@writefile{brf}{\backcite{melax_13}{{10}{6}{figure.21}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces  Developing robust model-based tracking is essential to enable tracking of hands interacting with each other or with other objects in the environment. Here we illustrate that for our method tracking accuracy is not significantly affected even though we are not modeling the second hand. Note that such motion cannot be tracked successfully by appearance-based methods such as\nobreakspace  {}\cite {tompson_tog14}. }}{10}{figure.20}}
+\@writefile{brf}{\backcite{tompson_tog14}{{10}{20}{figure.20}}}
+\newlabel{fig:tompsonfail}{{20}{10}{Developing robust model-based tracking is essential to enable tracking of hands interacting with each other or with other objects in the environment. Here we illustrate that for our method tracking accuracy is not significantly affected even though we are not modeling the second hand. Note that such motion cannot be tracked successfully by appearance-based methods such as~\protect \cite {tompson_tog14}}{figure.20}{}}
+\citation{tompson_tog14}
+\citation{tompson_tog14}
+\citation{delagorce_pami11}
+\citation{tompson_tog14}
+\citation{Taylor_cvpr14}
+\citation{bouaziz_sig13}
+\@writefile{brf}{\backcite{tompson_tog14}{{11}{6}{figure.20}}}
+\@writefile{brf}{\backcite{tompson_tog14}{{11}{6}{figure.20}}}
+\@writefile{brf}{\backcite{tompson_tog14}{{11}{6}{figure.20}}}
+\@writefile{brf}{\backcite{tompson_tog14}{{11}{6}{figure.20}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Quantitative comparison to \cite {tompson_tog14}. The graph shows the average root mean square tracking error w.r.t.\ ground truth across 2440 frames. Some frames where the accuracy of the two methods differs significantly are highlighted in the bottom row. }}{11}{figure.21}}
+\@writefile{brf}{\backcite{tompson_tog14}{{11}{21}{figure.21}}}
+\newlabel{fig:tompson}{{21}{11}{Quantitative comparison to \protect \cite {tompson_tog14}. The graph shows the average root mean square tracking error w.r.t.\ ground truth across 2440 frames. Some frames where the accuracy of the two methods differs significantly are highlighted in the bottom row}{figure.21}{}}
+\@writefile{brf}{\backcite{oiko_bmvc11}{{11}{6}{figure.21}}}
+\@writefile{brf}{\backcite{tompson_tog14}{{11}{6}{figure.21}}}
+\@writefile{brf}{\backcite{tompson_tog14}{{11}{6}{figure.21}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces  Our algorithm relies on the presence of salient geometric features in the depth map. Challenging sequences like a rotating fist lack such features when acquired with current commodity depth sensors, which can result in loss of tracking. }}{11}{figure.22}}
+\newlabel{fig:fisting}{{22}{11}{Our algorithm relies on the presence of salient geometric features in the depth map. Challenging sequences like a rotating fist lack such features when acquired with current commodity depth sensors, which can result in loss of tracking}{figure.22}{}}
+\@writefile{brf}{\backcite{delagorce_pami11}{{11}{6}{figure.23}}}
+\@writefile{brf}{\backcite{tompson_tog14}{{11}{6}{figure.23}}}
+\@writefile{brf}{\backcite{Taylor_cvpr14}{{11}{6}{figure.23}}}
+\@writefile{brf}{\backcite{bouaziz_sig13}{{11}{6}{figure.23}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces  When tracking with an uncalibrated model, tracking correspondences can map to data belonging to erroneous portions of the model. In the figure, the index finger remains attached to samples associated with the thumb. }}{11}{figure.23}}
+\newlabel{fig:wronghand}{{23}{11}{When tracking with an uncalibrated model, tracking correspondences can map to data belonging to erroneous portions of the model. In the figure, the index finger remains attached to samples associated with the thumb}{figure.23}{}}
+\bibstyle{eg-alpha}
+\bibdata{htrack}
+\bibcite{Bouaziz_sgp12}{BDS{$^{*}$}12}
+\bibcite{ballan_eccv13}{BTG{$^{*}$}12}
+\bibcite{bouaziz_sgp13}{BTP13}
+\bibcite{Bouaziz_eg2014}{BTP14}
+\bibcite{buss_04}{Bus04}
+\bibcite{bouaziz_sig13}{BWP13}
+\bibcite{chan_95}{CD95}
+\bibcite{cao_sig14}{CHZ14}
+\bibcite{delagorce_pami11}{dLGFP11}
+\bibcite{erol_cviu07}{EBN{$^{*}$}07}
+\bibcite{felzenszwalb_12}{FH12}
+\bibcite{ganapathi_eccv12}{GPKT12}
+\bibcite{Hoyet_i3d12}{HRMO12}
+\bibcite{keskin_eccv12}{KKKA12}
+\bibcite{krupka_cvpr14}{KVK{$^{*}$}14}
+\bibcite{melax_13}{MKO13}
+\bibcite{oiko_bmvc11}{OKA11a}
+\bibcite{oiko_iccv11}{OKA11b}
+\bibcite{oiko_cvpr12}{OKA12}
+\bibcite{oiko_cvpr14}{OLA14}
+\bibcite{qian_cvpr14}{QSW{$^{*}$}14}
+\bibcite{romero_13}{RKEK13}
+\bibcite{shotton_cvpr11}{SFC{$^{*}$}11}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusions}{12}{section.7}}
+\@writefile{toc}{\contentsline {section}{References}{12}{section.7}}
+\bibcite{schroeder_icra14}{SMRB14}
+\bibcite{sridhar_iccv13}{SOT13}
+\bibcite{sridhar_14}{SRS{$^{*}$}14}
+\bibcite{tang_cvpr14}{TCTK14}
+\bibcite{tompson_tog14}{TSLP14}
+\bibcite{Taylor_cvpr14}{TSR{$^{*}$}14}
+\bibcite{tang_iccv13}{TYK13}
+\bibcite{wang_sig13}{WMZ{$^{*}$}13}
+\bibcite{wang_sig09}{WP09}
+\bibcite{wang_uist11}{WPP11}
+\bibcite{wei_siga12}{WZC12}
+\bibcite{ye_13}{YZW{$^{*}$}13}
+\bibcite{zhao_sca12}{ZCX12}
+\bibcite{zhang_siga14}{ZSZ{$^{*}$}14}
+\citation{Bouaziz_eg2014}
+\citation{buss_04}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Projective v.s. subspace PCA}{13}{appendix.A}}
+\newlabel{app:pca}{{A}{13}{Projective v.s. subspace PCA}{appendix.A}{}}
+\newlabel{eq:pcaproj2}{{10}{13}{Projective v.s. subspace PCA}{}{}}
+\newlabel{eq:pcaproj3}{{10}{13}{Projective v.s. subspace PCA}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Jacobians}{13}{appendix.B}}
+\newlabel{app:jacobians}{{B}{13}{Jacobians}{appendix.B}{}}
+\@writefile{brf}{\backcite{Bouaziz_eg2014}{{13}{B}{appendix.B}}}
+\@writefile{brf}{\backcite{buss_04}{{13}{B}{appendix.B}}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Approximation using linearized function.}{13}{appendix.C}}
+\newlabel{app:linfunction}{{C}{13}{Approximation using linearized function}{appendix.C}{}}
+\newlabel{eq:linearization}{{10}{13}{Approximation using linearized function}{equation.C.10}{}}
+\citation{Bouaziz_sgp12}
+\citation{bouaziz_sgp13}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Approximation using Linearized $\ell _2$ Distance.}{14}{appendix.D}}
+\newlabel{app:lindistance}{{D}{14}{Approximation using Linearized $\ell _2$ Distance}{appendix.D}{}}
+\@writefile{brf}{\backcite{Bouaziz_sgp12}{{14}{D}{appendix.D}}}
+\newlabel{eq:linproj}{{D}{14}{Approximation using Linearized $\ell _2$ Distance}{appendix.D}{}}
+\@writefile{brf}{\backcite{bouaziz_sgp13}{{14}{D}{appendix.D}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces (left) Collision constraints definition, deepest penetration points marked as $\mathbf  {x}_i,\mathbf  {x}_j$. (right) When the collision energy is minimized in isolation the penetration points are co-located.}}{14}{figure.24}}
+\newlabel{fig:collision}{{24}{14}{(left) Collision constraints definition, deepest penetration points marked as $\point _i,\point _j$. (right) When the collision energy is minimized in isolation the penetration points are co-located}{figure.24}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {E}Non-Linear Least Squares Optimization}{14}{appendix.E}}
+\newlabel{app:opt}{{E}{14}{Non-Linear Least Squares Optimization}{appendix.E}{}}
+\newlabel{eq:solve}{{11}{14}{Non-Linear Least Squares Optimization}{equation.E.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {F}CPU/GPU Optimization}{14}{appendix.F}}
+\newlabel{app:gpu}{{F}{14}{CPU/GPU Optimization}{appendix.F}{}}

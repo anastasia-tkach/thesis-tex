@@ -1,0 +1,67 @@
+% \documentclass[tog]{acmsiggraph}
+% \documentclass[review]{acmsiggraph}
+\documentclass{acmsiggraph}
+\input{sec/tweaks.tex}
+\input{sec/math.tex}
+\input{sec/videotimes.tex}
+\title{Sphere-Meshes for Real-Time Hand Modeling and Tracking}
+
+%--- Authors on the homepage 
+\author{
+Anastasia Tkach\\
+EPFL %
+\and
+Mark Pauly\\
+EPFL %
+\and
+Andrea Tagliasacchi\\
+University of Victoria %
+}
+%--- Authors on other pages
+\pdfauthor{Anastasia Tkach, Mark Pauly, Andrea Tagliasacchi}
+
+%----------- UNCOMMENT FOR ADDITIONAL MATERIAL PDF
+% \input{additional/main.tex} \endinput
+
+\keywords{non-rigid registration, hand tracking, sphere-meshes}
+\setcopyright{acmlicensed}
+\copyrightyear{2016}
+\conferenceinfo{SA'16 Technical Papers}{December 05 - 08, 2016, Macao}
+\isbn{978-1-4503-4514-9/16/12}%\acmPrice{\$15.00}
+\doi{http://dx.doi.org/10.1145/2980179.2980226}
+
+%----------- FULL PAPER
+\input{fig/teaser/item.tex}
+\begin{document}
+\maketitle 
+\input{sec/abstract.tex}
+\input{sec/metadata}
+% \clearpage
+\input{sec/intro.tex}
+% \clearpage
+\input{sec/related.tex}
+% \clearpage
+\input{sec/overview.tex} 
+% \clearpage
+\input{sec/corresp.tex}
+% \clearpage
+\input{sec/fitting.tex}
+% \clearpage
+\input{sec/tracking.tex}
+% 
+\input{sec/results.tex}
+% \clearpage
+\input{sec/discussion.tex}
+%
+\input{sec/conclusion.tex}
+% 
+\input{sec/acks.tex}
+% \input{sec/draft.tex}
+% \clearpage
+% \nocite{*} %<< prints all
+\newpage
+\bibliographystyle{acmsiggraph}
+\bibliography{hmodel}
+% \appendix
+% \input{sec/appendix.tex}
+\end{document}

@@ -1,0 +1,28 @@
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=5]
+% {fig/wristband/composite.pdf}
+{htrack/fig/wristband/composite.png}
+% \put(0,0){\small{text}}
+\put(75,02){\tiny{sensor cloud}$\PointsSensor$}
+\put(75,22){\tiny{sensor silh.} $\SilhoSensor$}
+\put(1,02){\tiny{wristband mask}}
+\put(1,22){\tiny{depth image}}
+\put(30,02){\tiny{PCA wristband}}
+\put(53,02){\tiny{hand ROI}}
+\put(35.5,17){$\ell$}
+\putfilename
+\end{overpic}
+\caption{
+% \todo{[wristband]}
+%
+We first identify the wristband mask by color segmentation, then compute the 3D orientation of the forearm as the PCA axis of points in its proximity.
+Offsetting a 3D sphere  from the wristband center allows isolating the region of interest. The obtained silhouette image and sensor point clouds are shown on the right. 
+\vspace{-.2in}
+% \TODO{display padding sensor silhouette}
+% 
+}
+\label{fig:wristband}
+\end{figure}

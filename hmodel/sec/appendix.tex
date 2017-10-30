@@ -1,0 +1,61 @@
+\section{Appendix}
+\paragraph{Gradients of calibration energies}
+\label{app:gradients}
+\TODO{you know...}
+
+\endinput
+
+% \paragraph{Tangent lines to two circles.}
+% \label{app:pillcorr}
+% 
+% \TODO{computation of line (normal+point) tangent to two circles}
+
+% Let us assume $r_1 > r_2$ and define $\mathbf{u} = \ballcenter_2-\ballcenter_1$, $\mathbf{\vec{u}} = \mathbf{u}/\|\mathbf{u}\|$, $\mathbf{v} = \point-\ballcenter_1$, $\alpha=\mathbf{\vec{u}} \cdot \mathbf{v}$. The orthogonal projection of $\point$ onto the segment is $\mathbf{t} = \mathbf{c}_1 + \alpha \mathbf{u}$. The distance $\omega$ can be derived with the Pythagorean theorem as $\omega^2 = \mathbf{u}^T \mathbf{u} - (r_1 - r_2)^2$ while $\delta$ is derived leveraging triangle similarity $\delta / \| \point - \mathbf{t} \| = (r_1-r_2)/\omega$. Finally, our skewed projection $\skewproj$ is $\skewproj = \mathbf{t} - \delta \mathbf{\vec{u}}$. 
+% \begin{DRAFT}
+% According to the position of $\skewproj$ we have two solutions:
+% (1) If $\skewproj$ lies on the segment $\segment$, then $\point$ projects onto the pill's conic surface as $\footpoint=\mathbf{s}+(\gamma+r_2) \overrightarrow{\mathbf{\skewproj} \point}$, where $\overrightarrow{\skewproj \point} = (\point-\skewproj)/ \|\point-\skewproj\|$.
+% (2) if $\skewproj$ lies outside the segment and closer to the ball $\ball_*$, then $\point$ projects onto the sphere as $\footpoint_e = \ballcenter_* + r_*(\overrightarrow{\point \ballcenter_*})$.
+% \end{DRAFT}
+
+% \paragraph{Tangent planes to three spheres}
+% \label{app:wedgecorr}
+% 
+% \TODO{computation of a plane (point + normal) tangent to three spheres}
+
+% \begin{DRAFT}
+% Before computing the projection, we need to compute the vertices $u_1, u_2, u_3$ and $v_1, v_2, v_3$ of the two triangles tangent to the spheres that form the faces of the wedge. For tracking this computation is done only once for each wedge at initialization.
+%
+% Denote the apex of the cone tangent to the spheres $S_1$ and $S_2$ as $z_{12}$. Find $z_{12}$ from similarity of triangles $z_{12} = c_1 +\frac{r_1 (c_2 - c_1)}{r_1 - r_2}$. In the same way $z_{13} = c_1 +\frac{r_1 (c_3 - c_1)}{r_1 - r_3}$.
+%
+% The vector $l = \frac{z_{12} - z_{13}} {\Vert z_{12} - z_{13} \Vert}$ is the direction vector of the line, that contains the apices of the tangent cones.
+%
+% The intersection point of the plane orthogonal to $l$ and going through the point $c_1$ with the line going through $z_{12}$ and $z_{13}$ is found as
+% $z = z_{12} + ((c_1 - z_{12})^T l )l$.
+% The sine and cosine of the angle $\beta$ in triangle $\{c_1, z, v_1\}$ are given by
+% $\sin(\beta) = \frac{r_1}{\eta}$
+% and
+% $\cos(\beta) = \frac{\nu}{\eta}$,
+% where $\eta = \Vert c_1 - z \Vert $ and $\nu = \sqrt{\eta^2 -  r_1^2}$.
+%
+% Denote the tangent point of the sphere $S_1$ as $v_1$. The direction vector $g$ of the line $\{c_1, v_1\}$ can be found by rotating the direction vector $f$ of the line
+% $\{c_1, z\}$ by angle $\beta$ around the axis $l$.
+%
+% \begin{align*}
+%     & h = \frac{l \times f}{\Vert l \times f \Vert}, \\
+%     & g = \sin(\beta) h + \cos(\beta) f.
+% \end{align*}
+%
+% The tangent point $v_1$ is found as $v_1 = z + \nu  g$. Having the normal vector of the tangent plane $n = \frac{v_1 - c_1}{\Vert v_1 - c_1 \Vert}$, we can find the tangent points of the spheres $S_2$ and $S_3$ as $v_2 = c_2  + r_2 n$ and $v_3 = c_3 + r_3 n$.
+% The second tangent plane $\{u_1, u_2, u_3$\} is found by rotating the vector $f$ around the axis $l$ by an angle $-\beta$.
+%
+% As in the case with pill, we compute skewed projections $s_1$ and $s_2$ of the point $p$ on the skeleton  - the triangle $c_1 c_2 c_3$ along the normals to the triangles $v_1 v_2 v_3$ and $u_1 u_2 u_3$.
+%
+% \begin{itemize}
+% \item If one or both projections lie inside of the triangle $c_1 c_2 c_3$ than the point $p$ projects on the face of the wedge. (In case if it projects on both faces, just pick the closest projection.) \Anastasia{For tracking I only consider projections to front-facing faces.}
+% \item If none of the projections line inside of the triangle, but, say, $s_1$ lies on the edge $c_1 c_2$, than $p$ projects on the conic surface tangent to the spheres $S_1$ and $S_2$.
+% \item If, say, $s_1$ projects to the vertex $c_1$, than $p$ projects to the sphere $S_1$.
+% \end{itemize}
+%
+% \Anastasia{Actually in the code I am projecting the point to all the conic surfaces of the wedge, not just to one, so I never experimentally verified that this should be correct in all the cases. But I cannot come up with a counter-example. I should test it and optimize the code.}
+%
+% \end{DRAFT}

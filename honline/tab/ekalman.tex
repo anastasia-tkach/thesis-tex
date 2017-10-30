@@ -1,0 +1,17 @@
+\begin{algorithm}
+\begin{align*}
+&\text{Time}                 &       &\text{Measurement} \\
+\hat{x}_n^0 &=\hat{x}_{n-1}           &       K_n &= P_n^0 J_n^T(J_n P_n^0 J_n^T + R)^{-1}\\
+P_n^0 &= P_{n-1} + Q                 &       \hat{x}_n &= \hat{x}_n^0 + K_n(z_n - F_n) \\
+&                                   &       P_n &= (I - K_n J_n)P_n^0
+\end{align*}
+\caption{
+% 
+% 
+Extended Kalman Filter update equations (with linear $\tilde{F}$).
+% 
+% 
+}
+\label{tab:ekalman}
+\label{tab:extended}
+\end{algorithm}

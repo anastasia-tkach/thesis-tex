@@ -1,0 +1,44 @@
+\begin{algorithm}
+\begin{equation*}
+\begin{aligned}
+\hat{x}_n &= \argmax_{x_n} \: \underbrace{\log \left( P(x_n^*|x_n) \: P(x_n |\hat{x}_{n - 1}) \right)}_{L(x_n)}    
+\\
+\end{aligned}
+\end{equation*}
+
+\begin{equation*}
+\begin{aligned}
+P(x_n^* | x_n) &= \exp \left( -\tfrac{1}{2}(x_n^* - x_n )^T {\star{\Sigma}_n}^{-1}(x_n^* - x_n )\right)
+% \mathcal{N}(x_n^*,\todo{\Sigma_n})
+\\
+P(x_n |\hat{x}_{n - 1}) &= 
+% \mathcal{N}(\hat{x}_{n - 1}, \hat{\Sigma}_{n-1})
+\exp \left( -\tfrac{1}{2} (x_n - \hat{x}_{n - 1} )^T \hat{\Sigma}_{n - 1}^{-1} (x_n - \hat{x}_{n - 1} )\right)
+\\
+\hat{\Sigma}_n^{-1} = 
+\left.\tfrac{\partial^2 L}{\partial x_n^2}\right|_{\hat{x}_n} &\approx 
+\left[
+    \begin{array}{cc}
+        \sqrt{{\star{\Sigma}_n}^{-1}} \\
+        \sqrt{\hat{\Sigma}_{n - 1}^{-1}} \\
+    \end{array}
+\right]^T
+\left[
+    \begin{array}{c}
+        \sqrt{{\star{\Sigma}_n}^{-1}} \\
+        \sqrt{\hat{\Sigma}_{n - 1}^{-1}} \\
+    \end{array}
+\right]
+= {\star{\Sigma}_n}^{-1} + \hat{\Sigma}_{n-1}^{-1}
+\end{aligned}
+\end{equation*}
+\caption{
+% 
+% 
+\emph{Split} cumulative regression -- Kalman Filter (KF)
+% 
+% 
+}
+\label{tab:interframe}
+\label{tab:kf-like}
+\end{algorithm}

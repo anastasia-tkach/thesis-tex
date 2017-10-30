@@ -1,0 +1,27 @@
+\begin{figure}[t]
+\flushleft
+\begin{overpic} 
+[width=\linewidth]
+% [width=.97\linewidth,grid,tics=5]
+{htrack/fig/frontcorr/composite.pdf}
+\put(98, 1){\tiny\rotatebox{90}{Converged}}
+\put(98,18.7){\tiny\rotatebox{90}{First Iter.}}
+\put(98,34.7){\tiny\rotatebox{90}{Initial.}}
+\put(15,-3){\small(a)}
+\put(43,-3){\small(b)}
+\put(78,-3){\small(c)}
+\put(9,32){\tiny$\PointsSensor$}
+\put(25,43){\tiny$\handmodel$}
+\put(17,37){\color{red}$\proj_\handmodel$}
+\put(45,37){\color{red}$\proj_\handmodel$}
+\put(73,37){\color{red}$\proj_{\visiblehand}$}
+\putfilename
+\end{overpic}
+% \vspace{-.05in}
+\caption{
+% 
+Illustration of correspondences computations. The circles represent cross-sections of the fingers, the small black dots are samples of the depth map. (a) A configuration that can be handled by standard closest point correspondences.
+ (b) Closest point correspondences to the back of the cylinder model can cause the registration to fall into a local minimum. Note that simply pruning correspondences with back-pointing normals would not solve this issue, as no constraints would remain to pull the finger towards the data. (c) This problem is resolved by taking visibility into account, and computing closest points only to the portion $\visiblehand$ of $\handmodel$ facing the camera. % 
+}
+\label{fig:frontcorr}
+\end{figure}

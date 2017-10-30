@@ -1,0 +1,20 @@
+\begin{figure}[t]
+\flushright
+\begin{overpic} 
+[width=.95\linewidth]
+% [width=.95\linewidth,grid,tics=5]
+{htrack/fig/dexter/composite.pdf}
+\put(-2,11){\tiny{10}}
+\put(-2,18){\tiny{20}}
+\put(-2,25){\tiny{30}}
+\put(-2,33){\tiny{40}}
+\put(-2,40){\tiny{50}}
+\put(-3,45){\tiny{\emph{mm}}}
+\putfilename
+\end{overpic}
+\caption{
+We quantitatively evaluate our algorithm on the \textbf{Dexter-1} dataset from \protect\cite{sridhar_iccv13}. The measurements report the root mean square errors of fingertip placements. The acquisition setup consists of several calibrated video cameras and a single depth camera. For our results and the method of~\protect\cite{tang_cvpr14}, only the depth image is used for tracking, while the algorithms of Sridhar and colleagues also use the video streams. The blue, green, and purple bars are reproduced from~\protect\cite{sridhar_14}.
+For our algorithm we report results without (red) and with (orange) reinitialization. 
+}
+\label{fig:dexter}
+\end{figure}

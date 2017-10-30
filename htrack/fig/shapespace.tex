@@ -1,0 +1,15 @@
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=5]
+{htrack/fig/shapespace/composite.pdf}
+\putfilename
+\end{overpic}
+\caption{An illustration of the PCA pose-space used to regularize the optimization. Black dots denote the samples of the data base. 
+High likelihood poses are located nearby the mean of the latent space (dark red). 
+% Note how the eigenvalues of the PCA space skew the metric in such a way that certain axis offer a broader spectrum of likely poses.
+The eigenvalues of the PCA define the metric in the low-dimensional space, skewing it in certain directions. Poses that, according to this metric, are far from the mean are likely to be unnatural and will be penalized in the optimization.
+}
+\label{fig:shapespace}
+\end{figure}

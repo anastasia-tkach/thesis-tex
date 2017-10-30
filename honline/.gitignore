@@ -1,0 +1,80 @@
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# =========================
+# Operating System Files
+# =========================
+
+# OSX
+# =========================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+/.honline_for_review.lb
+/.honline_for_review.watcher_pid
+/honline_for_review.aux
+/honline_for_review.bbl
+/honline_for_review.blg
+/honline_for_review.brf
+/honline_for_review.fdb_latexmk
+/honline_for_review.fls
+/honline_for_review.latexmk.log
+/honline_for_review.log
+/honline_for_review.pdf
+/honline_for_review.synctex.gz
+
+/paper.pdf
+
+/paper.aux
+/paper.bbl
+/paper.blg
+/paper.fdb_latexmk
+/paper.fls
+/paper.latexmk.log
+/paper.log
+/paper.out
+/paper.synctex.gz
+
+/.paper.lb
+/.paper.watcher_pid
+
+/paper.brf
+
+/paper.synctex.gz(busy)
+paper annot.pdf

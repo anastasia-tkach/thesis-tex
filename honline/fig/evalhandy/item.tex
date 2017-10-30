@@ -1,0 +1,28 @@
+\renewcommand{\off}{6}
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,height=1.5in,grid,tics=10]
+{\currfiledir/item.pdf}
+\put(97,1.5){\small $\varepsilon$}
+\put(0,38){\scriptsize \vertical{$\% (avg)$}}
+\myfigurename{}
+
+\put(\off,42){\scriptsize \color[RGB]{197,151,53}    \OfflineHard{} -- \Eq{offlinehard}}
+\put(\off,39){\scriptsize \color[RGB]{160,215,190}   \OfflineSoft{} -- \Eq{offlinesoft}}
+\put(\off,36){\scriptsize \color[RGB]{61,131,119}      Per-frame -- \Eq{energies}}
+\put(\off,33){\scriptsize \color[RGB]{219,158,148}     Split cumulative (KF) -- \Tab{kf-like}}
+\put(\off,30){\scriptsize \color[RGB]{182,78,124}      Joint cumulative (IEKF) -- \Tab{iekf-like}}
+\put(\off,27){\scriptsize \color[RGB]{150,149,30}     \cite{htrack}}
+\put(\off,24){\scriptsize \color[RGB]{150,29,29}      \cite{taylor2016joint}}
+\put(\off,21){\scriptsize \color[RGB]{129,76,145}      \cite{tkach2016sphere}}
+\put(\off,18){\scriptsize \color[RGB]{100,100,100}      \cite{sharp2015accurate}}
+\end{overpic}
+\caption{
+% 
+Evaluation on the \texttt{Handy/Teaser} dataset, reporting the percentage of frames with an average $E_\text{d2m}$ data-to-model energy below $\varepsilon$. The tracking sequences corresponding to these plots can be observed in our \VideoHandy{}.
+% 
+}
+\label{fig:evalhandy}
+\end{figure}

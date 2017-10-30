@@ -1,0 +1,28 @@
+%!TEX root = ../../paper.tex
+\begin{teaserfigure}
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=10]
+{fig/teaser/item.pdf}
+\put(2.2,9){$\color[RGB]{198,94,125}  \text{diag}({\star\Sigma}^{-1})$}
+\put(2.2,4){$\color[RGB]{103,177,159} \text{diag}({\hat\Sigma}^{-1})$}
+\myfigurename{}
+\end{overpic}
+\centering
+\vspace{-.2in}
+\caption{
+% 
+% 
+% 
+Our adaptive hand tracking algorithm optimizes for a tracking model on the fly, leading to progressive improvements in tracking accuracy over time.   
+{\bf Above}: hand surface color-coded to visualize the spatially-varying confidence of the estimated geometry. Insets: color-coded \emph{cumulative} certainty.  Notice how in the last frame all parameters are certain. 
+{\bf Below}: histograms visualize the certainty of each degree of freedom, that is, the diagonal entries of the inverse of the covariance estimate from:
+(a) data in the current frame $\star\Sigma$, or 
+(b) the information $\hat\Sigma$ accumulated through time by our system.
+% These results are best appreciated by watching the supplementary \textbf{video}.
+%
+%
+% 
+}
+\label{fig:teaser}
+\end{teaserfigure}

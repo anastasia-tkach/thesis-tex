@@ -1,0 +1,152 @@
+% Comments
+\definecolor{turquoise}{cmyk}{0.65,0,0.1,0.3}
+\definecolor{purple}{rgb}{0.65,0,0.65}
+\definecolor{dark_green}{rgb}{0, 0.5, 0}
+\definecolor{orange}{rgb}{0.8, 0.6, 0.2}
+\definecolor{red}{rgb}{0.8, 0.2, 0.2}
+\definecolor{blueish}{rgb}{0.0, 0.7, 1}
+\definecolor{light_gray}{rgb}{0.7, 0.7, .7}
+\definecolor{pink}{rgb}{1, 0, 1}
+\newcommand{\edit}[1]{\textcolor{dark_green}{#1}}
+\newcommand{\new}[1]{{#1}}
+\newcommand{\LEGACY}[1]{\textcolor{orange}{[LEGACY] #1}}
+\newcommand{\aedit}[1]{\textcolor{purple}{#1}}
+\newcommand{\ADDRESSED}[1]{{}}
+\newcommand{\copypaste}[1]{{#1}}
+\newcommand{\revision}[1]{{#1}}
+\newcommand{\hidden}[1]{{}}
+
+%%
+%% inlined comments
+%% 
+\newcommand{\MP}[1]{{\color{orange}[MP: #1]}} % mark 
+\newcommand{\AT}[1]{{\color{blueish}[AT: #1]}} % andrea
+\newcommand{\SB}[1]{{\color{turquoise}[SB: #1]}} % sofien
+\newcommand{\NT}[1]{{\color{dark_green}[NT: #1]}} % anastasia
+\newcommand{\MB}[1]{{\color{pink}[MB: #1]}} % mario
+\newcommand{\MS}[1]{{\color{purple}[MS: #1]}} % matthias
+
+\newcommand{\yoff}{0}
+
+%%
+%% shortcut for references
+%% 
+\newcommand{\Fig}[1]{Figure~\ref{fig:#1}}
+\newcommand{\Figure}[1]{Figure~\ref{fig:#1}}
+\newcommand{\Eq}[1]{Equation~\ref{eq:#1}}
+\newcommand{\Equation}[1]{Equation~\ref{eq:#1}}
+\newcommand{\Sec}[1]{Section~\ref{sec:#1}}
+\newcommand{\Section}[1]{Section~\ref{sec:#1}}
+\newcommand{\Appendix}[1]{Appendix~\ref{app:#1}}
+
+
+%%
+%% Inlined annotation of paragraph content
+%% 
+\newcommand{\brief}[1]{} % ONLY LATEX VISIBLE
+% \newcommand{\brief}[1]{{\flushright\small{\vspace{-7pt}\color{light_gray} [\textbf{#1}]}\\}}
+
+
+%%
+%% MATH STUFF
+%% 
+\let\vec=\mathbf
+\let\mat=\vec
+\newcommand{\F}{F} % dataframe
+\newcommand{\normal}{\mathcal{N}}
+\newcommand{\vertex}{\mathbf{v}}
+
+% MARIO
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\norm}[1]{\left\Vert {#1} \right\Vert}
+
+% hack to use computer modern font for bold greek letters
+\SetSymbolFont{letters}{bold}{OML}{cmm}{b}{it}
+\SetSymbolFont{operators}{bold}{OT1}{cmr}{bx}{n}
+
+%%
+%% Small math symbols
+%%
+\newcommand{\unaryminus}{\scalebox{0.5}[1.0]{\( - \)}} % small "-"
+% \newcommand{\smallless}{\scalebox{0.5}[.5]{\(<\)}} % small "<"
+
+%--- OLD SYMBOLS
+% \newcommand{\pars}{\boldsymbol{\omega}}
+% \newcommand{\parsopt}{\boldsymbol{\omega}^*}
+
+%%
+%% Inverted
+%%
+\usepackage[T3,T1]{fontenc}
+\DeclareSymbolFont{tipa}{T3}{cmr}{m}{n}
+\DeclareMathAccent{\invbreve}{\mathalpha}{tipa}{16}
+
+%%
+%% Math symbols
+%%
+\newcommand{\cyl}{\mathbf{c}} %cylinder
+\newcommand{\cylrad}{\mathbf{c}} %cylinder
+
+% weights of terms
+\newcommand{\omegacloud}{\omega_1}
+\newcommand{\omegasilhouette}{\omega_2}
+\newcommand{\omegawrist}{\omega_3}
+\newcommand{\omegapcaproj}{\omega_4}
+\newcommand{\omegapcareg}{\omega_5}
+\newcommand{\omegacollision}{\omega_6}
+\newcommand{\omegabounds}{\omega_7}
+\newcommand{\omegatemporalst}{\omega_8}
+\newcommand{\omegatemporalnd}{\omega_9}
+%\newcommand{\skeleton}{\mathcal{K}}
+\newcommand{\numpars}{26}
+\newcommand{\jacobian}{\mathbf{J}}
+\newcommand{\J}{\jacobian}
+\newcommand{\Jproj}{\jacobian_{\text{persp}}}
+\newcommand{\Jskel}{\jacobian_{\text{skel}}}
+\newcommand{\residuals}{\mathbf{e}}
+\newcommand{\weight}{\omega}
+%\newcommand{\pixel}{\mathbf{p}}
+\newcommand{\pixels}{\mathbf{P}}
+%\newcommand{\point}{\mathbf{x}}
+\newcommand{\skelpoint}{\mathbf{k}}
+\newcommand{\points}{\mathbf{X}}
+\newcommand{\proj}{\Pi}
+\newcommand{\PointsRender}{\mathcal{X}_{r}}
+%\newcommand{\PointsSensor}{\mathcal{X}_{s}}
+\newcommand{\DepthRender}{\mathcal{D}_{r}}
+\newcommand{\DepthSensor}{\mathcal{D}_{s}} 
+\newcommand{\SilhoRender}{\mathcal{S}_{r}}
+\newcommand{\SilhoSensor}{\mathcal{S}_{s}}
+\newcommand{\DataSensor}{\mathcal{F}}
+\newcommand{\history}{\mathcal{H}}
+\newcommand{\handmodel}{\mathcal{M}}
+\newcommand{\visiblehand}{\invbreve\handmodel}
+\newcommand{\posespace}{\mathcal{P}}
+\newcommand{\MU}{\boldsymbol\mu} 
+\newcommand{\SIGMA}{\boldsymbol{\Sigma}}
+%\newcommand{\pars}{\boldsymbol{\theta}}
+\newcommand{\dpars}{\Delta\boldsymbol{\theta}}
+\newcommand{\parssub}{\boldsymbol{\tilde\theta}}
+\newcommand{\parsopt}{\pars^*}
+\newcommand{\identity}{\mathbf{I}}
+\newcommand{\zero}{\mathbf{0}}
+
+% \underset{x}{\operatorname{argmin}} 
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+
+%--- 2x2 matrix block
+\newcommand{\matblocktwo}[4]{
+\left[
+    \begin{array}{c|c}
+        #1 & #2 \\ \hline
+        #3 & #4 
+    \end{array}
+\right] 
+}
+
+%--- TO SHOW PATH OF INSERTED IMAGES
+\usepackage{currfile}
+% \newcommand{\putfilename}{\put(-3,0){\rotatebox{90}{\color{red}\currfilename}}}
+\newcommand{\putfilename}{}

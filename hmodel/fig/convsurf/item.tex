@@ -1,0 +1,28 @@
+\begin{figure}[t!]
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=5]
+{fig/convsurf/item.png}
+% {fig/fitting/convolution_blocks}
+\put(25,57){\small{$\skeleton$}}
+\put(74,57){\small{$\skeleton$}}
+\put(9,54){\small{$c_1$}}
+\put(10,60){\small{$r_1$}}
+\put(40,52.5){\small{$c_2$}}
+\put(41,58){\small{$r_2$}}
+\end{overpic}
+% \vspace{-.3in} 
+\caption{
+% 
+% Image thanks to: ryoichi_sig13
+The \todo{sphere-mesh skeleton $\skeleton$ identifies sphere positions and radii.}
+% 
+\todo{The surface of the object is obtained as the convex-hull of the spheres on the vertices of the skeleton.}
+% zero-crossing of this implicit function describes the convex-hull of our spheres.
+% 
+\todo{Sphere-meshes} can be rendered through GPU ray-tracing, or by meshing \todo{the zero-crossing of their implicit function; see \Eq{convsurf}.}
+% 
+% 
+}
+\label{fig:convsurf}
+\end{figure}

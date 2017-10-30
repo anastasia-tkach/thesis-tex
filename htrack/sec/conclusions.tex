@@ -1,0 +1,67 @@
+% !TEX root = ../htrack.tex
+
+
+\input{htrack/fig/fisting.tex}
+\input{htrack/fig/wronghand.tex}
+\paragraph*{Limitations.}
+
+
+Single-camera depth acquisition yields incomplete data and as such the pose reconstruction problem is inherently ill-posed.
+Tracking errors can occur in certain situations as explained above when insufficient data is acquired due to occlusions or fast motion.
+Similarly, the resolution of the sensor limits tracking accuracy. As shown in \Figure{fisting}, when geometric features become indiscriminate, our registration approach fails. Integrating color and shading information could potentially address this issue~\cite{delagorce_pami11}.
+\revision{While our current system requires the user to wear a wristband for detection and stabilization, this could be replaced by automatic hand labeling, e.g. using forest classifiers as in~\cite{tompson_tog14}.}
+%\revision{The wristband used for detection and tracking stabilization could be replaced by automatic hand labeling, e.g. using forest classifiers as in~\cite{tompson_tog14}.}
+
+Our cylinder model proved adequate for the data quality of current commodity sensors, but is overall limited in geometric accuracy, and hence might not scale with increasing sensor resolution.
+Also, in our current implementation the model needs to be manually adapted to the user through simple scaling operations. Without such adaptation, tracking accuracy degrades as shown in \Figure{wronghand}.
+This user-specific adaption could be automated~\cite{Taylor_cvpr14} and potentially even performed simultaneously with the realtime tracking as recently proposed for face tracking~\cite{bouaziz_sig13}.
+
+The PCA model used in the prior energy is an efficient, but rather simplistic representation of the pose space. We currently do not consider the
+temporal order in which the hand poses of the database have been acquired, which could potentially be exploited for more sophisticated temporal priors. 
+
+% mention the rotating fist sequence \Figure{fisting}. Depth data i  featureless, we'd either need better resolution, use color with optical flow, or, for high-fi tracking, an annotated wristband from which we can infer forearm axial rotation.. that would work perfectly!}
+
+%\MP{maybe add one or two more limitations}
+
+
+
+
+%\section{Future Work}
+
+% \begin{itemize}
+% \item Combine appearance based model for loss-of-tracking recovery a-la \cite{wei_siga12} \SB{done???}.
+% \item Leverage upper body tracking instead of wristband?
+%\item Automatic calibration of cylinder model
+% \item color cues, optical flow, color segmentation,...
+%\item Combine Faceshift with hands, upper body is constrained \cite{faceshift}
+% \end{itemize}
+
+
+%In our current implementation we employ a simple cylinder model as a geometric template. To improve tracking quality, the model can be quickly scaled to match the user's hand. An interesting avenue of future work is on automatic and accurate hand modeling~\cite{Taylor_cvpr14}. Similar to~\cite{bouaziz_sig13} for faces, we would like to jointly solve for hand tracking and modeling in realtime. This would allow to keep our system user friendly while further improving the tracking accuracy. 
+%
+%In a near future, we will integrate our hand tracking solution to a face tracking system based on RGBD devices~\cite{faceshift}. Our goal is to develop a complete system for online human communication in desktop environments based on upper-body tracking combining face, hands, arms, and torso.
+%
+
+\section{Conclusions}
+
+% \todo{we are awesome because this and that}
+
+We have introduced a new model-based approach to realtime hand tracking using a single low-cost depth camera. This simple acquisition setup maximizes ease of deployment, but poses significant challenges for robust tracking.
+%
+Our analysis revealed that a major source of error when tracking articulated hands are erroneous correspondences between the hand model and the acquired data, mainly caused by outliers, holes, or data popping in and out during acquisition.
+We demonstrate that these problems can be resolved by our new formulation of correspondence search. In combination with suitable 2D/3D registration energies and data-driven priors, this leads to a robust and efficient hand tracking algorithm that outperforms existing model- and appearance-based solutions.
+
+
+In our experiments we show that our system runs seamlessly for sensors capturing data at 60 Hz. However,  we can even support higher frame rates of up to 120 fps in anticipation of future sensors that have recently been announced.
+By fully disclosing our source code and data we ensure that our method and results are reproducible, as well as facilitating future research and product development. 
+
+\revision{We are investigating a technique for efficient automatic personalization of the tracking model to the acquired user, in order to facilitate a more seamless usage of our system across different subjects.}
+Other examples of future efforts are robust two-hand tracking with object interactions, combinations of hand tracking with full body tracking, and integrating our hand tracking solution to new interfaces and realtime applications.
+%Examples of such future efforts are automatic personalization of the tracking model to the acquired user, robust two-hand tracking with object interactions, combinations of hand tracking with full body tracking algorithms, and integrating our hand tracking solution to new interfaces and realtime applications.
+
+
+%We have demonstrated that accurate realtime hand tracking can be performed at 60FPS on a low-cost RGBD device using a model-based approach. Robust tracking is achieved by combining 2D and 3D informations extracted from the sensor data with a set of carefully designed priors. We compared our method with multiple state of the art approaches and showed that our system outperforms current model- and appearance-based approaches. By fully disclosing our source code we believe that our approach will facilitated future research and product development. 
+
+\section*{Acknowledgments}
+The authors thank S. Sridhar, S. Melax and J. Tompson for insightful discussions. This research is supported by the Swiss National Science Foundation grant 200021-153567. Parts of this work were supported by the Cluster of Excellence ``Cognitive Interaction Technology'' (EXC 277) funded by the German Research Foundation~(DFG).
+

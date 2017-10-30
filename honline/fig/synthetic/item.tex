@@ -1,0 +1,19 @@
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth, height=3.1in]
+% [width=\linewidth,grid,tics=10]
+{\currfiledir/item.pdf}
+\myfigurename{}
+\put(1.5,86){\scriptsize \vertical{$mm$}}
+\put(1.5,40){\scriptsize \vertical{$mm$}}
+\put(83,1){\scriptsize $\sigma$}
+\put(83,47){\scriptsize $\sigma$}
+\end{overpic}
+\caption{
+% 
+Mean and standard deviation for ground-truth calibration residuals as we vary the algorithm's initialization with a random perturbation of standard deviation $\sigma$. We evaluate the residuals on (top) synthetic depth maps, as well as (bottom) on the raw depth maps. (right) the exemplars drawn from the $\sigma=0.4$ perturbation used in the evaluation.
+% 
+}
+\label{fig:synthetic}
+\end{figure}

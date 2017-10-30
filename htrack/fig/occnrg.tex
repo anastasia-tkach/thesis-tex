@@ -1,0 +1,23 @@
+\begin{figure}[b]
+\centering
+\flushleft
+\begin{overpic} 
+[width=.97\linewidth]
+% [width=.97\linewidth,grid,tics=5]
+{htrack/fig/occnrg/composite.pdf}
+\put(100,2){\rotatebox{90}{\tiny{corresp. culling}}}
+\put(100,24){\rotatebox{90}{\tiny{occlusion energy}}}
+\putfilename
+\end{overpic}
+% \vspace{-.05in}
+\caption{
+% 
+Correspondence computations.
+The top row shows the strategy 
+% originally proposed for full-body tracking by \protect\cite{ganapathi_eccv12}
+used in~\protect\cite{qian_cvpr14} adapted to our gradient-based framework according to the formulation given in~\protect\cite{wei_siga12}. The bottom row shows the improved accuracy of our new approach.
+% 
+%The effect of replacing our view-dependent correspondence computation by an energy minimizing depth disparity~\protect\cite{wei_siga12} for portions of the model occluding the sensor data~\protect\cite{qian_cvpr14}. \MP{I don't understand the references. So the top row is Wei et al and the bottom row our method? Why refer to Qian?}
+} % caption
+\label{fig:occnrg}
+\end{figure}

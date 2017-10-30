@@ -1,0 +1,110 @@
+% !TEX root = ../htrack.tex
+% \newpage
+
+
+
+\section{Implementation}
+\label{sec:implementation}
+%\input{htrack/fig/constraints.tex}
+
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+% \subsection{Solver }
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+
+In this section we provide more details on the implementation of our optimization algorithm. The derivation of the necessary gradients and Jacobians is given in the appendix.
+
+\paragraph*{Optimization.} The optimization of the tracking energy of \Equation{tracking_optimization} over the pose $\pars$ 
+%\begin{equation}
+%\label{eq:final_optimization}
+%\argmin_{\pars, \parssub} E_{\text{fit}} + E_{\text{prior}}
+%\end{equation}
+is performed by solving the non-linear least squares problem with a Levenberg-Marquardt approach. 
+% \MB{Do you really use Levenberg-Marquardt? Why? In all comparisons I did it was slower than Gauss-Newton. The theoretical advantage of LM is that it is has a larger region fo convergence, but that (a) comes at a price and (b) should not be our problem due to small frame-to-frame changes. How do you adapt the LM-parameter that blends between Newton-step and gradient-step?}
+The assumption is that a current estimate of $\pars$ is known from which we then compute an update. More specifically, the high acquisition speed of the sensing device allows us to employ the optimized parameters from the previous time frame as the starting estimate. We then iteratively approximate the energy terms using Taylor expansion and solve a linear system to get the update $\delta\pars$ at each iteration (see appendix).
+% A detailed description of the optimization is given in Appendix~\ref{sec:app} and \Appendix{opt}. 
+As our algorithm achieves 60 fps tracking, the previously reconstructed pose is of sufficiently high quality allowing our solve to converge within seven iterations.
+
+\input{htrack/fig/rigid.tex}
+
+\paragraph*{Initialization.} As a user enters the scene our method is initialized by the fingertip detection and fitting from~\cite{qian_cvpr14}.
+Other appearance-based methods could be used for initialization as well \cite{tompson_tog14}. We also re-initialize the tracking in case a severe tracking failure is detected using the method of \cite{wei_siga12}. Such re-initialization occurs rarely (e.g.\ less than $0.5\%$ of the frames in the sequence of \Figure{tompson}).
+
+
+\paragraph*{Rigid bias.}
+To improve the convergence of our solver in case of fast motion, we first perform the optimization in \Equation{tracking_optimization} 
+% \MB{use brackets for referencing equations} 
+for the rigid motion only by optimizing for the root of the kinematic chain. As shown in \Figure{rigid}, optimizing first for the rigid motion prior to the full pose estimation leads to improved robustness of the tracking.
+
+ 
+
+
+
+% \AT{mention rigid iteration, perhaps show it in the analysis}
+% as $\mathbf{r} \approx \mathbf{r}_0 + \J(\mathbf{r}_0) \delta\pars$, where $\J=\partial \mathbf{r} / \partial \pars$ is the Jacobian of the residuals, and then compute the optimal update as:
+% %
+% \begin{eqnarray}
+% \delta\pars = (\J^T \J + \alpha \mathbf{I})^{-1} \J^T \mathbf{r_0}
+% \label{eq:gaussnewton}
+% \end{eqnarray}
+% %
+% A description of the rows that assemble $\J$, altogether with a description of the chain-rule derivatives is given in the appendix. The identity matrix $\mathbf{I}$ weighted by $\alpha$ ensures that the system remains well conditioned and stabilizes the optimization by reducing the magnitude of the computed update.
+
+% this assumes the device's acquisition speed is sufficiently high to capture the hand movement
+% Note that in \Equation{tracking_optimization},  $\proj_{\handmodel}(\point,\pars)$ and $\proj_{\SilhoSensor}(\pixel,\pars)$ are not differentiable \SB{that is not fully true}, making the direct application of Gauss-Newton unfeasible. By defining auxiliary variables $\tilde\point,\tilde\pixel$ and employing the indicator function notation~\cite{bouaziz_sgp13}, we obtain an alternating optimization in the spirit of \emph{iterative closest point}:
+% %
+% \begin{align}
+% &\text{\textbf{Step 1.1:}}& &\argmin_{\tilde\points=\{\tilde\point_i\}}
+% \sum_{\point_i \in \PointsSensor} \| \point_i - \tilde\point_i \|_2^2 + I_{\handmodel(\pars)}(\tilde\point_i)
+% \label{eq:cp3d}
+% %
+% \\
+% %
+% &\text{\textbf{Step 1.2:}}& &\argmin_{\tilde\pixels=\{\tilde\pixel_i\}}
+% \sum_{\pixel_i \in \SilhoRender} \| \pixel_i - \tilde\pixel_i \|_2^2 + I_{\SilhoRender(\pars)}(\tilde\pixel_i)
+% \label{eq:cp2d}
+% %
+% \\
+% %
+% %
+% & \text{\textbf{Step 2:}}& & \argmin_\theta E_{fit}(\dots, \tilde\points,\tilde\pixels)
+% \label{eq:icp}
+% \end{align}
+% %
+ 
+
+% %-------------------------------------------------------------------------------
+% %-------------------------------------------------------------------------------
+% \subsection{Prior}
+%
+% \todo{Temporal prior: how do you sample the skeleton?}
+%
+% \todo{Angle bounds: should we comment on the angle bounds here?}
+%
+% \todo{PCA: should we put the details on how it is created here?}
+% %-------------------------------------------------------------------------------
+% %-------------------------------------------------------------------------------
+% \AT{should we mention that adding bases increases the solve cost quadratically?}
+
+\paragraph*{Parameters.} For all our results we fix our parameters to $\omegacloud = \omegasilhouette = \omegapcareg = 1$, $\omegapcaproj = 10^3$, $\omegawrist = \omegacollision = \omegabounds = 10^8$, $\omegatemporalst = \omegatemporalnd = 3$. We determined these weights empirically by re-tracking multiple sequences with different sets of parameters. 
+Our system was tested on an Intel Core i7 4GHz with NVIDIA GTX980 GPU running Ubuntu 12.02 . To run on a 60Hz RGBD device such as the PrimeSense Carmine 1.09 or the Creative Gesture Camera, we perform $1$ rigid iteration and $7$ full iterations, at $1.5$ms per iteration. We perform closed form closest point correspondences and Jacobian computation for the fitting energies on the GPU. The number of iterations can be easily adapted to run on the new Intel RealSense 3D Camera (F200) at 120Hz or at even higher frame rates on future devices.
+% \MP{I think we need an extensive discussion about the weights.  This will for sure be an issue in the reviews ("The method combines many different terms and setting good weights seems difficult, blabla"). I think we should be very straightforward about this to take any wind out of the sail of a critical reviewer. We can argue that because the method is realtime and the weights can be adapted in realtime, setting good weights is not that hard.  We could say that we created a set of representative sequences that we used to tune the weights. If labeled ground truth data is available, one could even use some optimization to find optimal weights, but in our case this was not necessary, etc.
+% Also, do we use fix weight settings for all examples?}
+
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+% \subsection{CUDA Optimizations}
+%-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+% \todo{Briefly mention the memory layout and transfers}
+% \begin{itemize}
+%     \item sda
+% \end{itemize}
+
+
+%%% Local Variables:  
+%%% mode: latex 
+%%% TeX-master: "../htrack" 
+%%% End: 
+

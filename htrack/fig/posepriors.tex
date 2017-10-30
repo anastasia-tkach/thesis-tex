@@ -1,0 +1,20 @@
+\begin{figure}[t]
+\flushleft
+\begin{overpic} 
+[width=.95\linewidth]
+% [width=.95\linewidth,grid,tics=5]
+{htrack/fig/posepriors/composite.pdf}
+\put(100,36.5){\rotatebox{90}{\tiny{collision}}}
+\put(100,7){\rotatebox{90}{\tiny{joint limits}}}
+\put(9,-2){\tiny{color}}
+\put(34,-2){\tiny{depth}}
+\put(57,-2){\tiny{disabled}}
+\put(82.5,-2){\tiny{enabled}}
+\putfilename
+\end{overpic}
+\vspace{0pt}
+\caption{Kinematic priors augment the data prior to account for inconsistencies in the pose space. The collision term avoids self-collisions (top row), while the term for joint angle bounds avoids overbending of the finger joints.
+% (top) Our latent pose space can contain poses with self-intersecting geometry. The collision energy prevents our tracking model from falling in these strong registration local minima. (bottom) As we only penalize the distance from the mean pose, given enough fitting constraints, our tracked model can assume unlikely poses. Joint bounds give further structure to the latent space by preventing the creation of unrealizable poses; also see \Figure{shapespaceproj}}.
+}
+\label{fig:posepriors}
+\end{figure}

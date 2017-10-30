@@ -1,0 +1,33 @@
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=10]
+{\currfiledir item.pdf}
+\myfigurename{}
+\put(15,38){straight finger}
+\put(66.5,38){bent finger}
+% 
+\put(28.5,9.5){\scriptsize $\beta_{[1]}$}
+\put(18,19.5){\scriptsize $\beta_{[2]}$}
+% 
+\put(23,-1){\scriptsize $\beta_{[1]}^*$}
+\put(40,-1){\scriptsize $\beta_{[1]}^+$}
+\put(7.5,-1){\scriptsize $\beta_{[1]}^-$}
+% 
+\put(57,-1){\scriptsize $\beta_{[1]}^-$}
+\put(74,-1){\scriptsize $\beta_{[1]}^*$}
+\put(90,-1){\scriptsize $\beta_{[1]}^+$}
+\end{overpic}
+\caption{
+% 
+%
+\textbf{(Per-frame regression)} We abstract the hand shape/pose estimation problem from a single frame into the one of a simpler 2D stick-figure. Note, however, that this illustration is not hand-crafted, but is derived from numerical optimization executed on these simplified datasets. When the finger is straight (left), it is difficult to estimate the length of individual phalanges as the optimization problem is ill-posed. With a bent finger (right) the problem is better conditioned.
+% 
+% \AN{we need to tell that $E(\beta_1)$ is a registration energy} \AT{done}
+We analyze the landscape of the registration energy {\color{anagreen}$E(\shape_{[1]})$}, and observe how estimation uncertainty relates to the width of the local minima valley. This uncertainty, the posterior distribution of shape parameters after computing their estimate from the data in the current frame, can be estimated through a quadratic approximation {\color{anasalmon}$\tilde{E}(\shape_{[1]})$}, derived from the Hessians of the registration energies.
+% 
+%
+}
+\label{fig:intra}
+\end{figure}

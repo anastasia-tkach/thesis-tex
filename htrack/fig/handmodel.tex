@@ -1,0 +1,24 @@
+\begin{figure}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=5]
+% {fig/handmodel/composite.png}
+{htrack/fig/handmodel/composite.pdf}
+\put(36,1){\tiny $\skelpoint_0$}
+\put(38,9){\tiny $\skelpoint_1$}
+\put(40,14){\tiny $\skelpoint_2$}
+\put(42.5,19.5){\tiny $\skelpoint_3$}
+\put(43.5,23){\tiny $\skelpoint_4$}
+% Too cluttered if we put more!!!
+\putfilename
+\end{overpic}
+\caption{ 
+%
+A visualization of the template hand model with the number and location of degrees of freedom of our optimization. From left to right: The cylinder model used for tracking, the skeleton, the BVH skeleton exported to Maya to drive the rendering, the rendered hand model. 
+% Note the rig bones of fingertips are sligthly longer, as they extend until they touch the surface.
+% \MP{Not sure if I understand the last sentence. Should we skip it?}
+%\TODO{Replace (d) with posed rendered model.}
+} % caption
+\label{fig:handmodel}
+\end{figure}

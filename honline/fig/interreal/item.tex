@@ -1,0 +1,38 @@
+\definecolor{truth}{RGB}{180,180,180}
+\definecolor{intra}{RGB}{188,58,117}
+\definecolor{inter}{RGB}{61,131,119}
+\definecolor{varintra}{RGB}{227,176,171}
+\definecolor{varinter}{RGB}{160,215,190}
+
+% 
+\begin{figure*}[t]
+\centering
+\begin{overpic} 
+[width=\linewidth]
+% [width=\linewidth,grid,tics=10]
+{\currfiledir/item.pdf}
+\myfigurename{}
+\put(2,23){\scriptsize \vertical{$E_\beta$}}
+\put(97,23){\scriptsize \vertical{$\Sigma^{-1}$}}
+% \put(7,-1){\scriptsize thumb middle length -- \todo{$\beta_{[?]}$}}
+\put(10,-1){\small ring attachment-y -- {$\beta_{[25]}$}}
+\put(40,-1){\small middle middle-length -- {$\beta_{[7]}$}}
+\put(75,-1){\small middle attachment-z -- {$\beta_{[23]}$}}
+\end{overpic}
+\caption{
+% 
+We illustrate the formulation in \Section{technical} on the calibration of four different degrees-of-freedom on the \texttt{Handy/Teaser} dataset. 
+(top)
+% 
+Frames are indexed by $n$ and we display: 
+{\color{truth} ground-truth value $\bar{\beta}$},
+{\color{intra} per-frame estimate $\star{\beta}_n$} and 
+{\color{inter} cumulative estimate $\hat{\beta}_n$}; the scale for these quantities is relative to $\bar{\beta}$, and shown on left-hand side of each axis.
+% 
+In the same plot, we also visualize the \emph{inverse} of the diagonal entry of the covariance matrices (i.e. certainty) for {\color{varintra} per-frame $\star\Sigma_n$} and {\color{varinter} cumulative $\hat\Sigma_n$} estimates; the scale for these quantities is on the right-hand side of each plot.
+% 
+(bottom) We also display the pose corresponding to a selection of frames in the sequence (dashed); please note the correlation between pose and uncertainty.
+% 
+}
+\label{fig:interreal}
+\end{figure*}
