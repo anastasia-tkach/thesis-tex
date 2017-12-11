@@ -1,5 +1,5 @@
 %!TEX root = ../paper.tex
-\input{fig/intra/item}
+\input{honline/fig/intra/item}
 
 \section{Online model calibration}
 \label{sec:technical}
@@ -7,25 +7,26 @@
 We now describe our \emph{joint} calibration and tracking algorithm, which combines the Levenberg-style optimization of previous hand trackers with the uncertainty maintenance framework of Kalman filtering.   Previous hand tracking work has made use of temporal smoothing priors to propagate {\em pose} information from previous frames, without the use of filtering.  However this approach cannot be used for {\em shape} because it is so weakly constrained in any given frame, and because its temporal prior is so strong, as shape parameters are \emph{persistent} over time: we observe the same user performing in front of the camera for thousands of frames. However, sufficient information to estimate certain shape parameters is simply not available in certain frames. For example, by observing a straight finger like the one in \Figure{intra}-(left), it is difficult to estimate the length of a phalanx. Therefore, knowledge must be 
 gathered from a \emph{collection} of frames capturing the user in different poses. 
 
+\input{honline/fig/inter/item}
+\input{honline/fig/covariance/item}
 As we illustrate in \Figure{intra} and \Figure{covariance}, the confidence in regressed \emph{shape} parameters is conditional on the \emph{pose} of the current frame.
 Rather than manually picking a few frames in different poses as in~\cite{taylor2016joint}, we show how propagation of not just the shape estimate, but also its uncertainty allows reliable calibration even if the initial poses fail entirely to constrain some shape dimensions.  Additionally, the temporal priors of previous work are easily incorporated in the LMKF formulation.
 
-\input{fig/inter/item}
-\input{fig/covariance/item}
+\input{honline/tab/kf-like}
 
-\paragraph{Input data and shape model}
-The input data are a sequence of depth frames $\mathcal{D}_n$, which are segmented via a wristband~\cite{htrack} to produce a point cloud $d_n \subset \mathbb R^3$.   The pose vector in frame~$n$ is $\theta_n$, and our shape model $\mathcal{M}(\theta; \beta)$ is the sphere mesh of \citeN{tkach2016sphere}.   Shape is encoded via scalar length parameters $\beta$ instead of sphere positions; see \Figure{handmodel} and \cite{edoardo}.
+\subsection*{Input data and shape model}
+The input data are a sequence of depth frames $\mathcal{D}_n$, which are segmented via a wristband~\cite{tagliasacchi2015robust} to produce a point cloud $d_n \subset \mathbb R^3$.   The pose vector in frame~$n$ is $\theta_n$, and our shape model $\mathcal{M}(\theta; \beta)$ is the sphere mesh of \cite{tkach2016sphere}.   Shape is encoded via scalar length parameters $\beta$ instead of sphere positions; see \Figure{handmodel} and \cite{edoardo}.
 
-\paragraph{Estimation}
+\subsection*{Estimation}
 Let $x_n = [\theta_n; \beta_n]$ denote the model {\em state}: the vector of coalesced pose and shape parameters at frame $n$.  
 Our goal in tracking is to produce the best estimate $\hat{x}_n$, at frame~$n$, of the state~$x_n$, given all the data seen previously, $d_1, ..., d_n$.
-What is more, we want to estimate not just the state, but the parameters of the {\em probability distribution} over the state $p(x_n|d_{1..n})$.  Thus, if we write
+Additionally, we want to estimate not just the state, but the parameters of the {\em probability distribution} over the state $p(x_n|d_{1..n})$.  Thus, if we write
 \begin{equation}
 p(x_n|d_{1..n}) \approx \mathcal N(x_n \mid \hat{x}_n, \hat{\Sigma}_n),
 \end{equation}
 we are saying that $x_n$ approximately follows a normal distribution with mean ~$\hat x_n$ and covariance~$\hat\Sigma_n$.  When we display a tracked hand to the user, we will most likely just draw the hand with pose and shape parameters~ $\hat x_n$, which sometimes leads to ~$\hat x_n$ being called ``the estimate of $x_n$'', but it is more correctly ``the estimate of the mean of the distribution $p(x_n)$'', and similarly with $\hat\Sigma_n$.
 
-It is generally computationally intractable to estimate the parameters conditioned on all the previous history~$d_{1..n}$ at every frame (although in~\Section{offline} we compute some related quantities as a baseline), so the estimation is typically expressed in terms of an {\em per-frame} term $p(x_n|d_n)$, which describes the components due only to information in frame~$d_n$ and {\em cumulative} term $p(x_n|d_1, ..., d_{n-1})$.  Different approximations for this term leads to different methods, denoted {\em split cumulative} and {\em joint cumulative} below.
+It is generally computationally intractable to estimate the parameters conditioned on all the previous history~$d_{1..n}$ at every frame (although in~\Section{offline} we compute some related quantities as a baseline), so the estimation is typically expressed in terms of an {\em per-frame} term $p(x_n|d_n)$, which describes the components due only to information in frame~$d_n$ and {\em cumulative} term $p(x_n|d_1, ..., d_{n-1})$.  Different approximations for this term lead to different methods, denoted {\em split cumulative} and {\em joint cumulative} below.
 
 % AF: These points are now above..
 % To achieve online \emph{joint} calibration and tracking, we introduce  two fundamental components which we refer to as \emph{intra-} and \emph{inter-frame} regression. The former gathers estimates from a single frame (see \Section{independent}), while the latter integrates this knowlege across frames. We first demonstrate how inter-frame regression can be interpreted as a Kalman Filter (KF) (see \Section{split}), highlight its shortcomings, and finally propose a \emph{joint} inter-/intra-frame regression. We show how this approach can be interpreted as an Iterative Extended Kalman Filter (IEKF)~(see \Section{joint}).
@@ -33,7 +34,7 @@ It is generally computationally intractable to estimate the parameters condition
 %In \Section{offline}, we conclude by describing two \emph{offline} calibration procedures that will be used as baselines for comparisons to our online calibration solutions.    
 %\end{edit}
 
-
+% \vspace{2in}
 
 \subsection{Per-frame estimate -- $p(x_n|d_n)$}
 \label{sec:independent}
@@ -60,9 +61,8 @@ Where the terms $\mathcal{T}$ ensure that:
 \text{\textbf{shape-valid}} & \quad \text{semantics: finger order and connectivity}
 \end{aligned}
 \end{equation*}
-The energy terms in the objective function are detailed in~\cite{tkach2016sphere} and~\cite{htrack}, with the exception of \emph{shape-prior} and \emph{shape-valid} that are discussed in \Section{shapeprior}.
+The energy terms in the objective function are detailed in \cite{tkach2016sphere} and~\cite{tagliasacchi2015robust}, with the exception of \emph{shape-prior} and \emph{shape-valid} that are discussed in \Section{shapeprior}.
 % 
-\input{tab/kf-like}
 % \paragraph{Laplace approximation}
 % \subsection{Posterior distribution of parameters after taking a measurement into account}
 % \label{sec:posterior}
@@ -92,7 +92,6 @@ Thus, after processing the information in a frame $d_n$, the sought-after quadra
 \tilde{p}(x_n|d_n) \approx \mathcal{N}\left(\star{x}_n, \star{\Sigma}_n \right),
 \end{align}
 so the ``per-frame'' posterior parameters are $\hat x_n = \star x_n, \hat\Sigma_n = \star\Sigma_n$.
-
 
 %
 %Rather than deriving this relationship via hard-coded rules,  we follow the ideas in ~\todo{\cite{?} and derive how this distribution can be approximated by a Gaussian  $\mathcal{N}(\star{x}_n, \star{\Sigma}_n)$.} %\AN{How can one derive hard-coded rules?}
@@ -164,8 +163,8 @@ From \Equation{taylor}, using $\tilde P(d|x) = \exp (\tilde{L}(x))$, we can then
 \end{align}
 \fi
 
-\input{tab/iekf-like}
-\input{fig/realtrack/item}
+\input{honline/tab/iekf-like}
+\input{honline/fig/realtrack/item}
 \subsection{Split cumulative estimate -- $p(x_n|d_{1..n})$}
 % -- $\mathcal{N}(\hat{x}_n, \hat{\Sigma}_n) | \mathcal{N}(\star{x}_n, \star{\Sigma}_n)$ } 
 \label{sec:split}
@@ -225,14 +224,14 @@ In \Appendix{ieif-lm} we link this update to LM \cite{skoglund2015extended}, dem
 % \AN{Thus in \Appendix{ieif-lm} we have proven that adding a  $E_\text{iekf}$ to a standard LM sum of energies optimization (that is used in our field all the time) turns the entire system into Iterated Extended Kalman Filter. If you already have an LM system, this can be literally coded in hours at most including debug time :). To our knowledge, this trick was not known/used before. }
 %Notice how this optimization, representing our online tracking/modeling system, jointly considers the measurement $d_n$ as %well as past estimates $\mathcal{N}(\hat{x}_n, \hat{\Sigma}_n)$.
 
-\input{fig/interreal/item}
+\input{honline/fig/interreal/item}
 
 \subsection{Joint multiframe (batch/offline) estimate}
 \label{sec:batch}
 \label{sec:offline}
 While we focus on an online/streaming algorithm, we also describe an offline baseline calibration procedure -- inspired by the work of~\cite{taylor2014user} -- where multiple frames in the input sequence are simultaneously considered. 
 
-\paragraph{Offline-Hard}
+\subsection*{Offline-Hard}
 To achieve this, \Equation{energies} is modified to consider $N$ frames, each with its own pose parameters $\theta_n$, but with the same underlying shape $\beta$, resulting in what we refer to as \emph{\OfflineHard{}} calibration:
 % 
 \begin{equation}
@@ -242,8 +241,7 @@ To achieve this, \Equation{energies} is modified to consider $N$ frames, each wi
 % 
 Such optimization is initialized with a single $\beta^0$, and in our experiments, we noticed how this resulted in reduced convergence performance and a propensity for the optimization to fall into local minima. 
 
-\newpage
-\paragraph{Offline-Soft}
+\subsection*{Offline-Soft}
 Therefore, we introduce the \emph{\OfflineSoft{}} calibration, where the constraint that a single $\beta$ should be optimized is enforced through a soft penalty:
 % 
 \begin{equation}
@@ -251,13 +249,13 @@ Therefore, we introduce the \emph{\OfflineSoft{}} calibration, where the constra
 \label{eq:offlinesoft}
 \end{equation}
 %
-The initializations $\beta_n^0$ is derived from the per-frame optimization of \Equation{energies}, while the penalty weight is set to a large value ($\small \omega_{\beta}=10e4$). The advantage of \OfflineSoft{} over \OfflineHard{} can be clearly observed in \Figure{evalnyu}, where the former achieves a performance comparable to the one of the (overfitting) per-frame optimization. Finally, note that in practice we do not consider every frame as this large problem would not fit into memory, but instead we sub-sample at a $\approx 1/20$ rate, the same subsampling is used for Kalman \emph{measurement} updates in our online solution to avoid a bias in the comparisons.
+The initializations $\beta_n^0$ are derived from the per-frame optimization of \Equation{energies}, while the penalty weight is set to a large value ($\small \omega_{\beta}=10e4$). The advantage of \OfflineSoft{} over \OfflineHard{} can be clearly observed in \Figure{evalnyu}, where the former achieves a performance comparable to the one of the (overfitting) per-frame optimization. Finally, note that in practice we do not consider every frame as this large problem would not fit into memory, but instead we sub-sample at a $\approx 1/20$ rate, the same subsampling is used for Kalman \emph{measurement} updates in our online solution to avoid a bias in the comparisons.
 % \AN{This sounds like our online algorithm runs only every 20th frame. THIS IS NOT THE CASE. KF and IEKF measurements are taken every 20th frame to satisfy independent measurements assumption of the Kalman filter. The neighboring frames are not independent, they are too similar to each other.}
 % \AT{see github issue }
 
 \subsection{Shape regularizers}
 \label{sec:shapeprior}
-Hand shape variation can be explained in a low dimensional space whose fundamental degrees of freedom include variation like uniform scale, palm width, and finger thickness \cite{khamis2015learning}. In our paper we follow the ideas presented in~\cite{edoardo}, and build a latent-space encoding hand shape variability through \emph{anisotropic scaling}. By setting $\omega_\text{shape-space}{\ll}1$,
+Hand shape variation can be explained in a low dimensional space whose fundamental degrees of freedom include variation like uniform scale, palm width, and finger thickness \cite{khamis15learning}. In our paper we follow the ideas presented in~\cite{edoardo}, and build a latent-space encoding hand shape variability through \emph{anisotropic scaling}. By setting $\omega_\text{shape-space}{\ll}1$,
 % \AN{actually, $\omega = 5 - 10$, it still makes very week influence}.
 this prior acts as a soft regularizer and does not prevent the algorithm from computing a tight fit:
 % to the observed user:

@@ -5,21 +5,21 @@
 % [width=\linewidth,grid,tics=5]
 {htrack/fig/pcafail/composite.pdf}
 \renewcommand{\yoff}{-4}
-\put(05,\yoff){\tiny$89\%$, \#PCA=4}
-\put(30,\yoff){\tiny$96\%$, \#PCA=6}
-\put(54,\yoff){\tiny$99\%$, \#PCA=9}
-\put(79,\yoff){\tiny$79\%$, \#PCA=2}
+\put(05,\yoff){\small$89\%$, \#PCA=4}
+\put(30,\yoff){\small$96\%$, \#PCA=6}
+\put(54,\yoff){\small$99\%$, \#PCA=9}
+\put(79,\yoff){\small$79\%$, \#PCA=2}
 \renewcommand{\yoff}{-8}
-\put(08,\yoff){\tiny$\omegapcaproj=10^8$}
-\put(33,\yoff){\tiny$\omegapcaproj=10^8$}
-\put(57,\yoff){\tiny$\omegapcaproj=10^8$}
-\put(82,\yoff){\tiny$\omegapcaproj=10^2$}
+\put(08,\yoff){\small$\omegapcaproj=10^8$}
+\put(33,\yoff){\small$\omegapcaproj=10^8$}
+\put(57,\yoff){\small$\omegapcaproj=10^8$}
+\put(82,\yoff){\small$\omegapcaproj=10^2$}
 \putfilename
 \end{overpic}
-\vspace{.05in} % leave enough space for overpic
+\vspace{2em} % leave enough space for overpic
 \caption{
 %
-Optimizing directly in the PCA subspace~\protect\cite{schroeder_icra14} can lead to inferior registration accuracy.
+Optimizing directly in the PCA subspace~\protect\cite{schroder2014real} can lead to inferior registration accuracy.
 We replicate this behavior by setting $\omegapcaproj$ in Equation~\ref{eq:pcaproj} to a large value. Even when increasing the number of PCA bases to cover $99\%$ of the variance in the database, the model remains too stiff to conform well to the input. Our approach  is able to recover the correct hand pose by optimizing for projection distances even with a very limited number of bases (right).}
 \label{fig:pcafail}
 \end{figure}

@@ -4,8 +4,8 @@
 [width=.8\linewidth]
 % [width=.8\linewidth,grid,tics=5]
 {htrack/fig/shapespaceproj/composite.pdf}
-\put(36,45){$\pars$}
-\put(26,31){$\tilde\pars$}
+\put(36,45){$\parsHtrack$}
+\put(26,31){$\tilde\parsHtrack$}
 \put(26,23){$\boldsymbol{\mu}$}
 \put(39,6){$\posespace$}
 % \put(25,31){$\tilde\pars$}
@@ -13,9 +13,9 @@
 \end{overpic}
 \caption{
 % 
-An illustration of the energies involved in our pose-space prior. For illustration purposes the full dimensional parameter vector $\pars\in\mathbb{R}^3$, while latent space variable $\tilde\pars\in\mathbb{R}^2$.
+An illustration of the energies involved in our pose-space prior. For illustration purposes the full dimensional parameter vector $\parsHtrack\in\mathbb{R}^3$, while latent space variable $\tilde\parsHtrack\in\mathbb{R}^2$.
 % 
-The PCA optimization in \protect\cite{schroeder_icra14} constrains the pose parameters $\pars$ to lie on the subspace~$\posespace$. Conversely, we penalize the distance of our pose from~$\posespace$~(\Equation{pcaproj}); simultaneously, we ensure our pose remains likely by preventing it from diverging from the mean of the distribution~(\Equation{pcareg}).
+The PCA optimization in \protect\cite{schroder2014real} constrains the pose parameters $\parsHtrack$ to lie on the subspace~$\posespace$. Conversely, we penalize the distance of our pose from~$\posespace$~(\Equation{pcaproj}); simultaneously, we ensure our pose remains likely by preventing it from diverging from the mean of the distribution~(\Equation{pcareg}).
 % 
 % either limiting the freedom of motion of the hand.
 % This reduces the freedom of motion, as only poses in the subspace

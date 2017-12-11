@@ -1,31 +1,32 @@
-\begin{figure}[b]
+\begin{figure}[t]
 \centering
 \begin{overpic} 
 [width=\linewidth]
 % [width=\linewidth,grid,tics=5]
 {htrack/fig/temporal/composite.pdf}
-\put(1.2, 5){\tiny\rotatebox{90}{w/ temporal}}
-\put(1.2, 25.5){\tiny\rotatebox{90}{w/o temporal}}
-\put(22, 42){\tiny{50}}
-\put(40, 42){\tiny{100}}
-\put(59, 42){\tiny{150}}
-\put(78, 42){\tiny{200}}
+\put(1.2, 5){\small\rotatebox{90}{w/ temporal}}
+\put(1.2, 25.5){\small\rotatebox{90}{w/o temporal}}
+\put(22, 42){\small{50}}
+\put(40, 42){\small{100}}
+\put(59, 42){\small{150}}
+\put(78, 42){\small{200}}
 % labels
-\put(14,-2.5){\tiny(a)}
-\put(38,-2.5){\tiny(b)}
-\put(62,-2.5){\tiny(c)}
-\put(86,-2.5){\tiny(d)}
+\put(14,-2.5){\small(a)}
+\put(38,-2.5){\small(b)}
+\put(62,-2.5){\small(c)}
+\put(86,-2.5){\small(d)}
 % plot labels
-\put(42.75,69){\tiny(a)}
-\put(47.4, 69){\tiny(b)}
-\put(50.6, 69){\tiny(c)}
-\put(55.5, 69){\tiny(d)}
+\put(42.75,69){\small(a)}
+\put(47.4, 69){\small(b)}
+\put(50.6, 69){\small(c)}
+\put(55.5, 69){\small(d)}
 % Y
-\put(-.5, 56){\tiny{\rotatebox{0}{ 50}}}
-\put(-.5, 68){\tiny{\rotatebox{0}{100}}}
+\put(-.5, 56){\small{\rotatebox{0}{ 50}}}
+\put(-.5, 68){\small{\rotatebox{0}{100}}}
 \put(2, 72){\small{y}}
 \putfilename
 \end{overpic}
+\vspace{1em}
 \caption{The effect of the temporal prior. The graph shows the trajectory of the $y$-coordinate of the  fingertip over time as the index finger is bend up and down repeatedly. The temporal prior reduces jitter, but also helps avoiding tracking artifacts that arise when fragments of data pop in and out of view. %see also \Figure{data}-(bottom).
 } % caption
 \label{fig:temporal}

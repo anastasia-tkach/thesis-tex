@@ -2,16 +2,16 @@
 \begin{equation*}
 \begin{aligned}
 \hat{x}_n &= \argmax_{x_n} \:
-\underbrace{\log \left( P(d_n|x_n) \: P(x_n |\hat{x}_{n - 1}) \right)}_{L(x_n)}   
+\underbrace{\log \left( p(d_n|x_n) \: p(x_n |\hat{x}_{n - 1}) \right)}_{L(x_n)}   
 \\
 \end{aligned}
 \end{equation*}
 
 \begin{equation*}
 \begin{aligned}
-P(d_n|x_n) &= \exp \left( -\tfrac{1}{2} (d_n - F(x_n))^T (d_n - F(x_n)) \right)
+p(d_n|x_n) &= \exp \left( -\tfrac{1}{2} (d_n - F(x_n))^T (d_n - F(x_n)) \right)
 \\
-P(x_n |\hat{x}_{n - 1}) &= \exp \left( -\tfrac{1}{2}(x_n - \hat{x}_{n - 1})^T \hat{\Sigma}_{n - 1}^{-1} (x_n - \hat{x}_{n - 1})\right)
+p(x_n |\hat{x}_{n - 1}) &= \exp \left( -\tfrac{1}{2}(x_n - \hat{x}_{n - 1})^T \hat{\Sigma}_{n - 1}^{-1} (x_n - \hat{x}_{n - 1})\right)
 \\
 \hat{\Sigma}_n^{-1} = 
 \left.\tfrac{\partial^2 L}{\partial x_n^2}\right|_{\hat{x}_n} &\approx 

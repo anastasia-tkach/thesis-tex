@@ -1,17 +1,17 @@
 \begin{algorithm}
 \begin{equation*}
 \begin{aligned}
-\hat{x}_n &= \argmax_{x_n} \: \underbrace{\log \left( P(x_n^*|x_n) \: P(x_n |\hat{x}_{n - 1}) \right)}_{L(x_n)}    
+\hat{x}_n &= \argmax_{x_n} \: \underbrace{\log \left( p(x_n^*|x_n) \: p(x_n |\hat{x}_{n - 1}) \right)}_{L(x_n)}    
 \\
 \end{aligned}
 \end{equation*}
 
 \begin{equation*}
 \begin{aligned}
-P(x_n^* | x_n) &= \exp \left( -\tfrac{1}{2}(x_n^* - x_n )^T {\star{\Sigma}_n}^{-1}(x_n^* - x_n )\right)
+p(x_n^* | x_n) &= \exp \left( -\tfrac{1}{2}(x_n^* - x_n )^T {\star{\Sigma}_n}^{-1}(x_n^* - x_n )\right)
 % \mathcal{N}(x_n^*,\todo{\Sigma_n})
 \\
-P(x_n |\hat{x}_{n - 1}) &= 
+p(x_n |\hat{x}_{n - 1}) &= 
 % \mathcal{N}(\hat{x}_{n - 1}, \hat{\Sigma}_{n-1})
 \exp \left( -\tfrac{1}{2} (x_n - \hat{x}_{n - 1} )^T \hat{\Sigma}_{n - 1}^{-1} (x_n - \hat{x}_{n - 1} )\right)
 \\

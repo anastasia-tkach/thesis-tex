@@ -1,134 +1,30 @@
 % !TEX root = ../htrack.tex
-\input{htrack/fig/handmodel.tex}
 \input{htrack/fig/overview.tex}
 \section{Related Work}
-\label{sec:related}
+\label{sec:htrack-related}
 
-
-
-%\MP{The paragraph below has been moved from the intro, needs to be either integrated or removed}
-%Accurate realtime tracking is possible using instrumented data gloves (e.g. CyberGlove II), but such systems are invasive, unwieldy and require complex calibration processes to yield results of sufficiently good quality~\cite{wang_sca13}. Tracking optical markers with high-speed infrared cameras (Vicon, OptiTrack) can estimate motion with high accuracy, but such systems are expensive, need extensive calibration, and require lengthy placement of optical beacons~\cite{zhao_sca12}.
-
-% The high complexity of human geometry and motion dynamics, and the high sensitivity of the human visual system to variations and subtleties in faces and bodies make the 3D acquisition and reconstruction of humans in motion a complex task. Marker-based systems, multi-camera capture devices, or intrusive scanners commonly used in high-end animation production require an expensive hardware setup, a complex calibration phase, and necessitate extensive manual assistance to setup and operate the system.
-% Recent technological advances in cameras, motion sensors and RGB-D devices, such as Mi- crosoft Kinect, brought new hopes for realtime, portable, accurate and affordable systems allow- ing to capture facial expressions and hand and body motions. Such motion capture technologies could be deployed at a large scale as numerous of these sensors are already integrated into smartphones or computers. End-users’ emotions could then be accurately captured, analyzed and mirrored, enabling new forms of human-human and human-computer interaction and communication.
-
-%The high complexity of human hands and the high sensitivity of the human visual system to human motion make the acquisition and reconstruction of hands a challenging task. Recent technological advances in RGBD devices brought new hopes for realtime, portable, accurate and affordable systems allowing to capture humans in motion in consumer applications. 
-
-%Acquisition, modeling, and tracking of dynamic geometry on RGBD sensors, in particular face~\cite{bouaziz_sig13}, hand~\cite{melax_13} and body~\cite{shotton_cvpr11}, has been an active field of research in recent years. In the next sections we focus on hand tracking techniques and refer the interested reader to~\cite{ye_13} for a more detailed discussion on human motion capture using depth imagery.
-%in recent years. 
 
 
 We discuss the most relevant papers on human hand tracking related to our approach. For a more general overview of human motion analysis using depth sensors we refer to the recent survey of~\cite{ye_13}.
-%
-%Acquisition, modeling, and tracking of dynamic geometry on RGBD sensors, in particular face~\cite{bouaziz_sig13}, hand~\cite{melax_13} and body~\cite{shotton_cvpr11}, has been an active field of research in recent years. In the next sections we focus on hand tracking techniques and refer the interested reader to~\cite{ye_13} for a more detailed discussion on human motion capture using depth imagery.
-%
-% More recently, the research community has gain interest in hand tracking a lot of attention from the
-%~\cite{chen_13,ye_13}.
-% \new{Here we focus on hand tracking techniques and refer the interested reader to these surveys~\cite{chen_13,ye_13}}.
-% Beyond hand tracking techniques, we also discuss relevant techniques in full body tracking and \todo{recent methods for generic non-rigid registration \AT{is this necessary?}}. \MP{I'd say no. Can we refer to a survey and say that we only focus on hand tracking techniques? }
-%
-% Hand detection and pose estimation based on color has been reviewed in \cite{erol_cviu07} and is still a considered a largely unsolved problem.
-%\paragraph*{Appearance-~vs.~model-based tracking.}
-Tracking algorithms can be roughly divided into two main classes, \emph{appearance-based} and \emph{model-based} methods~\cite{erol_cviu07}.
-Appearance-based approaches train a classifier or a regressor to map image features to hand poses. Consequently, while these systems can robustly determine a hand pose from a single frame, appearance-based methods are optimal in scenarios where only a rough pose estimate is desired~\cite{wang_uist11} or highly discriminative features can be extracted~\cite{wang_sig09}. Conversely, \emph{model-based} techniques approach tracking as an alignment optimization, where the objective function typically measures the discrepancy between the data synthesized from the model and the one observed by the sensor. While model-based methods can suffer from loss-of-tracking~\cite{wei_siga12}, regularizing priors can be employed to infer high-quality tracking even when sensor data is incomplete or corrupted~\cite{melax_13,schroeder_icra14}. 
+
+Tracking algorithms can be roughly divided into two main classes, \emph{appearance-based} and \emph{model-based} methods~\cite{erol2007vision}.
+Appearance-based approaches train a classifier or a regressor to map image features to hand poses. Consequently, while these systems can robustly determine a hand pose from a single frame, appearance-based methods are optimal in scenarios where only a rough pose estimate is desired~\cite{wang_uist11} or highly discriminative features can be extracted~\cite{wang2009colorglove}. Conversely, \emph{model-based} techniques approach tracking as an alignment optimization, where the objective function typically measures the discrepancy between the data synthesized from the model and the one observed by the sensor. While model-based methods can suffer from loss-of-tracking~\cite{wei_siga12}, regularizing priors can be employed to infer high-quality tracking even when sensor data is incomplete or corrupted~\cite{melax2013dynamics,schroder2014real}. 
 In this work we focus on improving the robustness and accuracy of model-based approaches by combining effective 2D and 3D registration energies with carefully designed priors.
 
-%More recently, \emph{hybrid} approaches have been developed with 
-
-
-
-
-%\AT{Here, should we stress the importance of model-based tracking? For example, by mentioning that \emph{hybrid} approaches like~\cite{wei_siga12} are the ones that achieve the best results.}
-
-%Tracking is then achieved by efficiently recovering the pose parameters that best matches the data measured by the sensor. 
-
-%The expressivity of the tracking is limited, as the database must remain sufficiently compact to allow for efficient querying. 
-
-% Consequently, while robust, these systems are optimal in scenarios where only a rough pose estimate is required~\cite{wang_uist11} or highly discriminative features can be extracted~\cite{wang_sig09}. Conversely, \emph{model-based} techniques approach tracking as an alignment optimization, where the objective function typically measures the discrepancy between the data synthesized from the model and the one observed by the sensor. While model-based methods can suffer from loss-of-tracking~\cite{wei_siga12}, regularizing priors can be employed to infer high quality tracking even when sensor data is incomplete or corrupted~\cite{melax_13,schroeder_icra14}. \AT{Here, should we stress the importance of model-based tracking? For example, by mentioning that \emph{hybrid} approaches like~\cite{wei_siga12} are the ones that achieve the best results.}
-
-\paragraph*{Appearance-based hand tracking.} 
-During the past few years, numerous appearance-based methods have been developed for hand tracking. Approaches based on nearest neighbor search~\cite{wang_sig09,wang_uist11,romero_13}, decision trees~\cite{keskin_eccv12,tang_iccv13,tang_cvpr14,krupka_cvpr14}, or convolutional networks \cite{tompson_tog14} have demonstrated that appearance-based methods can be successfully employed for realtime hand tracking. The strength of these methods is the capability of inferring a hand pose from a single frame without the need of relying on temporal coherence, which avoids drift.
+\subsection*{Appearance-based hand tracking} 
+During the past few years, numerous appearance-based methods have been developed for hand tracking. Approaches based on nearest neighbor search~\cite{wang2009colorglove,wang_uist11,romero_13}, decision trees~\cite{keskin2012hand,tang2013real,tang_cvpr14,krupka2014discriminative}, or convolutional networks \cite{tompson2014real} have demonstrated that appearance-based methods can be successfully employed for realtime hand tracking. The strength of these methods is the capability of inferring a hand pose from a single frame without the need of relying on temporal coherence, which avoids drift.
  However, such appearance-based approaches are tightly linked to the training data and often do not generalize well to previously unseen hand poses, i.e., poses not contained in the training database. For this reason most of these methods assume a single hand in isolation to avoid data explosion, and often do not reach the accuracy of model-based methods.
 
- % Occlusion of the hand from grasped objects does in fact often pose a severe challenge to the estimation of hand pose.
-%  the database contains hands both with and without grasped objects.
-%  using ferns at extremely low computational cost
-% In contrast, the accuracy of our discriminative non-parametric approach is fundamentally limited by the design of the database; it is not computationally tractable, using any approximation, to add enough new samples to the database in order to reach the accuracy of a generative tracker.
-% Such approaches suffer from two main drawbacks.
-% the majority of methods in the literature assume a free hand, isolated from the surrounding environment.
-% data explosion
-%  Occlusion of the hand from grasped objects does in fact often pose a severe challenge to the estimation of hand pose.
-%
-%  Discriminative methods explore their full precomputed and dis- crete domain completely and independently every frame. This allows them to explore more efficiently broader sets of parameters compared to generative methods.
-% % However, appearance-based methods suffer when the hand strays from configurations that are not known and therefore can perform poorly in certain free moving hand situations.
-%
-% % Appearance methods estimate the hand pose
-% % \MP{maybe only mention why the kinect stuff is not very suitable}
-% If assisted by a colored glove, realtime hand pose inference based on monocular video is possible \cite{wang_sig09}. Limitations in z-axis resolution can be compensated by using depth information \cite{schroeder_12}. Coarse (i.e. 6 DOF) realtime tracking and gesture detection can be achieved with the use of two mutually calibrated cameras, where a wide baseline in cameras positioning allows the discrimination of ambiguous hand poses \cite{wang_uist11}.
-% \begin{description}
-% \item[\cite{tompson_tog14}] \todo{Forest hand pixel classifier + convnet to identify joint positions + particle filtering to place a model onto the joints \AT{check if any temporal coherence used.}}
-% ConvNets to recover continuous 3D pose of human hands from depth data.
-% real-time continuous pose recovery of mark- erless complex articulable objects from a single depth image.
-% Convolutional Network
-% \item[\cite{tang_cvpr14}] ``They learn a \emph{Latent Tree Model} to represent the hierarchical topology of the hand in an unsupervised manner (using geodesic distances), using this they then train a Latent Regression Forest to perform classification'' \AT{don't know much about decision trees, it's quite a tough read...}
-% \item[\cite{tang_iccv13}] ``semi-supervised learning using annotated synthetic data and unlabeled data'' same author as \cite{tang_cvpr14} \AT{see how author refers to this in \cite{tang_cvpr14}}
-% \item[\cite{keskin_eccv12}] ``solution to data-explosion by clustering training data and then using (kinect) forest classifier on each cluster'' \AT{clustering what?}
-% \item[\cite{romero_13}] \todo{Considers the object being manipulated to improve tracking quality (appearance space).}
-% \end{description}
-% And perhaps mention at the end that recognition can be done much more efficiently than tracking:
-% \begin{description}
-% \item[\cite{krupka_cvpr14}] \todo{Recognition (sign language stuff) using ferns at extremely low computational cost}
-% \end{description}
-% %\input{sec/related_appearance.tex}
+\subsection*{Model-based hand tracking}
 
-\paragraph*{Model-based hand tracking.}
+A popular approach to hand motion capture is to use a marker-based system (e.g.\ Vicon, OptiTrack).  A 3D hand model can then be fitted to the tracked markers to get the final hand poses. A small number of markers has been shown to be sufficient for reconstructing the 3D hand poses via inverse kinematics techniques~\cite{Hoyet_i3d12}. However, due to frequent occlusions of the markers, motion sequences acquired using marker-based systems often need a significant amount of manual cleaning. To overcome this issue, \cite{zhao2012marker} propose to complement a marker-based system with RGBD data to capture hand motion even in case of significant self-occlusion.
+Recently, accurate model-based tracking has been achieved in a multiple camera setup~\cite{sridhar2013multicam,sridhar2014anisotropic}, where the multiple vantage points help resolving challenging occlusions. Multiple camera systems have also been used successfully to model precise hand-hand and hand-object interactions~\cite{oiko_iccv11,ballan2013salient,wang2013physics}. All of the above methods require a complex acquisition setup and manual calibration, which makes them less suitable for the kind of consumer-level applications that we target with this work.
 
-A popular approach to hand motion capture is to use a marker-based system (e.g.\ Vicon, OptiTrack).  A 3D hand model can then be fitted to the tracked markers to get the final hand poses. A small number of markers has been shown to be sufficient for reconstructing the 3D hand poses via inverse kinematics techniques~\cite{Hoyet_i3d12}. However, due to frequent occlusions of the markers, motion sequences acquired using marker-based systems often need a significant amount of manual cleaning. To overcome this issue, \cite{zhao_sca12} propose to complement a marker-based system with RGBD data to capture hand motion even in case of significant self-occlusion.
-Recently, accurate model-based tracking has been achieved in a multiple camera setup~\cite{sridhar_iccv13,sridhar_14}, where the multiple vantage points help resolving challenging occlusions. Multiple camera systems have also been used successfully to model precise hand-hand and hand-object interactions~\cite{oiko_iccv11,ballan_eccv13,wang_sig13}. All of the above methods require a complex acquisition setup and manual calibration, which makes them less suitable for the kind of consumer-level applications that we target with this work.
-
-\emph{Particle-swarm optimization} (PSO) methods achieve interactive (15~fps) tracking with a single RGBD camera~\cite{oiko_bmvc11}. PSO techniques have also been applied successfully to model challenging interaction between two hands \cite{oiko_cvpr12} at a reduced rate of 4 fps. 
+\emph{Particle-swarm optimization} (PSO) methods achieve interactive (15~fps) tracking with a single RGBD camera~\cite{oiko2011hand}. PSO techniques have also been applied successfully to model challenging interaction between two hands \cite{oiko_cvpr12} at a reduced rate of 4 fps. 
 PSO is an optimization heuristic that does not use the gradient information of the considered optimization problem, but instead uses a sampling strategy.
-For this reason the accuracy and efficiency of PSO approaches heavily rely on the number of samples used. Oikonomidis et al.~\cite{oiko_cvpr14} introduced a more advanced sampling strategy that improves tracking efficiency without compromising quality. However, gradient-based optimization approaches  converge faster and more accurately than PSO when close to the solution, and are therefore well suited for realtime applications~\cite{qian_cvpr14}.
+For this reason the accuracy and efficiency of PSO approaches heavily rely on the number of samples used. Oikonomidis et al.~\cite{oikonomidis2014evolutionary} introduced a more advanced sampling strategy that improves tracking efficiency without compromising quality. However, gradient-based optimization approaches  converge faster and more accurately than PSO when close to the solution, and are therefore well suited for realtime applications~\cite{qian2014realtime}.
 
 
-Compelling 60 fps realtime performance was recently shown using gradient-based optimization by~\cite{melax_13}, where the optimization is expressed as a convex rigid body simulation, and numerous heuristics for re-initialization were employed to avoid tracking failures. Rather than resorting to reinitialization for robustness, \cite{schroeder_icra14} formulate the optimization in a subspace of likely hand poses. While the lower number of optimization variables leads to efficient computations, tracking accuracy can be limited by the reduced pose complexity induced by the subspace.
+Compelling 60 fps realtime performance was recently shown using gradient-based optimization by~\cite{melax2013dynamics}, where the optimization is expressed as a convex rigid body simulation, and numerous heuristics for re-initialization were employed to avoid tracking failures. Rather than resorting to reinitialization for robustness, \cite{schroder2014real} formulate the optimization in a subspace of likely hand poses. While the lower number of optimization variables leads to efficient computations, tracking accuracy can be limited by the reduced pose complexity induced by the subspace.
 
  In this paper, we show that hand tracking can be formulated as a single gradient-based optimization to obtain an efficient and accurate real-time tracking system running at up to 120 fps. By using a combination of geometric and data-driven priors we achieve significant improvements in tracking quality and robustness.
-
-
-% Hand-object RGBD \cite{kyriazis_cvpr14}
-
-% IGNORED FOR NOW:
-
-% Tracking hands with objects imposes additional con- straints on hand motion. Methods proposed by Hamer et al. [7, 6], and others [13, 16, 3] model these constraints. However, these methods require offline computation and are unsuitable for interaction applications.
-
-% \cite{delagorce_pami11} ``incorporate shading and texture information into a model-based tracker''. 
-
-
-% Accurate real-time model-based offline tracking has been achieved in a multiple camera setup~\cite{sridhar_iccv13,sridhar_14}, where the multiple vantage points help tackling challenging self-occlusion.
-
-% However, these multi-camera systems require a complex hardware setup and manual calibration which make them not suitable or easily adaptable to consumer-level applications.
-
-
-
-% Accurate model-based offline tracking has been achieved in a multiple camera setup~\cite{oiko_iccv11,ballan_eccv13,oiko_cvpr14}, where the multiple vantage points help tackling challenging self-occlusion. While these systems has been recently shown sufficient to model precise hand-object interaction~\cite{wang_sig13}, the large amount of data and intricate optimization makes these methods generally too complex for real-time tracking. Recently, multi-camera setups has been adapted to real-time hand tracking, where a set of isotropic~\cite{sridhar_iccv13} or anisotropic~\cite{sridhar_14} Gaussians are employed as tracking model, trading-off accuracy for performance. However, these multi-camera systems require a complex hardware setup and manual calibration which make them not suitable or easily adaptable to consumer-level applications.
-
-
-% Articulated body tracking can be aided by the use of a \emph{parametric} model that allows to re-formulate the tracking problem as a randomized search~\cite{oiko_iccv11}.
-
-
-% \emph{Particle-swarm optimization} (PSO) was shown suitable to perform real-time (15FPS) monocular tracking with RGBD cameras~\cite{oiko_bmvc11}, where the tracking accuracy can also be boosted by the use of optical markers \cite{zhao_sca12}. Although only at 4FPS, PSO techniques have demonstrated the capability to model challenging interaction between two hands \cite{oiko_cvpr12}.
-% %- \todo{we believe that this is something where model-based approaches have more potential than appearance ones}.
-% Recently better sampling strategy that improve tracking efficiency without compromising quality have been proposed~\cite{oiko_cvpr14}, as well as hybrid techniques that combine randomized search to registration refinement~\cite{qian_cvpr14}.
-
-
-
-\brief{registration based, old stuff} 
-% Melax and colleagues recently achieved realtime hand tracking by modeling it as a set of simple convex rigid bodies and optimizing with constrained rigid body solvers; while grasping priors and heuristics are used for recovery from tracking failure, unlikely poses are often obtained.
-% To better constrain the space of plausible poses, Shroder and colleagues employ a database of recordings and a PCA model to drive registration. While this increases the likelihood of a plausible pose to be returned in output, this approach greatly reduces the degrees of freedom of tracked hands.
-
-%%% Local Variables:  
-%%% mode: latex 
-%%% TeX-master: "../htrack" 
-%%% End: 
-

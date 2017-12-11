@@ -1,0 +1,506 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{00}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Albrecht, Haber, and Seidel}{Albrecht
+  et~al\mbox{.}}{2003}]%
+        {albrecht2003construction}
+\bibfield{author}{\bibinfo{person}{Irene Albrecht}, \bibinfo{person}{J{\"o}rg
+  Haber}, {and} \bibinfo{person}{Hans-Peter Seidel}.}
+  \bibinfo{year}{2003}\natexlab{}.
+\newblock \showarticletitle{Construction and animation of anatomically based
+  human hand models}. In \bibinfo{booktitle}{{\em Proc. Symposium on Computer
+  Animation~(SCA)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Anderson and Moore}{Anderson and
+  Moore}{1979}]%
+        {optimal}
+\bibfield{author}{\bibinfo{person}{Brian Anderson} {and} \bibinfo{person}{John
+  Moore}.} \bibinfo{year}{1979}\natexlab{}.
+\newblock \bibinfo{booktitle}{{\em Optimal filtering}}.
+\newblock \bibinfo{publisher}{Englewood Cliffs}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Anonymous}{Anonymous}{2017}]%
+        {edoardo}
+\bibfield{author}{\bibinfo{person}{Anonymous}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Low-Dimensionality Calibration through Local
+  Anisotropic for Scaling for Robust Hand Model Personalization}. In
+  \bibinfo{booktitle}{{\em \textbf{(currently under review, see additional
+  material)}}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Bell and Cathey}{Bell and Cathey}{1993}]%
+        {bell1993iterated}
+\bibfield{author}{\bibinfo{person}{Bradley~M Bell} {and}
+  \bibinfo{person}{Frederick~W Cathey}.} \bibinfo{year}{1993}\natexlab{}.
+\newblock \showarticletitle{The iterated Kalman filter update as a Gauss-Newton
+  method}. In \bibinfo{booktitle}{{\em IEEE Transactions on Automatic
+  Control}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Bellaire, Kamen, and Zabin}{Bellaire
+  et~al\mbox{.}}{1995}]%
+        {bellaire1995new}
+\bibfield{author}{\bibinfo{person}{R~Louis Bellaire}, \bibinfo{person}{Edward~W
+  Kamen}, {and} \bibinfo{person}{Serena~M Zabin}.}
+  \bibinfo{year}{1995}\natexlab{}.
+\newblock \showarticletitle{New nonlinear iterated filter with applications to
+  target tracking}. In \bibinfo{booktitle}{{\em SPIE Intl. Symposium on Optical
+  Science, Engineering, and Instrumentation}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Bogo, Black, Loper, and Romero}{Bogo
+  et~al\mbox{.}}{2015}]%
+        {bogo2015detailed}
+\bibfield{author}{\bibinfo{person}{Federica Bogo}, \bibinfo{person}{Michael~J
+  Black}, \bibinfo{person}{Matthew Loper}, {and} \bibinfo{person}{Javier
+  Romero}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Detailed full-body reconstructions of moving people
+  from monocular RGB-D sequences}. In \bibinfo{booktitle}{{\em Proc. Intl.
+  Conf. on Computer Vision~(ICCV)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Bouaziz, Wang, and Pauly}{Bouaziz
+  et~al\mbox{.}}{2013}]%
+        {bouaziz2013online}
+\bibfield{author}{\bibinfo{person}{Sofien Bouaziz}, \bibinfo{person}{Yangang
+  Wang}, {and} \bibinfo{person}{Mark Pauly}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Online modeling for realtime facial animation}. In
+  \bibinfo{booktitle}{{\em ACM Transactions on Graphics (Proc.~SIGGRAPH)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Cao, Bradley, Zhou, and Beeler}{Cao
+  et~al\mbox{.}}{2015}]%
+        {cao2015facial}
+\bibfield{author}{\bibinfo{person}{Chen Cao}, \bibinfo{person}{Derek Bradley},
+  \bibinfo{person}{Kun Zhou}, {and} \bibinfo{person}{Thabo Beeler}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Real-time high-fidelity facial performance
+  capture}. In \bibinfo{booktitle}{{\em ACM Transactions on Graphics
+  (Proc.~SIGGRAPH)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Cao, Wu, Weng, Shao, and Zhou}{Cao
+  et~al\mbox{.}}{2016}]%
+        {cao2016real}
+\bibfield{author}{\bibinfo{person}{Chen Cao}, \bibinfo{person}{Hongzhi Wu},
+  \bibinfo{person}{Yanlin Weng}, \bibinfo{person}{Tianjia Shao}, {and}
+  \bibinfo{person}{Kun Zhou}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Real-time facial animation with image-based dynamic
+  avatars}. In \bibinfo{booktitle}{{\em ACM Transactions on Graphics
+  (Proc.~SIGGRAPH)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{de~La~Gorce, Fleet, and Paragios}{de~La~Gorce
+  et~al\mbox{.}}{2011}]%
+        {delagorce2011model}
+\bibfield{author}{\bibinfo{person}{Martin de La~Gorce},
+  \bibinfo{person}{David~J Fleet}, {and} \bibinfo{person}{Nikos Paragios}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Model-based {3D} hand pose estimation from
+  monocular video}. In \bibinfo{booktitle}{{\em Pattern Analysis and Machine
+  Intelligence~(PAMI)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Ekman and Friesen}{Ekman and Friesen}{1977}]%
+        {facs}
+\bibfield{author}{\bibinfo{person}{Paul Ekman} {and} \bibinfo{person}{Wallace~V
+  Friesen}.} \bibinfo{year}{1977}\natexlab{}.
+\newblock \bibinfo{booktitle}{{\em {Facial Action Coding System}}}.
+\newblock \bibinfo{publisher}{Consulting Psychologists Press, Stanford
+  University, Palo Alto}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Havl{\'\i}k and Straka}{Havl{\'\i}k and
+  Straka}{2015}]%
+        {havlik2015performance}
+\bibfield{author}{\bibinfo{person}{Jind{\v{r}}ich Havl{\'\i}k} {and}
+  \bibinfo{person}{Ond{\v{r}}ej Straka}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Performance evaluation of iterated extended Kalman
+  filter with variable step-length}. In \bibinfo{booktitle}{{\em Journal of
+  Physics: Conference Series}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Izadi, Kim, Hilliges, Molyneaux, Newcombe,
+  Kohli, Shotton, Hodges, Freeman, Davison, et~al\mbox{.}}{Izadi
+  et~al\mbox{.}}{2011}]%
+        {kinfu}
+\bibfield{author}{\bibinfo{person}{Shahram Izadi}, \bibinfo{person}{David Kim},
+  \bibinfo{person}{Otmar Hilliges}, \bibinfo{person}{David Molyneaux},
+  \bibinfo{person}{Richard Newcombe}, \bibinfo{person}{Pushmeet Kohli},
+  \bibinfo{person}{Jamie Shotton}, \bibinfo{person}{Steve Hodges},
+  \bibinfo{person}{Dustin Freeman}, \bibinfo{person}{Andrew Davison}, {and}
+  \bibinfo{person}{others}.} \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{KinectFusion: Real-time 3D reconstruction and
+  interaction using a moving depth camera}. In \bibinfo{booktitle}{{\em Proc.
+  ACM User Interface Software and Technology}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Khamis, Taylor, Shotton, Keskin, Izadi, and
+  Fitzgibbon}{Khamis et~al\mbox{.}}{2015}]%
+        {khamis2015learning}
+\bibfield{author}{\bibinfo{person}{Sameh Khamis}, \bibinfo{person}{Jonathan
+  Taylor}, \bibinfo{person}{Jamie Shotton}, \bibinfo{person}{Cem Keskin},
+  \bibinfo{person}{Shahram Izadi}, {and} \bibinfo{person}{Andrew Fitzgibbon}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Learning an efficient model of hand shape variation
+  from depth images}. In \bibinfo{booktitle}{{\em Proc. Computer Vision and
+  Pattern Recognition~(CVPR)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Li, Yu, Ye, and Bregler}{Li
+  et~al\mbox{.}}{2013}]%
+        {li_sig13}
+\bibfield{author}{\bibinfo{person}{Hao Li}, \bibinfo{person}{Jihun Yu},
+  \bibinfo{person}{Yuting Ye}, {and} \bibinfo{person}{Chris Bregler}.}
+  \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Realtime Facial Animation with On-the-fly
+  Correctives}. In \bibinfo{booktitle}{{\em ACM Transactions on Graphics
+  (Proc.~SIGGRAPH)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Makris and Argyros}{Makris and
+  Argyros}{2015}]%
+        {makris2015model}
+\bibfield{author}{\bibinfo{person}{Alexandros Makris} {and} \bibinfo{person}{A
+  Argyros}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Model-based 3D hand tracking with on-line hand
+  shape adaptation}. In \bibinfo{booktitle}{{\em Proc. British Machine Vision
+  Conference~(BMVC)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Nocedal and Wright}{Nocedal and
+  Wright}{2006}]%
+        {nocedal2006numerical}
+\bibfield{author}{\bibinfo{person}{Jorge Nocedal} {and}
+  \bibinfo{person}{Stephen Wright}.} \bibinfo{year}{2006}\natexlab{}.
+\newblock \bibinfo{booktitle}{{\em Numerical optimization}}.
+\newblock \bibinfo{publisher}{Springer Science \& Business Media}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Oberweger, Wohlhart, and Lepetit}{Oberweger
+  et~al\mbox{.}}{2015}]%
+        {oberweger2015hands}
+\bibfield{author}{\bibinfo{person}{Markus Oberweger}, \bibinfo{person}{Paul
+  Wohlhart}, {and} \bibinfo{person}{Vincent Lepetit}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Hands deep in deep learning for hand pose
+  estimation}. In \bibinfo{booktitle}{{\em Proc. Computer Vision Winter
+  Workshop}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Petersen, Pedersen, et~al\mbox{.}}{Petersen
+  et~al\mbox{.}}{2008}]%
+        {petersen2008matrix}
+\bibfield{author}{\bibinfo{person}{Kaare~Brandt Petersen},
+  \bibinfo{person}{Michael~Syskind Pedersen}, {and} \bibinfo{person}{others}.}
+  \bibinfo{year}{2008}\natexlab{}.
+\newblock \bibinfo{booktitle}{{\em The matrix cookbook}}.
+\newblock \bibinfo{publisher}{Technical University of Denmark}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Pons-Moll and Rosenhahn}{Pons-Moll and
+  Rosenhahn}{2011}]%
+        {pons2011model}
+\bibfield{author}{\bibinfo{person}{Gerard Pons-Moll} {and}
+  \bibinfo{person}{Bodo Rosenhahn}.} \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Model-based pose estimation}.
+\newblock In \bibinfo{booktitle}{{\em Visual analysis of humans: Looking at
+  People}}. \bibinfo{publisher}{Springer}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Qian, Sun, Wei, Tang, and Sun}{Qian
+  et~al\mbox{.}}{2014}]%
+        {qian2014realtime}
+\bibfield{author}{\bibinfo{person}{Chen Qian}, \bibinfo{person}{Xiao Sun},
+  \bibinfo{person}{Yichen Wei}, \bibinfo{person}{Xiaoou Tang}, {and}
+  \bibinfo{person}{Jian Sun}.} \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{Realtime and robust hand tracking from depth}. In
+  \bibinfo{booktitle}{{\em Proc. Computer Vision and Pattern
+  Recognition~(CVPR)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Rhee, Neumann, and Lewis}{Rhee
+  et~al\mbox{.}}{2006}]%
+        {rhee2006human}
+\bibfield{author}{\bibinfo{person}{Taehyun Rhee}, \bibinfo{person}{Ulrich
+  Neumann}, {and} \bibinfo{person}{John~P Lewis}.}
+  \bibinfo{year}{2006}\natexlab{}.
+\newblock \showarticletitle{Human hand modeling from surface anatomy}. In
+  \bibinfo{booktitle}{{\em Proc. Symposium on Interactive 3D graphics and
+  games}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Sharp, Keskin, Robertson, Taylor, Shotton,
+  Kim, Rhemann, Leichter, Vinnikov, Wei, et~al\mbox{.}}{Sharp
+  et~al\mbox{.}}{2015}]%
+        {sharp2015accurate}
+\bibfield{author}{\bibinfo{person}{Toby Sharp}, \bibinfo{person}{Cem Keskin},
+  \bibinfo{person}{Duncan Robertson}, \bibinfo{person}{Jonathan Taylor},
+  \bibinfo{person}{Jamie Shotton}, \bibinfo{person}{David Kim},
+  \bibinfo{person}{Christoph Rhemann}, \bibinfo{person}{Ido Leichter},
+  \bibinfo{person}{Alon Vinnikov}, \bibinfo{person}{Yichen Wei}, {and}
+  \bibinfo{person}{others}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Accurate, robust, and flexible real-time hand
+  tracking}. In \bibinfo{booktitle}{{\em Proc. ACM Special Interest Group on
+  Computer-Human Interaction~(CHI)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Skoglund, Hendeby, and Axehill}{Skoglund
+  et~al\mbox{.}}{2015}]%
+        {skoglund2015extended}
+\bibfield{author}{\bibinfo{person}{Martin~A Skoglund}, \bibinfo{person}{Gustaf
+  Hendeby}, {and} \bibinfo{person}{Daniel Axehill}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Extended Kalman filter modifications based on an
+  optimization view point}. In \bibinfo{booktitle}{{\em Intl. Conference on
+  Information Fusion (Fusion)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Sridhar, Mueller, Oulasvirta, and
+  Theobalt}{Sridhar et~al\mbox{.}}{2015}]%
+        {sridhar2015fast}
+\bibfield{author}{\bibinfo{person}{Srinath Sridhar}, \bibinfo{person}{Franziska
+  Mueller}, \bibinfo{person}{Antti Oulasvirta}, {and}
+  \bibinfo{person}{Christian Theobalt}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Fast and Robust Hand Tracking Using
+  Detection-Guided Optimization}. In \bibinfo{booktitle}{{\em Proc. Computer
+  Vision and Pattern Recognition~(CVPR)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Strasdat, Montiel, and Davison}{Strasdat
+  et~al\mbox{.}}{2012}]%
+        {strasdat2012visual}
+\bibfield{author}{\bibinfo{person}{Hauke Strasdat},
+  \bibinfo{person}{Jos{\'e}~MM Montiel}, {and} \bibinfo{person}{Andrew~J
+  Davison}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{Visual SLAM: why filter?}. In
+  \bibinfo{booktitle}{{\em Image and Vision Computing}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Supancic, Rogez, Yang, Shotton, and
+  Ramanan}{Supancic et~al\mbox{.}}{2015}]%
+        {supancic2015depth}
+\bibfield{author}{\bibinfo{person}{James~S Supancic},
+  \bibinfo{person}{Gr{\'e}gory Rogez}, \bibinfo{person}{Yi Yang},
+  \bibinfo{person}{Jamie Shotton}, {and} \bibinfo{person}{Deva Ramanan}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Depth-based hand pose estimation: data, methods,
+  and challenges}. In \bibinfo{booktitle}{{\em Proc. Intl. Conf. on Computer
+  Vision~(ICCV)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Tagliasacchi, Schr{\"o}der, Tkach, Bouaziz,
+  Botsch, and Pauly}{Tagliasacchi et~al\mbox{.}}{2015}]%
+        {htrack}
+\bibfield{author}{\bibinfo{person}{Andrea Tagliasacchi},
+  \bibinfo{person}{Matthias Schr{\"o}der}, \bibinfo{person}{Anastasia Tkach},
+  \bibinfo{person}{Sofien Bouaziz}, \bibinfo{person}{Mario Botsch}, {and}
+  \bibinfo{person}{Mark Pauly}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Robust Articulated-ICP for Real-Time Hand
+  Tracking}. In \bibinfo{booktitle}{{\em Computer Graphics Forum (Proc.
+  Symposium on Geometry Processing)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Tan, Cashman, Taylor, Fitzgibbon, Tarlow,
+  Khamis, Izadi, and Shotton}{Tan et~al\mbox{.}}{2016}]%
+        {tan2016fits}
+\bibfield{author}{\bibinfo{person}{David~J. Tan}, \bibinfo{person}{Thomas
+  Cashman}, \bibinfo{person}{Jonathan Taylor}, \bibinfo{person}{Andrew
+  Fitzgibbon}, \bibinfo{person}{Daniel Tarlow}, \bibinfo{person}{Sameh Khamis},
+  \bibinfo{person}{Shahram Izadi}, {and} \bibinfo{person}{Jamie Shotton}.}
+  \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Fits like a glove: Rapid and reliable hand shape
+  personalization}. In \bibinfo{booktitle}{{\em Proc. Computer Vision and
+  Pattern Recognition~(CVPR)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Tang, Taylor, Kohli, Keskin, Kim, and
+  Shotton}{Tang et~al\mbox{.}}{2015}]%
+        {tang2015opening}
+\bibfield{author}{\bibinfo{person}{Danhang Tang}, \bibinfo{person}{Jonathan
+  Taylor}, \bibinfo{person}{Pushmeet Kohli}, \bibinfo{person}{Cem Keskin},
+  \bibinfo{person}{Tae-Kyun Kim}, {and} \bibinfo{person}{Jamie Shotton}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Opening the black box: Hierarchical sampling
+  optimization for estimating human hand pose}. In \bibinfo{booktitle}{{\em
+  Proc. Intl. Conf. on Computer Vision~(ICCV)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Taylor, Bordeaux, Cashman, Corish, Keskin,
+  Sharp, Soto, Sweeney, Valentin, Luff, et~al\mbox{.}}{Taylor
+  et~al\mbox{.}}{2016}]%
+        {taylor2016joint}
+\bibfield{author}{\bibinfo{person}{Jonathan Taylor}, \bibinfo{person}{Lucas
+  Bordeaux}, \bibinfo{person}{Thomas Cashman}, \bibinfo{person}{Bob Corish},
+  \bibinfo{person}{Cem Keskin}, \bibinfo{person}{Toby Sharp},
+  \bibinfo{person}{Eduardo Soto}, \bibinfo{person}{David Sweeney},
+  \bibinfo{person}{Julien Valentin}, \bibinfo{person}{Benjamin Luff}, {and}
+  \bibinfo{person}{others}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Efficient and precise interactive hand tracking
+  through joint, continuous optimization of pose and correspondences}. In
+  \bibinfo{booktitle}{{\em ACM Transactions on Graphics (Proc.~SIGGRAPH)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Taylor, Stebbing, Ramakrishna, Keskin,
+  Shotton, Izadi, Hertzmann, and Fitzgibbon}{Taylor et~al\mbox{.}}{2014}]%
+        {taylor2014user}
+\bibfield{author}{\bibinfo{person}{Jonathan Taylor}, \bibinfo{person}{Richard
+  Stebbing}, \bibinfo{person}{Varun Ramakrishna}, \bibinfo{person}{Cem Keskin},
+  \bibinfo{person}{Jamie Shotton}, \bibinfo{person}{Shahram Izadi},
+  \bibinfo{person}{Aaron Hertzmann}, {and} \bibinfo{person}{Andrew
+  Fitzgibbon}.} \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{User-specific hand modeling from monocular depth
+  sequences}. In \bibinfo{booktitle}{{\em Proc. Computer Vision and Pattern
+  Recognition~(CVPR)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Tkach, Pauly, and Tagliasacchi}{Tkach
+  et~al\mbox{.}}{2016}]%
+        {tkach2016sphere}
+\bibfield{author}{\bibinfo{person}{Anastasia Tkach}, \bibinfo{person}{Mark
+  Pauly}, {and} \bibinfo{person}{Andrea Tagliasacchi}.}
+  \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Sphere-meshes for real-time hand modeling and
+  tracking}. In \bibinfo{booktitle}{{\em ACM Transactions on Graphics (Proc.
+  SIGGRAPH Asia)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Tompson, Stein, Lecun, and Perlin}{Tompson
+  et~al\mbox{.}}{2014}]%
+        {tompson2014real}
+\bibfield{author}{\bibinfo{person}{Jonathan Tompson}, \bibinfo{person}{Murphy
+  Stein}, \bibinfo{person}{Yann Lecun}, {and} \bibinfo{person}{Ken Perlin}.}
+  \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{Real-time continuous pose recovery of human hands
+  using convolutional networks}. In \bibinfo{booktitle}{{\em ACM Transactions
+  on Graphics~(TOG)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Valentin, Dai, Nie{\ss}ner, Kohli, Torr,
+  Izadi, and Keskin}{Valentin et~al\mbox{.}}{2016}]%
+        {valentin2016learning}
+\bibfield{author}{\bibinfo{person}{Julien Valentin}, \bibinfo{person}{Angela
+  Dai}, \bibinfo{person}{Matthias Nie{\ss}ner}, \bibinfo{person}{Pushmeet
+  Kohli}, \bibinfo{person}{Philip Torr}, \bibinfo{person}{Shahram Izadi}, {and}
+  \bibinfo{person}{Cem Keskin}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Learning to navigate the energy landscape}. In
+  \bibinfo{booktitle}{{\em International Conference on 3D Vision~(3DV)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Weise, Bouaziz, Li, and Pauly}{Weise
+  et~al\mbox{.}}{2011}]%
+        {weise2011realtime}
+\bibfield{author}{\bibinfo{person}{Thibaut Weise}, \bibinfo{person}{Sofien
+  Bouaziz}, \bibinfo{person}{Hao Li}, {and} \bibinfo{person}{Mark Pauly}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Realtime performance-based facial animation}. In
+  \bibinfo{booktitle}{{\em ACM Transactions on Graphics (Proc.~SIGGRAPH)}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Welch and Bishop}{Welch and Bishop}{1995}]%
+        {welch1995introduction}
+\bibfield{author}{\bibinfo{person}{Greg Welch} {and} \bibinfo{person}{Gary
+  Bishop}.} \bibinfo{year}{1995}\natexlab{}.
+\newblock \bibinfo{booktitle}{{\em An introduction to the Kalman filter}}.
+\newblock \bibinfo{publisher}{Technical report}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Yuan, Ye, Stenger, Jain, and Kim}{Yuan
+  et~al\mbox{.}}{2017}]%
+        {yuan2017bighand}
+\bibfield{author}{\bibinfo{person}{Shanxin Yuan}, \bibinfo{person}{Qi Ye},
+  \bibinfo{person}{Bjorn Stenger}, \bibinfo{person}{Siddhand Jain}, {and}
+  \bibinfo{person}{Tae-Kyun Kim}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{BigHand2M Benchmark: Hand Pose Dataset and State of
+  the Art Analysis}. In \bibinfo{booktitle}{{\em arXiv preprint
+  arXiv:1704.02612}}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Zou and Tan}{Zou and Tan}{2013}]%
+        {zou2013coslam}
+\bibfield{author}{\bibinfo{person}{Danping Zou} {and} \bibinfo{person}{Ping
+  Tan}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{COSLAM: Collaborative visual slam in dynamic
+  environments}. In \bibinfo{booktitle}{{\em Pattern Analysis and Machine
+  Intelligence~(PAMI)}}.
+\newblock
+
+
+\end{thebibliography}

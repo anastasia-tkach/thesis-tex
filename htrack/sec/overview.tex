@@ -1,5 +1,9 @@
 % !TEX root = ../htrack.tex
 \section{Overview}
+\label{sec:htrack-overview}
+
+\input{htrack/fig/wristband.tex}
+
 % - input data from sensors, illustrate how the data sucks
 % - our hand model, motivation of why we use the cylinders
 % - output, i.e. pose parameters
@@ -17,17 +21,14 @@ Simultaneously, as we cannot create such constraints for occluded parts of the h
 % We determined that retaining realistic hand postures is critical, as erroneous postures can result in establishing erroneous closest-point correspondences and cause catastrophic loss of tracking. \MP{not clear to me. a realistic pose can just as well lead to wrong correspondences. I would probably skip this sentence.}
 
 
-\paragraph*{Acquisition device.}
-Our system processes raw data acquired at 60 fps from a single RGBD sensor. \Figure{data} illustrates this data for the \emph{PrimeSense Carmine 1.09} structured light sensor as well as the \emph{Creative Gesture Camera} time-of-flight sensor. From the raw data our algorithm extracts a 2D \emph{silhouette image} $\SilhoSensor$ and a 3D \emph{point cloud} $\PointsSensor$. The two sensors exhibit different types of imperfections. The precision of depth measurements in the PrimeSense camera is significantly higher. However, substantial holes often occur at grazing angles, e.g.\ note the gap in the data where we would expect to see the index finger. Conversely, the Creative Gesture Camera provides an accurate and gap-free silhouette image, but suffers from high noise in the depth measurements, therefore resulting in very noisy point clouds. Our algorithm is designed to handle both types of imperfections. This is achieved by formulating an optimization that \emph{jointly} considers silhouette and point cloud, balancing their contribution in a way that conforms to the quality of sensor data.
+\subsection*{Acquisition device}
+Our system processes raw data acquired at 60 fps from a single RGBD sensor. \Figure{data} illustrates this data for the \emph{PrimeSense Carmine 1.09} structured light sensor as well as the \emph{Creative Gesture Camera} time-of-flight sensor. From the raw data our algorithm extracts a 2D \emph{silhouette image} $\SilhoSensor$ and a 3D \emph{point cloud} $\PointsSensorHtrack$. The two sensors exhibit different types of imperfections. The precision of depth measurements in the PrimeSense camera is significantly higher. However, substantial holes often occur at grazing angles, e.g.\ note the gap in the data where we would expect to see the index finger. Conversely, the Creative Gesture Camera provides an accurate and gap-free silhouette image, but suffers from high noise in the depth measurements, therefore resulting in very noisy point clouds. Our algorithm is designed to handle both types of imperfections. This is achieved by formulating an optimization that \emph{jointly} considers silhouette and point cloud, balancing their contribution in a way that conforms to the quality of sensor data.
 
-\input{htrack/fig/wristband.tex}
-
-
-\paragraph*{Tracking model.}
-Our algorithm registers a template hand model to the sensor data. Similar to other techniques~\cite{oiko_bmvc11,schroeder_icra14}, we employ a simple (sphere capped) cylinder model as a geometric template; see \Figure{handmodel}.  We optimize for $26$ degrees of freedom, $6$ for global rotation and translation and $20$ for articulation.
+\subsection*{Tracking model}
+Our algorithm registers a template hand model to the sensor data. Similar to other techniques~\cite{oiko2011hand,schroder2014real}, we employ a simple (sphere capped) cylinder model as a geometric template; see \Figure{handmodel}.  We optimize for $26$ degrees of freedom, $6$ for global rotation and translation and $20$ for articulation.
 % 
 % \MP{We should say something about how the hand is customized to the user. Right now, it appears as if one generic model would work for all people.}
-Like in \cite{melax_13}, the model can be quickly adjusted to the user by specifying global scale, palm size and finger lengths. In most scenarios, it is sufficient to perform a simple uniform scaling of the model.
+Like in \cite{melax2013dynamics}, the model can be quickly adjusted to the user by specifying global scale, palm size and finger lengths. In most scenarios, it is sufficient to perform a simple uniform scaling of the model.
 % 
 Such a coarse geometry is sufficient for hand tracking, as the signal-to-noise ratio for commercially available RGBD sensors is low for samples on the fingers when compared to the size of a finger. Furthermore, the computation of closest-point correspondences can be performed in closed form and in parallel, which is essential for real-time performance.
 % 
@@ -38,8 +39,8 @@ While the geometry of the model used for tracking remains coarse, our algorithm 
 
 %\section{Technical details}
 \label{sec:tech}
-\paragraph*{Preprocessing.}
-The  silhouette image $\SilhoSensor$ is not directly available from the sensor and needs to be computed. This labeling can be obtained by extracting  the sensor color image and performing a skin color segmentation~\cite{oiko_cvpr12,schroeder_icra14}, or can be obtained directly from depth images by performing a classification with randomized forests~\cite{tompson_tog14}. Another possibility is to exploit a full-body tracking algorithm~\cite{shotton_cvpr11} and segment the hand according to the wrist position. For gestural tracking, where the hand is typically the closest object to the sensor~\cite{qian_cvpr14}, a black wristband can be used to simplify segmentation by creating a gap in the depth image. Similarly to this method, in our system the user wears a \emph{colored wristband}. We first identify the position of the wristband in the scene by color segmentation,
+\subsection*{Preprocessing}
+The  silhouette image $\SilhoSensor$ is not directly available from the sensor and needs to be computed. This labeling can be obtained by extracting  the sensor color image and performing a skin color segmentation~\cite{oiko_cvpr12,schroder2014real}, or can be obtained directly from depth images by performing a classification with randomized forests~\cite{tompson2014real}. Another possibility is to exploit a full-body tracking algorithm~\cite{shotton_cvpr11} and segment the hand according to the wrist position. For gestural tracking, where the hand is typically the closest object to the sensor~\cite{qian2014realtime}, a black wristband can be used to simplify segmentation by creating a gap in the depth image. Similarly to this method, in our system the user wears a \emph{colored wristband}. We first identify the position of the wristband in the scene by color segmentation,
 then retrieve the 3D points in the proximity of the wristband and compute the principal axis. This axis, in conjunction with the wristband centroid, is then used to segment the hand point cloud. Any depth pixel within the hand point cloud is labelled as belonging to the silhouette image $\SilhoSensor$ as shown in \Figure{wristband}.
 % \MP{We should add an image here.} DONE
 

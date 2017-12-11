@@ -1,4 +1,4 @@
-\input{fig/comp2/item.tex}
+\input{hmodel/fig/comp2/item.tex}
 \section{Calibration}
 \label{sec:modeling}
 
@@ -8,33 +8,33 @@ Our calibration formulation can be employed for both acquisition modalities.
 \todo{Dynamic reconstruction frameworks such as~\cite{newcombe2015dynfusion} or \cite{innmann2016volume} could also be used to generate a dynamic template mesh over which sphere-mesh decimation could be executed~\cite{thiery2016spheremesh}. 
 However, as no public implementation is currently available, it is currently unclear how well these methods would cope with loop-closure for features as small as human fingers.}
 
-\paragraph{Kinematics}
-The rest-pose geometry of our model is fully specified by two matrices specifying the set of sphere positions $\restcenters$ and \todo{the set of} radii $\radii$. The geometry is then posed through the application of  kinematic chain transformations; see \Figure{posing}a. Given a point $\bar\point$ on the model $\model$ at rest pose, its 3D position after posing can be computed by evaluating the expression:
+\subsection*{Kinematics}
+The rest-pose geometry of our model is fully specified by two matrices specifying the set of sphere positions $\restcenters$ and \todo{the set of} radii $\radii$. The geometry is then posed through the application of  kinematic chain transformations; see \Figure{posing}a. Given a point $\bar\pointHmodel$ on the model $\model$ at rest pose, its 3D position after posing can be computed by evaluating the expression:
 % 
 \begin{equation}
-\point = \left[ \Pi_{k \in K(\bar\point)} \mathbf{\bar{T}}_k \mathbf{T}_k \mathbf{\bar{T}}_k^{-1} \right] \bar\point
+\pointHmodel = \left[ \Pi_{k \in K(\bar\pointHmodel)} \mathbf{\bar{T}}_k \mathbf{T}_k \mathbf{\bar{T}}_k^{-1} \right] \bar\pointHmodel
 \label{eq:kinematic}
 % we apply the posing transformation, then we re-apply the rest pose transformation to bring the point back in world coordinates
 \end{equation}
 %
-where $\mathbf{T}_*$ are the \emph{pose} transformations parameterized by $\parpose$ and $\Pi$ left multiplies matrices by recursively traversing the kinematic chain $K$ of point $\bar\point$ towards the root~\cite{buss_04}. 
+where $\mathbf{T}_*$ are the \emph{pose} transformations parameterized by $\parpose$ and $\Pi$ left multiplies matrices by recursively traversing the kinematic chain $K$ of point $\bar\pointHmodel$ towards the root~\cite{buss2004introduction}. 
 Each node $k$ of the kinematic chain is associated with an orthogonal frame $\mathbf{\bar{T}}_k$ according to which local transformations are specified. In most tracking systems, the frames $\mathbf{\bar{T}}_*$ are manually set by a 3D modeling artist and kept fixed across users. However, incorrectly specified kinematic frames can be highly detrimental to tracking quality; see \Figure{posing}(c,d) and \VideoKinematic{}. Therefore, in our formulation, the kinematic structure (i.e. the matrices $\mathbf{\bar{T}}_*$) is directly optimized from acquired data.
 
-\input{fig/calibeval/item.tex}
-\input{fig/calibration/item.tex}
+\input{hmodel/fig/calibeval/item.tex}
+\input{hmodel/fig/calibration/item.tex}
 
 % \newpage
-\paragraph{Formulation}
+\subsection*{Formulation}
 Let $\parpose_n$ be the \emph{pose} parameters optimally aligning the rest-pose template to the data frame $\depth_n$, and $\parposture$ be the \emph{posture} parameters representing the transformations $\mathbf{\bar{T}}_*$ via Euler angles. 
 
-For notational brevity, we also define $\pars_n=[\parpose_n, \parposture, \restcenters, \radii]$. Our calibration optimization can then be written as:
+For notational brevity, we also define $\parsHmodel_n=[\parpose_n, \parposture, \restcenters, \radii]$. Our calibration optimization can then be written as:
 % 
 \begin{eqnarray}
 % \parposture, \centers, \radii =
-\argmin_{\{\pars_n\}}
+\argmin_{\{\parsHmodel_n\}}
 \sum_{n=1}^N 
 \sum_{\mathcal{T} \in \termscalib} 
-w_\mathcal{T} E_\mathcal{T}(\depth_n, \pars_n)
+w_\mathcal{T} E_\mathcal{T}(\depth_n, \parsHmodel_n)
 \label{eq:calibration}
 \end{eqnarray}
 % 
@@ -61,14 +61,14 @@ w_\mathcal{T} E_\mathcal{T}(\depth_n, \centers_n, \restcenters, \radii)
 \argmin_{\parposes,\parposture} &
 \sum_{n=1}^N 
 \sum_{\mathcal{T} \in \termscalib}
-w_\mathcal{T} E_\mathcal{T}(\centers_n, \pars_n) 
+w_\mathcal{T} E_\mathcal{T}(\centers_n, \parsHmodel_n) 
 \end{eqnarray}
 % 
 \todo{Our first step adjusts rest-pose sphere centers $\restcenters$ and radii $\radii$,} by allowing the model to fit to the data without any kinematic constraint beyond rigidity, and returning as a side product a set of \emph{per-frame} posed centers $\posedcenters$. 
 Our second step takes the set $\posedcenters$ and projects it onto the manifold of kinematically plausible template deformations. 
 This results in the optimization of the rotational components of rest-pose transformations $\mathbf{\bar{T}}_*$, as their translational components are simply derived from $\restcenters$.
 
-\paragraph{Optimization}
+\subsection*{Optimization}
 The energies above are non-linear and non-convex, but can be optimized offline, as real-time tracking only necessitates a pre-calibrated model. For this reason, we conveniently employ the $lsqnonlin$ Matlab routine, which requires the gradients of our energies as well as an initialization point.
 The initialization of $\restcenters$ is performed automatically by anisotropically scaling the vertices of a generic template to roughly fit the rest pose. The initial transformation frame rotations $\parposture$ are retrieved from the default template, while $\parposes$ are obtained by either aligning the scaled template to depth images, or by executing inverse kinematics on a few manually selected keypoints (multi-view stereo).
 % 
@@ -83,29 +83,29 @@ Our fitting energies are analogous to the ones used in tracking. They approximat
 \begin{eqnarray}
 E_{d2m} = 
 \sum_{n=1}^N |\depth_n|^{-1} 
-\sum_{\point \in \depth_n} 
-\| \point - \proj_{\model(\pars_n)}(\point)\|_2^1 \\
+\sum_{\pointHmodel \in \depth_n} 
+\| \pointHmodel - \proj_{\model(\parsHmodel_n)}(\pointHmodel)\|_2^1 \\
 E_{m2d} = 
-\sum_{n=1}^N |\model(\pars_n)|^{-1} 
-\sum_{\pixel \in \model(\pars_n)} 
-\| \pixel - \proj_{\depth_n}(\pixel)\|_2^1
+\sum_{n=1}^N |\model(\parsHmodel_n)|^{-1} 
+\sum_{\pixelHmodel \in \model(\parsHmodel_n)} 
+\| \pixelHmodel - \proj_{\depth_n}(\pixelHmodel)\|_2^1
 \end{eqnarray}
 % 
-Note that the projection operator $\proj_{\depth_n}$ changes according to the type of input data. If a multi-view acquisition system is used to acquire a complete point cloud, then the projection operator fetches the closest point to $\point$ in the point cloud of frame $\depth_n$. If $\depth_n$ is acquired through monocular acquisition, then $\proj_{\depth_n}$ computes the 2D projection to the image-space silhouette of the model.
+Note that the projection operator $\proj_{\depth_n}$ changes according to the type of input data. If a multi-view acquisition system is used to acquire a complete point cloud, then the projection operator fetches the closest point to $\pointHmodel$ in the point cloud of frame $\depth_n$. If $\depth_n$ is acquired through monocular acquisition, then $\proj_{\depth_n}$ computes the 2D projection to the image-space silhouette of the model.
 
-\paragraph{Rigidity}
-It is essential to estimate a \todo{single user template that, once articulated,} \emph{jointly} fits the set of data frames $\{ \depth_n \}$. For this purpose we require each posed model to be a piecewise-rigid articulation of our rest pose. \todo{This can be achieved by constraining each segment $\{ (\ballcenter_{n,i}, \ballcenter_{n,j})\:|\: ij \in \skeleton \}$ of $\centers_n$ to have the same length as the corresponding segment $(\bar\ballcenter_i, \bar\ballcenter_j)$ of the rest pose configuration $\restcenters$}:
+\subsection*{Rigidity}
+It is essential to estimate a \todo{single user template that, once articulated,} \emph{jointly} fits the set of data frames $\{ \depth_n \}$. For this purpose we require each posed model to be a piecewise-rigid articulation of our rest pose. \todo{This can be achieved by constraining each segment $\{ (\ballcenter_{n,i}, \ballcenter_{n,j})\:|\: ij \in \skeletonHmodel \}$ of $\centers_n$ to have the same length as the corresponding segment $(\bar\ballcenter_i, \bar\ballcenter_j)$ of the rest pose configuration $\restcenters$}:
 % 
 \begin{equation}
 E_{\text{rigid}} = 
 % \sum_{\ballcenter_{n,*} \in \centers_n}
-\sum_{ij \in \skeleton} (\| \ballcenter_{n,i} - \ballcenter_{n,j} \| - \| \bar\ballcenter_i - \bar\ballcenter_j \|)^2
+\sum_{ij \in \skeletonHmodel} (\| \ballcenter_{n,i} - \ballcenter_{n,j} \| - \| \bar\ballcenter_i - \bar\ballcenter_j \|)^2
 \end{equation}
 % 
 Note that only a subset of the edges of our control skeleton, as illustrated in \Figure{topology}, are required to satisfy this rigidity condition.
 
 % \newpage
-\paragraph{Validity}
+\subsection*{Validity}
 The calibration optimization should avoid producing degenerate configurations \todo{in our \emph{rest pose} template $\restcenters$}. For example, a pill degenerates into a sphere when one of its balls is fully contained within  the volume of the other. Analogously, a wedge can degenerate into a pill or a sphere. We monitor validity by an indicator function $\chi(\bar\ball_i)$ that evaluates to one if $\bar\ball_i$ is degenerate and zero otherwise.
 % 
 \todo{We make a conservative choice and use $\chi(\bar\ball_i)$, which verifies whether $\bar\ballcenter_i$ is inside $\bar\oneelement \setminus \bar\ball_i$, the element obtained by removing a vertex, as well as all its adjacent edges, from $\bar\oneelement$.}

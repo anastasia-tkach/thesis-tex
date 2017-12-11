@@ -1,11 +1,11 @@
 
 \input{htrack/fig/data.tex}
-\section{Introduction}
+\section{Introduction} \label{sec:htrack-intro}
 
 \brief{why is the problem important}
 Tracking and animating humans in motion is a fundamental problem in computer graphics and computer vision. A particularly important question is how to accurately reconstruct the shape and articulation of human hands. Hand motion is a crucial component of non-verbal communication, plays an important role in the animation of humanoid avatars, and is central for numerous human-computer interfaces. 
 
-Accurate realtime body tracking~\cite{shotton_cvpr11,wei_siga12} and face tracking~\cite{cao_sig14} systems have been recently proposed. Hand tracking is now gaining traction in the research community as a next natural step towards a complete system for online human communication in desktop environments~\cite{oiko_bmvc11,melax_13,sridhar_14,schroeder_icra14,tompson_tog14}.
+Accurate realtime body tracking~\cite{shotton_cvpr11,wei_siga12} and face tracking~\cite{cao_sig14} systems have been recently proposed. Hand tracking is now gaining traction in the research community as a next natural step towards a complete system for online human communication in desktop environments~\cite{oiko2011hand,melax2013dynamics,sridhar2014anisotropic,schroder2014real,tompson2014real}.
 
 Recent industrial trends in interaction systems for virtual environments have lead to the development of (closed source) software packages for the processing of RGBD data, like the Intel RealSense SDK, or purpose-designed hardware, like the Leap Motion and the Nimble sensors. 
 
@@ -17,17 +17,19 @@ Such single-camera acquisition is particularly advantageous as it is cheap, does
 \brief{why is it still challenging}
 Accurate hand tracking with a non-invasive sensing device in realtime is a challenging scientific problem. Human hands are highly articulated and therefore require models with sufficiently many degrees of freedom to adequately describe the corresponding motion space. Hand motion is often fast and exhibits intricate geometric configurations with complex contact patterns among fingers. 
 
-With a single-camera RGBD setup, we are faced with incomplete data due to self-occlusions and high noise levels (see Figure~\ref{htrack/fig:data}).
+With a single-camera RGBD setup, we are faced with incomplete data due to self-occlusions and high noise levels (see Figure~\ref{fig:data}).
 
 Yet the simplicity of the hardware and the ease of deployment make this setup the most promising for consumer applications as evidenced by the recent proliferation of new consumer-level sensors.
 
 To cope with the limited amount of available information, we employ an articulated template model as a geometric prior for shape completion and topology control. Our model does not only encode geometry, but also serves as a domain to represent information about \emph{plausible} hand poses and motions. This statistical information, built by analyzing a database of annotated poses, is directly embedded into the optimization, which
 allows accurate tracking with a high number of degrees of freedom even in challenging scenarios.
 
-\paragraph*{Contributions.}
+\subsection*{Contributions}
 % 
 We present a complete system for realtime hand tracking using a single commodity RBGD input sensor. Our core technical contributions are:
 % 
+\input{htrack/fig/handmodel.tex}
+
 \begin {itemize}
 \item \new{a novel articulated registration algorithm that efficiently integrates data and regularization priors into a \emph{unified} real-time solver; see \Section{optimization} and \Appendix{gpu},}
 \item a combined 2D/3D registration method to align the 3D hand model to the acquired depth map and extracted silhouette image; see \Section{fitting},
@@ -41,7 +43,7 @@ see \Appendix{lindistance}.}
 
 Another important contribution of our paper is that we fully disclose our source code\footnote{\url{https://github.com/OpenGP/htrack}}. To the best of our knowledge, no other freely available implementation is available, and we believe that publishing our code will not only ensure reproducibility of our results, but also facilitate future research in this domain.
 
-\new{Note that there is a widespread belief \cite{wei_siga12,zhang_siga14,qian_cvpr14} that ICP-like techniques are too local and prone to local minima to successfully deal with fast articulated motion. One of our contributions is to show this commonly held belief should be re-considered. We demonstrate that a regularized geometric registration approach in the spirit of ICP can achieve outstanding performance. We believe this will significantly impact future research in this domain, as it will allow further development of registration techniques for real-time tracking, in contraposition to commonly employed techniques from the vision community like  discriminative~\cite{tompson_tog14} and PSO~\cite{qian_cvpr14} methods.}
+\new{Note that there is a widespread belief \cite{wei_siga12,zhang_siga14,qian2014realtime} that ICP-like techniques are too local and prone to local minima to successfully deal with fast articulated motion. One of our contributions is to show this commonly held belief should be re-considered. We demonstrate that a regularized geometric registration approach in the spirit of ICP can achieve outstanding performance. We believe this will significantly impact future research in this domain, as it will allow further development of registration techniques for real-time tracking, in contraposition to commonly employed techniques from the vision community like  discriminative~\cite{tompson2014real} and PSO~\cite{qian2014realtime} methods.}
 
 Our regularized geometric registration achieves robust, highly articulated hand tracking at up to 120 frames per second (fps).
 %

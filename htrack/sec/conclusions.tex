@@ -3,18 +3,18 @@
 
 \input{htrack/fig/fisting.tex}
 \input{htrack/fig/wronghand.tex}
-\paragraph*{Limitations.}
+\subsection*{Limitations}
 
 
 Single-camera depth acquisition yields incomplete data and as such the pose reconstruction problem is inherently ill-posed.
 Tracking errors can occur in certain situations as explained above when insufficient data is acquired due to occlusions or fast motion.
-Similarly, the resolution of the sensor limits tracking accuracy. As shown in \Figure{fisting}, when geometric features become indiscriminate, our registration approach fails. Integrating color and shading information could potentially address this issue~\cite{delagorce_pami11}.
-\revision{While our current system requires the user to wear a wristband for detection and stabilization, this could be replaced by automatic hand labeling, e.g. using forest classifiers as in~\cite{tompson_tog14}.}
+Similarly, the resolution of the sensor limits tracking accuracy. As shown in \Figure{fisting}, when geometric features become indiscriminate, our registration approach fails. Integrating color and shading information could potentially address this issue~\cite{delagorce2011model}.
+\revision{While our current system requires the user to wear a wristband for detection and stabilization, this could be replaced by automatic hand labeling, e.g. using forest classifiers as in~\cite{tompson2014real}.}
 %\revision{The wristband used for detection and tracking stabilization could be replaced by automatic hand labeling, e.g. using forest classifiers as in~\cite{tompson_tog14}.}
 
 Our cylinder model proved adequate for the data quality of current commodity sensors, but is overall limited in geometric accuracy, and hence might not scale with increasing sensor resolution.
 Also, in our current implementation the model needs to be manually adapted to the user through simple scaling operations. Without such adaptation, tracking accuracy degrades as shown in \Figure{wronghand}.
-This user-specific adaption could be automated~\cite{Taylor_cvpr14} and potentially even performed simultaneously with the realtime tracking as recently proposed for face tracking~\cite{bouaziz_sig13}.
+This user-specific adaption could be automated~\cite{taylor2014user} and potentially even performed simultaneously with the realtime tracking as recently proposed for face tracking~\cite{bouaziz_sig13}.
 
 The PCA model used in the prior energy is an efficient, but rather simplistic representation of the pose space. We currently do not consider the
 temporal order in which the hand poses of the database have been acquired, which could potentially be exploited for more sophisticated temporal priors. 
@@ -62,6 +62,5 @@ Other examples of future efforts are robust two-hand tracking with object intera
 
 %We have demonstrated that accurate realtime hand tracking can be performed at 60FPS on a low-cost RGBD device using a model-based approach. Robust tracking is achieved by combining 2D and 3D informations extracted from the sensor data with a set of carefully designed priors. We compared our method with multiple state of the art approaches and showed that our system outperforms current model- and appearance-based approaches. By fully disclosing our source code we believe that our approach will facilitated future research and product development. 
 
-\section*{Acknowledgments}
-The authors thank S. Sridhar, S. Melax and J. Tompson for insightful discussions. This research is supported by the Swiss National Science Foundation grant 200021-153567. Parts of this work were supported by the Cluster of Excellence ``Cognitive Interaction Technology'' (EXC 277) funded by the German Research Foundation~(DFG).
+
 

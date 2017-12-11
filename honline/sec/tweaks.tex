@@ -6,6 +6,9 @@
 \usepackage{float} %< to define algorithms
 \usepackage{anyfontsize} %< remove warnings
 \usepackage{sidecap} %< caption on side
+\usepackage{microtype} 
+
+\newcommand{\EPFL}{\'Ecole Polytechnique F\'ed\'erale de Lausanne}
 
 %%
 %% general comments
@@ -28,49 +31,49 @@
 %% 
 \newcommand{\hidden}[1]{{}} %< discards
 \newcommand{\LEGACY}[1]{\textcolor{orange}{[LEGACY] #1}}
-\newcommand{\todo}[1]{{\color{red}#1}}
+%\newcommand{\todo}[1]{{\color{red}#1}}
 \newcommand{\red}[1]{{\color{red}#1}}
-\newcommand{\TODO}[1]{{\color{red}[TODO: #1]}}
-\newcommand{\ADDRESSED}[1]{{}}
-\newcommand{\copypaste}[1]{{#1}}
-\newcommand{\revision}[1]{{#1}}
+%\newcommand{\TODO}[1]{{\color{red}[TODO: #1]}}
+%\newcommand{\ADDRESSED}[1]{{}}
+%\newcommand{\copypaste}[1]{{#1}}
+%\newcommand{\revision}[1]{{\color{black}#1}}
 %\newcommand{\revision}[1]{{\color{red}#1}}
-\newenvironment{DRAFT}{\colorlet{oldcolor}{.} \color{red}}{\color{oldcolor}}
+%\newenvironment{DRAFT}{\colorlet{oldcolor}{.} \color{red}}{\color{oldcolor}}
 % \newenvironment{edit}{\colorlet{oldcolor}{.} \color{dark_green}}{\color{oldcolor}}
-\newenvironment{edit}{\colorlet{oldcolor}{.}}{\color{oldcolor}}
+%\newenvironment{edit}{\colorlet{oldcolor}{.}}{\color{oldcolor}}
 
 %%
 %% personal comments
 %% 
-\newcommand{\AN}[1]{{\color{teal}[AN: #1]}} % anastasia 
-\newcommand{\AT}[1]{{\color{pink}[AT: #1]}} % andrea
-\newcommand{\MP}[1]{{\color{blueish}[MP: #1]}} % mark
-\newcommand{\ER}[1]{{\color{orange}[ER: #1]}} % edo
-\newcommand{\AF}[1]{{\color{blueish}[AF: #1]}} % andrew
+%\newcommand{\AN}[1]{{\color{teal}[AN: #1]}} % anastasia 
+%\newcommand{\AT}[1]{{\color{pink}[AT: #1]}} % andrea
+%\newcommand{\MP}[1]{{\color{blueish}[MP: #1]}} % mark
+%\newcommand{\ER}[1]{{\color{orange}[ER: #1]}} % edo
+%\newcommand{\AF}[1]{{\color{blueish}[AF: #1]}} % andrew
 
 %%
 %% shortcut for references
 %% 
-\newcommand{\Fig}[1]{Fig.~\ref{fig:#1}}
-\newcommand{\Figure}[1]{Figure~\ref{fig:#1}}
-\newcommand{\Eq}[1]{Eq.~\ref{eq:#1}}
-\newcommand{\Equation}[1]{Equation~\ref{eq:#1}}
+%\newcommand{\Fig}[1]{Fig.~\ref{fig:#1}}
+%\newcommand{\Figure}[1]{Figure~\ref{fig:#1}}
+%\newcommand{\Eq}[1]{Eq.~\ref{eq:#1}}
+%\newcommand{\Equation}[1]{Equation~\ref{eq:#1}}
 \newcommand{\Optimization}[1]{Optimization~\ref{eq:#1}}
-\newcommand{\Sec}[1]{Sec.~\ref{sec:#1}}
-\newcommand{\Section}[1]{Section~\ref{sec:#1}}
-\newcommand{\Appendix}[1]{Appendix~\ref{app:#1}}
+%\newcommand{\Sec}[1]{Sec.~\ref{sec:#1}}
+%\newcommand{\Section}[1]{Section~\ref{sec:#1}}
+%\newcommand{\Appendix}[1]{Appendix~\ref{app:#1}}
 
 %%
 %% Inlined annotation of paragraph content
 %% 
-\newcommand{\brief}[1]{} % ONLY LATEX VISIBLE
+%\newcommand{\brief}[1]{} % ONLY LATEX VISIBLE
 % \newcommand{\brief}[1]{{\flushright\small{\vspace{-7pt}\color{light_gray} [\textbf{#1}]}\\}}
 
 %%
 %% SHOW PATH OF INSERTED IMAGES
 %% 
 \usepackage{currfile}
-\newcommand{\putfilename}{}
+%\newcommand{\putfilename}{}
 % \newcommand{\putfilename}{ \put(-3,0){\rotatebox{90}{\color{red}\currfilename}}}
 
 % Vertical text
@@ -80,15 +83,15 @@
 %% text layout
 %%
 % Insert whitespace at the end of a paragraph
-\setlength{\parskip}{.5\baselineskip}%
+% \setlength{\parskip}{.5\baselineskip}%
 % Don't intent by default on new paragraph
-\setlength{\parindent}{0pt}%
+% \setlength{\parindent}{0pt}%
 
 
 %%
 %% text layout
 %%
-\renewcommand{\paragraph}[1]{{\textbf{#1.}}}
+% \renewcommand{\paragraph}[1]{{\textbf{#1.}}}
 
 %%
 %% figure labels

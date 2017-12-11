@@ -1,36 +1,36 @@
 \subsection{Correspondences}
 \label{sec:corresp}
-% \paragraph{Surface Correspondences: $\proj_\surface(\point)$}
+% \paragraph{Surface Correspondences: $\proj_\surface(\pointHmodel)$}
 Our correspondence search leverages the structure of \Eq{convsurf}, by decomposing the surface into several elementary elements $\element$, where $e$ indexes the 30 elements of our template; see \VideoElements{}. As illustrated in \Figure{corresp}, elements are classified into 
 \emph{pill} and \emph{wedge} implicit primitives, with an associated implicit functions $\implicit_e$.
-Given a point $\point$ in space, the implicit function of the whole surface can be written by evaluating the expression:
+Given a point $\pointHmodel$ in space, the implicit function of the whole surface can be written by evaluating the expression:
 \begin{equation}
-\implicit_\surface(\point) = \argmin_{e=1 \dots E} \implicit_e(\point)
+\implicit_\surface(\pointHmodel) = \argmin_{e=1 \dots E} \implicit_e(\pointHmodel)
 \label{eq:piecewise}
 \end{equation}
 %
-Given a query point $\point$, we can first compute the closest-points $\footpoint_e = \proj_{\element}(\point)$ to each element independently; within this set, the closest-point projection to the full model $\footpoint = \proj_\surface(\point)$ is the one with the smallest associated implicit function value $\implicit_e(\point)$. In a tracking session with an average of 2500 points/frame the computation of closest-point correspondences takes 250 $\mu s$/iteration. 
+Given a query point $\pointHmodel$, we can first compute the closest-points $\footpoint_e = \proj_{\element}(\pointHmodel)$ to each element independently; within this set, the closest-point projection to the full model $\footpoint = \proj_\surface(\pointHmodel)$ is the one with the smallest associated implicit function value $\implicit_e(\pointHmodel)$. In a tracking session with an average of 2500 points/frame the computation of closest-point correspondences takes 250 $\mu s$/iteration. 
 %
 We now describe in detail how the projection is evaluated on each element in closed form. 
-\input{fig/visibility/item.tex}
-
-\paragraph{Pill correspondences: $\footpoint=\proj_\text{pill}(\point)$}
-A pill is defined by two spheres $\ball_1(\ballcenter_1,r_1)$ and $\ball_2(\ballcenter_2,r_2)$. By construction the closest point correspondence lies on the plane passing through the triplet $\{ \ballcenter_1, \ballcenter_2, \point \}$, thus allowing us to solve the problem in 2D; see \Figure{corresp}-(left). 
+\input{hmodel/fig/visibility/item.tex}
+d
+\subsection*{Pill correspondences: $\footpoint=\proj_\text{pill}(\pointHmodel)$}
+A pill is defined by two spheres $\ball_1(\ballcenter_1,r_1)$ and $\ball_2(\ballcenter_2,r_2)$. By construction the closest point correspondence lies on the plane passing through the triplet $\{ \ballcenter_1, \ballcenter_2, \pointHmodel \}$, thus allowing us to solve the problem in 2D; see \Figure{corresp}-(left). 
 % 
-We compute the intersection point $\skewproj$ of the ray $\mathbf{r}(t) = \point + t\mathbf{n}$ with the segment $\segment$ and parametrize its location in barycentric coordinates as $\skewproj = \alpha\ballcenter_1 + (1-\alpha)\ballcenter_2$. If $\alpha \in [0,1]$, our closest point correspondence is given by $\footpoint=\proj_\mathcal{L}(\point)$, that is, the intersection of $\segment$ and $\mathbf{r}(t)$.  If $\alpha<0$ or $\alpha>1$, then the closest point will be $\footpoint=\proj_{\ball_1}(\point)$ or $\footpoint=\proj_{\ball_2}(\point)$, respectively. 
+We compute the intersection point $\skewproj$ of the ray $\mathbf{r}(t) = \pointHmodel + t\mathbf{n}$ with the segment $\segment$ and parametrize its location in barycentric coordinates as $\skewproj = \alpha\ballcenter_1 + (1-\alpha)\ballcenter_2$. If $\alpha \in [0,1]$, our closest point correspondence is given by $\footpoint=\proj_\mathcal{L}(\pointHmodel)$, that is, the intersection of $\segment$ and $\mathbf{r}(t)$.  If $\alpha<0$ or $\alpha>1$, then the closest point will be $\footpoint=\proj_{\ball_1}(\pointHmodel)$ or $\footpoint=\proj_{\ball_2}(\pointHmodel)$, respectively. 
 
-\paragraph{Wedge correspondences: $\footpoint=\proj_\text{wedge}(\point)$}
+\subsection*{Wedge correspondences: $\footpoint=\proj_\text{wedge}(\pointHmodel)$}
 A wedge is defined by three spheres $\ball_i = \{\ballcenter_i, r_i\}$.  \Figure{convsurf} illustrates how a wedge element can be decomposed in three parts: \emph{spherical}, \emph{conical}, and \emph{planar} elements, associated with vertices, edges, and faces of the sphere-mesh skeleton. For the planar element $\mathcal{P}(\mathbf{t}_1,\mathbf{n})$ with normal $\mathbf{n}$ and tangent $\mathbf{t}_1$ to $\ball_1$
 %
-we compute the skewed projection $\skewproj$ by finding the intersection of the ray $\mathbf{r}(t) = \point + t\mathbf{n}$ with the triangle $\mathcal{T}$ formed by $\ballcenter_1$, $\ballcenter_2$, $\ballcenter_3$. 
+we compute the skewed projection $\skewproj$ by finding the intersection of the ray $\mathbf{r}(t) = \pointHmodel + t\mathbf{n}$ with the triangle $\mathcal{T}$ formed by $\ballcenter_1$, $\ballcenter_2$, $\ballcenter_3$. 
 % 
 According to the position of $\skewproj$ we have two possible solutions:
-If $\skewproj$ lies inside the triangle $\mathcal{T}$, then our footpoint is $\footpoint = \proj_\mathcal{P}(\point)$. Otherwise, we use the barycentric coordinates of $\skewproj$ in $\mathcal{T}$ to identify the closest pill element and compute $\footpoint=\proj_\text{pill}(\point)$.
+If $\skewproj$ lies inside the triangle $\mathcal{T}$, then our footpoint is $\footpoint = \proj_\mathcal{P}(\pointHmodel)$. Otherwise, we use the barycentric coordinates of $\skewproj$ in $\mathcal{T}$ to identify the closest pill element and compute $\footpoint=\proj_\text{pill}(\pointHmodel)$.
 
-\paragraph{Monocular Correspondences}
-In monocular acquisition (i.e.\ single sensor), an oracle registration algorithm aligns the portion of the model that is \emph{visible} from the sensor viewpoint to the available data. Hence, when computing ICP's closest-point correspondences, only the portion of the model currently visible by the camera should be considered~\cite{tagliasacchi2015robust}. Given the camera direction $\camdir$, we can test whether the retrieved footpoint $\footpoint$ is back-facing by testing the sign of $\camdir \cdot \mathcal{N}_\surface(\footpoint)$, where the second term is the object's normal at $\footpoint$. As illustrated in 2D in \Figure{visibility}, whenever this test fails, there are additional candidates for closest point that must be checked: (1)~the closest-point on the silhouette of the model (e.g. $\point_{2,3,6,7}$), and (2)~the front facing planar portions of elements (e.g. $\point_{5}$). These additional correspondences for the query point are computed, and the one closest to $\point$ becomes our front-facing footpoint $\footpoint$. The additional computational cost caused by front-facing correspondences with an average of 2500 points/frame is 100 $\mu s$/iteration.
+\subsection*{Monocular Correspondences}
+In monocular acquisition (i.e.\ single sensor), an oracle registration algorithm aligns the portion of the model that is \emph{visible} from the sensor viewpoint to the available data. Hence, when computing ICP's closest-point correspondences, only the portion of the model currently visible by the camera should be considered~\cite{tagliasacchi2015robust}. Given the camera direction $\camdir$, we can test whether the retrieved footpoint $\footpoint$ is back-facing by testing the sign of $\camdir \cdot \mathcal{N}_\surface(\footpoint)$, where the second term is the object's normal at $\footpoint$. As illustrated in 2D in \Figure{visibility}, whenever this test fails, there are additional candidates for closest point that must be checked: (1)~the closest-point on the silhouette of the model (e.g. $\pointHmodel_{2,3,6,7}$), and (2)~the front facing planar portions of elements (e.g. $\pointHmodel_{5}$). These additional correspondences for the query point are computed, and the one closest to $\pointHmodel$ becomes our front-facing footpoint $\footpoint$. The additional computational cost caused by front-facing correspondences with an average of 2500 points/frame is 100 $\mu s$/iteration.
 
-\paragraph{Silhouette computation}
+\subsection*{Silhouette computation}
 The \emph{object-space silhouette} $\partial \surface$ is a (3D) curve separating front-facing from back-facing portions of a shape~\cite[Sec.1]{olson2006eg}. 
 To simplify the silhouette computation we approximate the perspective camera of the sensor with an orthographic one. 
 We then offset all elements on the 2D camera plane, and perform a cross-section with this plane: spheres are replaced with circles and planes/cylinders with segments; see~\Figure{silhouette}-(left). 
@@ -42,7 +42,7 @@ Therefore, we apply the process to palm and fingers separately, and merge them i
 The merge process simply checks whether vertices $v \in \partial \surface$ are contained within the model, which means it discards those where $\implicit_\surface(v)<0$. 
 In our experiments the average computation of the silhouette on the CPU takes 150 $\mu$s/iteration.
 
-\input{fig/silhouette/item.tex}
+\input{hmodel/fig/silhouette/item.tex}
 
 \subsection{Rendering}
 \label{sec:rendering}

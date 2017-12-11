@@ -1,26 +1,27 @@
 % \documentclass[acmtog, review, anonymous]{acmart}
 % \documentclass[acmtog, anonymous]{acmart}
-\documentclass[acmtog, anonymous, review]{acmart}
+\documentclass[acmtog]{acmart}
+% \documentclass[acmtog,authorversion]{acmart}
 
 \acmJournal{TOG}
-\acmVolume{9}
-\acmNumber{4}
-\acmArticle{39}
-\acmYear{2010}
-\acmMonth{3}
+\acmVolume{36}
+\acmNumber{6}
+\acmArticle{243}
+\acmYear{2017}
+\acmMonth{11}
 
 % Copyright
-\setcopyright{none}
+% \setcopyright{none}
 %\setcopyright{acmcopyright}
 %\setcopyright{acmlicensed}
-%\setcopyright{rightsretained}
+\setcopyright{rightsretained}
 %\setcopyright{usgov}
 %\setcopyright{usgovmixed}
 %\setcopyright{cagov}
 %\setcopyright{cagovmixed}
 
 % DOI
-% \acmDOI{0000001.0000001_2}
+\acmDOI{10.1145/3130800.3130830}
 \citestyle{acmauthoryear}
 \setcitestyle{square}
 
@@ -30,21 +31,23 @@
 \begin{document}
 \title{Online Generative Model Personalization for Hand Tracking}
 \input{sec/0_authors}
-% \input{sec/0_keywords}
+\input{sec/0_keywords}
 \input{sec/0_abstract}
+\input{sec/0_autogen}
 \input{fig/teaser/teaser}
 \maketitle
-\input{sec/0_autogen}
 \input{sec/1_introduction}
 \input{sec/2_related}
 \input{sec/3_technical}
 \input{sec/4_evaluation}
 \input{sec/5_conclusions}
+\input{sec/6_acks}
 % % \input{sec/acks}
 \bibliographystyle{ACM-Reference-Format}
 % \nocite{*} %prints all citations (unreferenced)
+% \clearpage
 \bibliography{paper}
-\clearpage
+% \clearpage
 \input{sec/appendix}
 \clearpage
 \end{document}

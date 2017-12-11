@@ -1,8 +1,8 @@
 %!TEX root = ../paper.tex
-\section{Evaluation}
+\section{Evaluation} \label{honline-eval}
 To evaluate the technical validity of our approach we verify its effectiveness by applying it to a new dataset acquired through commodity depth cameras (\Sec{evaldataset}); corroborate the formulation of our optimization on a synthetic 3D dataset (\Sec{analysis}); analyze its robustness through randomly perturbing the algorithm initialization (\Sec{evalsynth}); and attest how our method achieves state-of-the-art performance on publicly available datasets (\Sec{evalnyu} and \Sec{evalhandy}).
 
-\subsection{Calibration dataset: \texttt{GuessWho?} -- \Fig{realtrack}} 
+\subsection{Calibration dataset: \texttt{Handy/GuessWho?} -- \Fig{realtrack}}
 \label{sec:evaldataset}
 We stress-tested our system by qualitatively evaluating our calibration technique with data acquired from \emph{twelve} different users performing in front of an Intel RealSense SR300 camera (a consumer-level time-of-flight depth sensor). Snapshots of the twelve calibration sequences are reported in \Figure{realtrack}.
 % , but the calibration procedure can be better appreciated by watching our \VideoQualitative{}.
@@ -14,7 +14,9 @@ While ground truth information is not available, these datasets will enable comp
 
 \subsection{Synthetic dataset: formulation analysis -- \Fig{interreal}}
 \label{sec:analysis}
-For synthetic data the ground truth shape parameters $\bar\beta$ are readily available, and the sphere-mesh model $\mathcal{M}(\theta,\beta)$ is animated in time with the $\bar\theta_n$ parameters of the complex motions in the \texttt{Handy} dataset~\cite{tkach2016sphere}. The following metric measures average ground-truth residuals (in millimeters):
+For synthetic data the ground truth shape parameters $\bar\beta$ are readily available, and the sphere-mesh model $\mathcal{M}(\theta,\beta)$ is animated in time with the $\bar\theta_n$ parameters of the complex motions in the \texttt{Handy} dataset~\cite{tkach2016sphere}.
+
+The following metric measures average ground-truth residuals (in millimeters):
 % 
 \begin{align}
 E_{\beta} &= \tfrac{1}{|M|} \sum_{m \in M} \left| \beta_{[m]} - \bar\beta_{[m]} \right|
@@ -33,7 +35,7 @@ Per-frame estimates {\small $\star\beta_n$} can often oscillate away from the gr
 % 
 Our algorithm estimates these per-frame uncertainties {\small $\Sigma^*_n$}, and accordingly updates the online cumulative estimates~{\small $\hat\beta_n$}~and~{\small $\hat\Sigma_n$}.
 
-\input{fig/synthetic/item}
+\input{honline/fig/synthetic/item}
 \subsection{Synthetic dataset: robustness -- \Fig{synthetic}}
 \label{sec:evalsynth}
 %--- Intro
@@ -44,8 +46,9 @@ We provide two experiments: \emph{synthetic} and \emph{real}. The real dataset c
 To achieve this, random initializations for the user-personalized models are drawn from the Gaussian distribution {\small $\mathcal{N}(\bar\beta, \sigma)$}. A few examples of such perturbations for $\sigma=.4$ are visualized in \Figure{synthetic}.
 In our experiments, we draw fifteen random samples per each value of $\sigma$, and compute mean and standard deviation of the measured ground truth residuals $E_\beta$. 
 %We observed how increasing the number of samples did not alter our observations. \AN{I did not study this, 15 is already enough, lets just drop this sentence}
+$\quad$
 % --- Mention of video
-As each sample requires the re-tracking the entire sequence ($\approx$ 20 seconds) with a new initialization, the two plot in \Figure{synthetic} amounts to roughly four hours of footage. For this reason, in ~\VideoSynth{} we only display a few examples of calibration 
+As each sample requires the re-tracking of the entire sequence ($\approx$ 20 seconds) with a new initialization, the two plots in \Figure{synthetic} amount to roughly four hours of footage. For this reason, in ~\VideoSynth{} we only display a few examples of calibration 
 % \AT{it was a typo}
 % for \emph{joint cumulative}\AN{What are you referring to? We do not display any joint cumulative on synthetic data. We display only per-frame. You cannot perturb template for cumulative, since it converges}
 and apply a random perturbation every few seconds.
@@ -60,8 +63,13 @@ were too significantly wrong; in this regard, we believe discriminative pose re-
 % \AN{Why do you want to say this? Our cumulative already solves the problem}.
 % --- Intra-frame.. SKIP?
 % independent is model parameters of the independent algorithm at the last frame of the sequence. since betas are initialized from previous frame, independent is getting better and better towards the end of the sequence. On the synthetic data it is doing almost as good as kf and iekf, because you can kind of "see" the parameters from the rendered model, since there is no noise.
+% \begin{edit}
+% Note how per-frame calibration performs excellently, even outperforming Offline-Hard. This is because,  thanks to our carefully designed shape priors, per-frame calibration is quite robust; see \VideoReal{}. This is essential in cumulative calibration, as information can be effectively integrated only when a precise and confident measurement is available. Compared to per-frame calibration, our cumulative solutions can deal with more difficult sequences, where information with low confidence is simply discarded.
+% \end{edit}
+
+\input{honline/fig/evalnyu/item}
 \begin{edit}
-Note how per-frame calibration performs excellently, even outperforming Offline-Hard. This is because,  thanks to our carefully designed shape priors, per-frame calibration is quite robust; see \VideoReal{}. This is essential in cumulative calibration, as information can be effectively integrated only when a precise and confident measurement is available. Compared to per-frame calibration, our cumulative solutions can deal with more difficult sequences, where information with low confidence is simply discarded. 
+Technically we could not display the per-frame algorithm performance in \Figure{synthetic}, since it does not provide a single final estimate of shape parameters. To do this, we employ the model parameters it estimated in the last frame of each sequence. In the last frame the error is low, as each frame is initialized with the values from the previous frame; see \VideoReal{}. Note how per-frame calibration performs excellently, even outperforming Offline-Hard. This is because, thanks to our carefully designed shape priors, per-frame calibration is quite robust; see \VideoReal{}. This is essential in cumulative calibration, as the true value of a parameter can be recovered only if accurate measurements are available in at least some poses. The per-frame algorithm should also not be mistaken for tracking algorithm (where shape parameters are fixed) which is twice more efficient (\revision{calibration executes at 30~Hz, while tracking executes at 60~Hz}) and, in general, much more robust.
 \end{edit}
 
 % \begin{edit}
@@ -75,31 +83,30 @@ Note how per-frame calibration performs excellently, even outperforming Offline-
 
 % --- Inter-frame variants
 It is difficult to differentiate the split vs. joint  cumulative variants in the synthetic dataset, as calibration converges very effectively when it can rely on precise measurements. 
-\begin{edit}
-Overall, on the sensed dataset our \emph{joint cumulative} calibration performs the best. Our split variant performs very well when per-frame consistently provides an accurate solution (e.g. on the synthetic sequences). Nonetheless, we noticed that how with more challenging motions, the joint-cumulative can aid the per-frame solver by providing a temporal regularization. This is highly beneficial when dealing with an uncooperative user, or to perform calibrations in sequences that were not specifically designed to perform this task (e.g. fast motion, long-term occlusions,...)
-\end{edit}
+% \begin{edit}
+Overall, on the sensed dataset our \emph{joint cumulative} calibration performs the best. Our split variant performs very well when per-frame consistently provides an accurate solution (e.g. on the synthetic sequences). Nonetheless, we noticed that how with more challenging motions, the joint-cumulative can aid the per-frame solver by providing a temporal regularization. This is beneficial when dealing with an uncooperative user, or to perform calibrations in sequences that were not specifically designed for this task (e.g. fast motion and long-term occlusions).
+% \end{edit}
 
 % \begin{edit}
 % The general observation is that split algorithm is better to use when per-frame algorithm is doing well by itself and does not need a robustness boost from joint-cumulative.
 % Since during calibration stage of split-cumulative the measured value just comes from per-frame algorithm, the measurement are more independent, while joint-cumulative algorithm influences the measurement by giving additional information too them $\|\hat{\Sigma}_{n-1}^{-1/2} (x_n - \hat{x}_{n-1})\|_2^2$. Exactly this influence makes joint-cumulative algorithm more robust and better to use if the subjects are less cooperative (for example, on a dataset that was not created for calibration)\end{edit}.
 
-\input{fig/evalnyu/item}
 \subsection{Marker-based evaluation on $\texttt{NYU}$ dataset --
 \Fig{evalnyu}}
 \label{sec:evalnyu}
 Although several marker-based datasets are available, such as \cite{qian2014realtime}, \cite{sharp2015accurate} and \cite{yuan2017bighand}, state-of-the-art \emph{generative} methods have focused on the \texttt{NYU} \cite{tompson2014real} and \texttt{Handy} \cite{tkach2016sphere} datasets for quantitative evaluation. 
 % \TODO{anastasia, I need to know which joints were used? no palm, only fingers, etc...} \AN{6x4 markers from each finger and 4 markers from the thumb, palm and wrist were not used}
-On the \texttt{NYU} dataset, to properly compare to~\citeN{taylor2016joint}, we evaluate the metrics on the first 2440 frames (user \#1), and consider only markers on finger joints.
+On the \texttt{NYU} dataset, to properly compare to~\cite{taylor2016joint}, we evaluate the metrics on the first 2440 frames (user \#1), and consider only markers on finger joints.
 %
-This dataset allow us to compare our method (and its variants) to a number of other algorithms including: the PSO tracker by~\citeN{sharp2015accurate}, the calibration methods by~\citeN{khamis2015learning} and \citeN{tan2016fits}, the subdivision tracker of~\citeN{taylor2016joint}, the cylindroid tracker by~\citeN{htrack}, the sphere-mesh tracker by~\citeN{tkach2016sphere}, the Gaussian tracker of~\citeN{sridhar2015fast}, and discriminative methods such as those of~\citeN{tompson2014real}, \citeN{tang2015opening} and \citeN{oberweger2015hands}. 
+This dataset allow us to compare our method (and its variants) to a number of other algorithms including: the PSO tracker by~\cite{sharp2015accurate}, the calibration methods by~\cite{khamis15learning} and \cite{tan2016fits}, the subdivision tracker of~\cite{taylor2016joint}, the cylindroid tracker by~\cite{tagliasacchi2015robust}, the sphere-mesh tracker by~\cite{tkach2016sphere}, the Gaussian tracker of~\cite{sridhar2015fast}, and discriminative methods such as those of~\cite{tompson2014real}, \cite{tang2015opening} and \cite{oberweger2015hands}. 
 % 
 % \TODO{describe scaled template}
 % 
-Our online algorithm achieves very competitive tracking performance while being the \emph{first} capable to calibrate the user-personalized tracking model \emph{online}, rather than in an offline calibration session like~\citeN{taylor2016joint}. 
+Our online algorithm achieves very competitive tracking performance while being the \emph{first} capable of calibrating the user-personalized tracking model \emph{online}, rather than in an offline calibration session like~\cite{taylor2016joint}. 
 % 
 Notice how the best performance is achieved by either: (1) the per-frame optimization, where per-frame \emph{overfitting} takes place, or (2) by offline calibration techniques such as \OfflineSoft{} or \cite{taylor2016joint}. This is expected, as offline algorithms jointly consider all available information, while online/streaming algorithms can only integrate information one frame at a time.
 
-\input{fig/evalhandy/item}
+\input{honline/fig/evalhandy/item}
 \subsection{Dense evaluation on the $\texttt{Handy}$ dataset -- \Fig{evalhandy}}
 \label{sec:evalhandy}
 Another way to evaluate the quality of tracking/calibration is to compare the depth map $\mathcal{D}_n$ (i.e. sensor point cloud) to the tracking model depth map $\mathcal{\bar{D}}(\theta,\beta)$ (i.e. model point cloud); see~\cite{tkach2016sphere}. The model depth map is obtained by rendering $\mathcal{M}(\theta,\beta)$ with the same intrinsic/extrinsic parameters of the sensor. The following metric measures the average magnitude of data-to-model ICP correspondences:
@@ -110,6 +117,6 @@ E_\text{d2m}^n = \tfrac{1}{|d_n|} \sum_{\mathbf{p}_j \in d_n} \| \mathbf{p}_j - 
 \end{equation}
 % 
 where $\Pi$ is an operator computing the closest-point projection of points in the sensor's point cloud, onto the point-cloud associated with the synthetic depth-map~$\mathcal{D}(\theta,\beta)$. This metric is \emph{dense}, as it computes residual of an entire geometry model rather than just a sparse set of markers. 
-If $E_\text{d2m}\approx0$ (up to sensor noise) in every frame, then the personalized model is a seemingly perfect \emph{dynamic replica} of the user's hand. The \texttt{Handy} dataset from~\cite{tkach2016sphere} enables these type of comparisons and includes rendered depth maps for \cite{htrack}, \cite{sharp2015accurate}, as well as the state-of-the-art method of~\cite{taylor2016joint}. Further, note how this dataset considers a range of motion substantially more complex than the one in the \texttt{NYU} dataset.
+If $E_\text{d2m}\approx0$ (up to sensor noise) in every frame, then the personalized model is a seemingly perfect \emph{dynamic replica} of the user's hand. The \texttt{Handy} dataset from~\cite{tkach2016sphere} enables these type of comparisons and includes rendered depth maps for \cite{tagliasacchi2015robust}, \cite{sharp2015accurate}, as well as the state-of-the-art method of~\cite{taylor2016joint}. Further, note how this dataset considers a range of motion substantially more complex than the one in the \texttt{NYU} dataset.
 % 
 Like in earlier comparisons, the per-frame technique performs best as it overfits to the data, by generating a collection of $\beta_n$ instead of a single tuple $\beta$. Our techniques calibrate a model with performance comparable to that of~\cite{tkach2016sphere}, where a high-quality MVS point cloud with manual annotations was used for calibration.

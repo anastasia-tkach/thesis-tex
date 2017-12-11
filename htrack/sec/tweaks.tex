@@ -9,12 +9,12 @@
 \definecolor{pink}{rgb}{1, 0, 1}
 \newcommand{\edit}[1]{\textcolor{dark_green}{#1}}
 \newcommand{\new}[1]{{#1}}
-\newcommand{\LEGACY}[1]{\textcolor{orange}{[LEGACY] #1}}
+%\newcommand{\LEGACY}[1]{\textcolor{orange}{[LEGACY] #1}}
 \newcommand{\aedit}[1]{\textcolor{purple}{#1}}
 \newcommand{\ADDRESSED}[1]{{}}
 \newcommand{\copypaste}[1]{{#1}}
 \newcommand{\revision}[1]{{#1}}
-\newcommand{\hidden}[1]{{}}
+%\newcommand{\hidden}[1]{{}}
 
 %%
 %% inlined comments
@@ -105,14 +105,17 @@
 \newcommand{\Jskel}{\jacobian_{\text{skel}}}
 \newcommand{\residuals}{\mathbf{e}}
 \newcommand{\weight}{\omega}
-%\newcommand{\pixel}{\mathbf{p}}
+
+\newcommand{\pixelHtrack}{\mathbf{p}}
 \newcommand{\pixels}{\mathbf{P}}
-%\newcommand{\point}{\mathbf{x}}
+
+\newcommand{\pointHtrack}{\mathbf{x}}
 \newcommand{\skelpoint}{\mathbf{k}}
 \newcommand{\points}{\mathbf{X}}
 \newcommand{\proj}{\Pi}
 \newcommand{\PointsRender}{\mathcal{X}_{r}}
-%\newcommand{\PointsSensor}{\mathcal{X}_{s}}
+
+\newcommand{\PointsSensorHtrack}{\mathcal{X}_{s}}
 \newcommand{\DepthRender}{\mathcal{D}_{r}}
 \newcommand{\DepthSensor}{\mathcal{D}_{s}} 
 \newcommand{\SilhoRender}{\mathcal{S}_{r}}
@@ -124,9 +127,11 @@
 \newcommand{\posespace}{\mathcal{P}}
 \newcommand{\MU}{\boldsymbol\mu} 
 \newcommand{\SIGMA}{\boldsymbol{\Sigma}}
-%\newcommand{\pars}{\boldsymbol{\theta}}
+
+\newcommand{\parsHtrack}{\boldsymbol{\theta}}
+
 \newcommand{\dpars}{\Delta\boldsymbol{\theta}}
-\newcommand{\parssub}{\boldsymbol{\tilde\theta}}
+\newcommand{\parssub}{\tilde{\boldsymbol{\theta}}}
 \newcommand{\parsopt}{\pars^*}
 \newcommand{\identity}{\mathbf{I}}
 \newcommand{\zero}{\mathbf{0}}

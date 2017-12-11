@@ -6,20 +6,20 @@
 % I IGNORED THIS ONE, NOT ENOUGH DETAILS:
 % Straka et al. \cite{straka2012simultaneous} also fit the template mesh with attached skeleton to 3D data. The model is deformed to explain the data while keeping the vertices attached to their corresponding bones. It is on clear whether the approach whether be able to handle a hand motion sequence, since the results are demonstrated on a full body model.
 
-\input{fig/handmodels/item.tex}
+\input{hmodel/fig/handmodels/item.tex}
 \section{Related Work}
 \label{sec:related}
 
 % \paragraph{Overkill} %< Instrumented + Multi-Camera
 The simplest way of tracking a hand in motion is by instrumentation. We can place retro-reflective markers on the hand, wear a data glove with embedded abduction and flexion sensors~\cite{dipietro2008survey} or a colored glove~\cite{wang2009colorglove}. While effective, active instrumentation can be cumbersome as it requires lengthy preparation and/or calibration.
 %\AnastasiaComment{We do we talk about these systems, they are from a different area and are solving completely different problems. If someone wrote related literature this way before, it does not mean that we have to do the same.}
-Systems solely relying on computer vision (i.e.\ color cameras) are highly desirable, but pose estimation  relying on color information is extremely challenging~\cite{erol2007survey}: the complexity of hand motion, the large number of self-occlusions and rapidly changing backgrounds all contribute to their limited success. Multiple-camera acquisition can mitigate these challenges. In \cite{ballan2013salient}, the authors demonstrate high-quality tracking of two-hand and hand-object interactions. 
+Systems solely relying on computer vision (i.e.\ color cameras) are highly desirable, but pose estimation  relying on color information is extremely challenging~\cite{erol2007vision}: the complexity of hand motion, the large number of self-occlusions and rapidly changing backgrounds all contribute to their limited success. Multiple-camera acquisition can mitigate these challenges. In \cite{ballan2013salient}, the authors demonstrate high-quality tracking of two-hand and hand-object interactions. 
 % REFUSE TO GIVE A CITE TO THIS GUY...
 % , while \cite{wang2013physics} additionally considers the physics of motion interaction.
 However, due to the substantial increase in data bandwidth, these algorithms do not scale to real-time performance.\todo{ A notable exception is the 10Hz system of  \cite{sridhar2013multicam}, but this acquisition setup also considers data from a depth sensor.} While providing accurate results, multi-camera rigs are  impractical for consumer-level applications. Therefore, we limit our attention to techniques relying on data from a \emph{single} depth camera; with a slight abuse of wording \todo{we refer to these systems as \emph{monocular} acquisition setups.}
 % IGNORED THIS: place a camera directly on the user's wrist~\cite{kim2012digits}.
 
-\paragraph{Hybrid = discriminative + generative}
+\subsection*{Hybrid = discriminative + generative}
 % 
 Pose estimation techniques can be grouped into \emph{discriminative} and \emph{generative} techniques, also known respectively as \emph{appearance-based} and \emph{model-based} approaches.
 % Generative
@@ -33,28 +33,28 @@ State-of-the-art tracking performance is achieved by \emph{hybrid} algorithms th
 Another class of hybrid algorithms introduce correspondences through a labeling obtained through a per-pixel forest  classifier~\cite{sridhar2015fast,fleishman2015icpik}.
 % 
 % What we (do not) cover?
-Our literature review focuses on generative approaches, while we refer the reader to the very recent work by Taylor and colleagues \shortcite{taylor2016concerto} for a review of recent discriminative methods. Commercial systems for hand tracking like the \emph{NimbleVR}, the \emph{LeapMotion Orion} and the \emph{Intel Perceptual SDK} also exist, but it is difficult to consider them as the underlying technology is undisclosed.
+Our literature review focuses on generative approaches, while we refer the reader to the very recent work by Taylor and colleagues \cite{taylor2016joint} for a review of recent discriminative methods. Commercial systems for hand tracking like the \emph{NimbleVR}, the \emph{LeapMotion Orion} and the \emph{Intel Perceptual SDK} also exist, but it is difficult to consider them as the underlying technology is undisclosed.
 
-\paragraph{Generative tracking models}
+\subsection*{Generative tracking models}
 The capsule model originally proposed by~\cite{rehg1994tracking} has been adopted by a number of researchers \cite{oiko2011hand,schroder2014real,fleishman2015icpik,tagliasacchi2015robust}; see \Figure{handmodels}(a). Such a coarse representation is suitable to the task given the low signal-to-noise ratio in modern depth sensors, while its simplicity enables the efficient closed-form computation of alignment queries. Cylinders can also be approximated by a small set of disconnected spheres~\cite{qian2014realtime}, but this rough approximation is only sufficient for coarse-scale tracking. An alternative to cylinders and spheres is the use of isotropic~\cite{sridhar2013multicam,sridhar2015fast}, as well as anisotropic Gaussians~\cite{sridhar2014anisotropic}; see \Figure{handmodels}(b).
 % while registration gradients can conveniently be computed in closed-form, the resulting tracking model is not appropriate for high-precision tracking.
 % 
 %
-The use of surface meshes, while widespread in other domains (e.g.\ face tracking~\cite{bouaziz2013online} or offline registration~\cite{loper_eccv14}), has been limited to the visualization of tracking performance through skinned model animations~\cite{tompson2014real,schroder2014real}. Sharp et al.~\shortcite{sharp2015accurate} employed mesh models for tracking in a render-and-compare framework, while the very recent work of~\cite{taylor2016concerto} presents the first attempt towards a continuous registration framework for tracking hands with triangular meshes; see~\Figure{handmodels}(c).
+The use of surface meshes, while widespread in other domains (e.g.\ face tracking~\cite{bouaziz2013online} or offline registration~\cite{loper_eccv14}), has been limited to the visualization of tracking performance through skinned model animations~\cite{tompson2014real,schroder2014real}. Sharp et al.~\cite{sharp2015accurate} employed mesh models for tracking in a render-and-compare framework, while the very recent work of~\cite{taylor2016joint} presents the first attempt towards a continuous registration framework for tracking hands with triangular meshes; see~\Figure{handmodels}(c).
 %
 Other variants of tracking models include the union of convex bodies from~\cite{melax2013dynamics}, \todo{a convolutional neural network capable of directly synthesizing hand depth images~\cite{oberweger2015feedback}}, and some \todo{initial attempts at tracking with implicit templates~\cite{fua2003soft}}.
 % 
 \todo{Our sphere-mesh model} offers accuracy comparable to triangle meshes used in \todo{recent hand} trackers, while retaining a compact representation for efficient correspondence queries and effective user adaptation.
 
-\input{fig/zsphere/item.tex}
-\paragraph{Template calibration}
-Albrecht et al.~\shortcite{albrecht2003construction} pioneered the creation of a realistic hand model (i.e. bones and muscles) by aligning a template mesh to data acquired by a laser-scanned plaster cast. Rhee et al.~\shortcite{rhee2006hand} use a simpler setup consisting of a single color image to identify approximate joint locations by localizing skin creases, and adapt a mesh template to conform to its silhouette. While these methods focus on a static template, in \cite{delagorce2011model} a model is roughly adapted to the user through simple bone scaling to produce the first \emph{animatable} template. 
+\input{hmodel/fig/zsphere/item.tex}
+\subsection*{Template calibration}
+Albrecht et al.~\cite{albrecht2003construction} pioneered the creation of a realistic hand model (i.e. bones and muscles) by aligning a template mesh to data acquired by a laser-scanned plaster cast. Rhee et al.~\cite{rhee2006human} use a simpler setup consisting of a single color image to identify approximate joint locations by localizing skin creases, and adapt a mesh template to conform to its silhouette. While these methods focus on a static template, in \cite{delagorce2011model} a model is roughly adapted to the user through simple bone scaling to produce the first \emph{animatable} template. 
 % 
-Calibration of a cylinder model through particle swarm has been investigated in~\cite{makris2015adapt}. \todo{Mesh calibration techniques were proposed in~\cite{taylor2014user} and extended in~\cite{khamis15learning}, which introduces compact and linear shape-spaces of human hand geometry.}
+Calibration of a cylinder model through particle swarm has been investigated in~\cite{makris2015model}. \todo{Mesh calibration techniques were proposed in~\cite{taylor2014user} and extended in~\cite{khamis15learning}, which introduces compact and linear shape-spaces of human hand geometry.}
 % 
 The method in \cite{taylor2014user} shares some similarities with our work, where the model is adjusted to \emph{jointly} fit a set of depth frames, but with a fundamental difference in the way in which geometry is represented. \todo{Our sphere-mesh model} is \emph{naturally compact}, leading to straightforward calibration and tracking algorithms.
 
-\paragraph{Implicit modeling}
+\subsection*{Implicit modeling}
 Implicit sculpting tools have recently become a viable alternative to mesh or spline-based approaches for modeling complex geometries. This paradigm lies at the basis of the success of the \emph{PixoLogic ZBrush} product line. 
 For articulated geometry, it is often convenient to first create a coarse geometric structure analogous to the one described in~\Equation{convsurf}, a process that \emph{PixoLogic} has re-branded as \emph{ZSphere{}} modeling; see \Figure{zsphere}. Editing the radii and centers of the sphere-mesh offers a \emph{natural} way of editing the model, making it easy for both humans and algorithms to calibrate.
 %
