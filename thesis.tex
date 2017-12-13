@@ -13,6 +13,8 @@
 \usepackage{graphicx}
 \usepackage{changepage}
 \usepackage{hyperref}
+\usepackage{longtable}
+
 \hypersetup{
     colorlinks=true,
     filecolor=magenta,      
@@ -128,12 +130,18 @@ the course of my PhD:
 \begin{adjustwidth}{2.5em}{0pt}
 \textsc{Tagliasacchi A., Schroeder M., Tkach A., Bouaziz S., Botsch M., Pauly
 M.}: Robust articulated-icp for real-time hand tracking. \textit{Computer Graphics
-Forum(Proc. of the Symposium on Geometry Processing) (2015)}.
+Forum(Proc. of the Symposium on Geometry Processing). 2015}.
 
 \textsc{Tkach A., Pauly M., Tagliasacchi A.}: Sphere-meshes for real-time hand
-modeling and tracking. \textit{In ACM Trans. Graph. (Proc. SIGGRAPH Asia) (2016)}.
+modeling and tracking. \textit{In ACM Trans. Graph. (Proc. SIGGRAPH Asia). 2016}.
 
 \textsc{Tkach A., Tagliasacchi A., Remelli E., Pauly M., Fitzgibbon A.}: Online generative model personalization for hand tracking. \textit{ACM Transactions on Graphics (Proc. SIGGRAPH Asia). 2017}.
+\end{adjustwidth}
+
+The following paper, also published during my PhD, is not discussed in this thesis, since its contributions are contained within the later work.
+
+\begin{adjustwidth}{2.5em}{0pt}
+\textsc{Remelli E., Tkach A., Tagliasacchi A., Pauly M.}: Low-Dimensionality Calibration through Local Anisotropic Scaling for Robust Hand Model Personalization. \textit{Proceedings of the International Conference on Computer Vision. 2017}.
 \end{adjustwidth}
 
 In summary, the contributions of this dissertation are:
@@ -157,25 +165,14 @@ We introduced a principled way of integrating per-frame information into an onli
 The remainder of the thesis describes our steps in solving the problem of precise model-based hand tracking. The problem consists of two inter-dependent components: accurate tracking and accurate calibration.
 
 The Chapter \ref{ch:tracking} describes our initial hand tracking system that uses cylinders hand model. 
-
-Section \ref{sec:htrack-intro},
-Section \ref{sec:htrack-related}, ...
-
+In Sections \ref{sec:htrack-intro} and \ref{sec:htrack-related} we briefly overview state of the art in the area and place our work in a broader context.
 In Section  \ref{sec:htrack-overview} we address the challenges of robust hand tracking by proposing a regularized articulated ICP-like optimization that carefully balances data fitting with suitable priors. Our data fitting performs a joint 2D-3D optimization. The 3D alignment ensures that every point measured by the sensor is sufficiently close to the tracked model. Simultaneously, as we cannot create such constraints for occluded parts of the hand, we integrate a 2D registration that pushes the tracked model to lie within the sensor visual hull. In Section \ref{sec:optimization} we detail a carefully chosen set of priors, that regularize the solution to ensure the recovered pose is plausible. After discussing some implementation details in Section \ref{sec:implementation}, we analyze tracking performance by providing a comparison to several state-of-the art solutions in Section \ref{sec:eval}.
 
 The Chapter \ref{ch:sphere-meshes} addresses the choice of hand model representation that is suitable both for efficient tracking and for accurate calibration.
-
-Section \ref{sec:hmodel-intro},
-Section \ref{sec:related}, ...
-
+In Sections \ref{sec:hmodel-intro} and \ref{sec:related} we motivate the work, discuss related literature and our contributions.
 In Section \ref{sec:tracking} we detail how our novel formulation fits into previous generative real-time hand tracking technique, while still enabling efficient correspondence computation. Section \label{sec:modeling} explains how we build our template model from 3D scans acquired either through multi-view stereo or from depth maps. In Section \label{sec:results} we analyze the performance of our model for realtime tracking and provide comparisons to the state-of-the-art. 
 
-In Chapter \ref{ch:online} we reconsider state offline calibration approach, aiming to enhance user experience and push calibration quality further. 
-
-Section \ref{sec:honline-intro},
-Section \ref{sec:honline-related}, ...
-
-In Section \ref{sec:technical} we describe our joint calibration and tracking algorithm, which combines the Levenberg-style optimization of previous hand trackers with the uncertainty maintenance framework of Kalman filtering. In Section \ref{honline-eval}, to evaluate the technical validity of our approach we corroborate the formulation of our optimization on a synthetic 3D dataset; analyze its robustness through randomly perturbing the algorithm initialization; and attest how our method achieves state-of-the-art performance on publicly available datasets. In Section \ref{honline-implementation} introduce Kalman filter with its extensions and derive the equivalence of the proposed online calibration scheme with a recent tool from control theory – the Levenberg-Marquardt Kalman Filter.
+In Chapter \ref{ch:online} we reconsider state offline calibration approach, aiming to enhance user experience and push calibration quality further. In Sections \ref{sec:honline-intro} and \ref{sec:honline-related} we introduce the topic, explain the relevance of our work and position it with respect to other approaches in the area. In Section \ref{sec:technical} we describe our joint calibration and tracking algorithm, which combines the Levenberg-style optimization of previous hand trackers with the uncertainty maintenance framework of Kalman filtering. In Section \ref{honline-eval}, to evaluate the technical validity of our approach, we corroborate the formulation of our optimization on a synthetic 3D dataset; analyze its robustness through randomly perturbing the algorithm initialization; and attest how our method achieves state-of-the-art performance on publicly available datasets. In Section \ref{honline-implementation} introduce Kalman filter with its extensions and derive the equivalence of the proposed online calibration scheme with a recent tool from control theory – the Levenberg-Marquardt Kalman Filter.
 
 \section{Related Works}
 
@@ -209,91 +206,333 @@ propose to estimate hand pose hierarchically starting with the parameters at the
 
 \hspace{-0.4em}
 \textbf{\cite{li20153d}} 
-extend the work of \cite{keskin2012hand} and Tang by proposing another variant of RDF. Similarly to Tang 2014, the method performs structured coarse-to-fine search, starting with entire hand and splitting it recursively to joints. Differently from Tang 2014 the division hierarchy of hand parts may not be the same for different poses. The work achieves superior performance on the Tang et al. dataset.
+extend the work of \cite{keskin2012hand} and Tang by proposing another variant of RDF. Similarly to \cite{tang_cvpr14}, the method performs structured coarse-to-fine search, starting with entire hand and splitting it recursively to joints. Differently from  \cite{tang_cvpr14} the division hierarchy of hand parts may not be the same for different poses. The work achieves superior performance on the ICVL dataset.
 
 \hspace{-0.4em}
 \textbf{\cite{oberweger2015hands}} 
-compare several CNN architectures and find that the best performance is given by a deeper architecture that takes depth images at several scales as an input. The rationale is that using multiple scales helps capturing contextual information. The authors also propose to regress hand pose parameters in a lower dimensional subspace. After the initial estimation phase follows a refinement step. To refine the location estimate provided by the first stage they use a different network for each joint. Each network looks at several patches of different centered on the predicted joint location. The refinement step is repeated several times, each iteration is centered on a newly predicted location.
-
-\hspace{-0.4em}
-\textbf{\cite{oberweger2015feedback}} 
-Oberweger 2015 b design a convolutional neural network capable of directly synthesizing hand depth images with a purpose of replacing hand model for hybrid tracking. As a first step they use a first CNN to predict an initial pose from the depth input. The initial pose is used to synthesize a depth image. The synthesized image and the input image are feed to updater CNN. The updater learns to predict updates, which would improve the pose estimate, given the input and synthesized depth. This process is repeated for several iterations. The synthesizer network consists of several fully-connected layers followed by several unpooling and convolution layers. The updater network has a Siamese architecture. It consists of two identical paths of several convolutional layers. The final feature maps are concatenated and fed into a fully connected network.
+compare several CNN architectures and find that the best performance is given by a deeper architecture that takes depth images at several scales as an input. The rationale is that using multiple scales helps capturing contextual information. The authors also propose to regress hand pose parameters in a lower-dimensional subspace. After the initial estimation phase follows a refinement step. To enhance the location estimate provided by the first stage, they use a different network for each joint. The per-joint networks look at several patches of different sizes centered on the predicted joint location. The refinement step is repeated several times, each iteration is centered on a newly predicted location.
 
 \hspace{-0.4em}
 \textbf{\cite{ge2016robust}} 
-propose to project the input depth image onto orthogonal planes and use the resulting views to predict for 2D heat-maps of joint locations on each plane. These 2D heat-maps are then fused to produce final 3D hand pose. The fusion step is expected to correct the imprecisions using the predictions from complimentary viewpoints. They use a multi-resolution CNN on each view with architecture similar to Tompson et al. Given the 2D heat maps from three views, they find the hand pose parameters in a lower dimensional PCA subspace, such that the total heat map confidence at the joint locations on the three views is maximized. 
+propose to project the input depth image onto orthogonal planes and use the resulting views to predict 2D heat-maps of joint locations on each plane. These 2D heat-maps are then fused to produce the final 3D hand pose. The fusion step is expected to correct the imprecisions using the predictions from complimentary viewpoints. The authors use a multi-resolution CNN on each view with architecture similar to the one introduced by \cite{tompson2014real}. Given the 2D heat maps from the three views, they find the hand pose parameters in a lower dimensional PCA subspace, such that the total heat map confidence at the joint locations on the three views is maximized. 
 
 \hspace{-0.4em}
 \textbf{\cite{sinha2016deephand}} 
-exploit activation features from a hidden layer of a trained CNN. The assumption is that augmenting an output activation feature by a pool of its nearest neighbors brings more reliable information about hand pose. Drawing on the fact that CNNs are less robust for regression than for classification, Sinha et al. compute the activation features from classifying joint angles into bins with a CNN. Since the number quantized hand poses is very large, they propose two stage classification. On the first stage global hand rotation is classified. Next, for each rotation bin, five separate CNNs are trained to classify the poses of the fingers. In run time, given the activation features, a pool of their nearest neighbors is efficiently retrieved from a database. The final hand pose is computed from the assumption that a matrix of stacked neighboring activation features concatenated with stacked corresponding hand poses has a low rank. The unknown current hand pose is computed by matrix completion.
+exploit activation features from a hidden layer of a trained CNN. The assumption is that augmenting an output activation feature by a pool of its nearest neighbors brings more reliable information about the hand pose. Drawing on the fact that CNNs are less robust for regression than for classification, the authors compute the activation features from classifying joint angles into bins with a CNN (as opposed to regressing the exact values of the joint angles). Since the number quantized hand poses is very large, they propose a  two-stage classification. On the first stage global hand rotation is classified. Next, for each rotation bin, five separate CNNs are trained to classify the poses of the fingers. In run time, given the activation features, a pool of their nearest neighbors is efficiently retrieved from a database. The final hand pose is computed from the assumption that a matrix of stacked neighboring activation features concatenated with stacked corresponding hand poses has a low rank. The unknown current hand pose is computed by matrix completion.
 
 \hspace{-0.4em}
 \textbf{\cite{zhou2016model}} 
-integrate domain knowledge about hand motion into a CNN, by adding a non-parametric layer that encodes a forward kinematic mapping from joint angles to joint locations. Since forward kinetic function is differentiable, it and can be used in a neutral network for gradient-descent like optimization. This approach guarantees that the predicted hand pose is valid. The remaining network architecture is similar of Oberweger 2015.
+integrate domain knowledge about hand motion into a CNN. This is done by adding a non-parametric layer that encodes a forward kinematic mapping from joint angles to joint locations. Since forward kinetic function is differentiable, it and can be used in a neutral network for gradient-descent like optimization. This approach guarantees that the predicted hand pose is valid. The remaining network architecture is similar to the one introduced by \cite{oberweger2015hands}.
+
+\hspace{-0.4em}
+\textbf{\cite{guo2017region}} 
+propose to use a hierarchically-structured Region Ensemble Network (REN) for hand pose inference. This architecture is inspired by widely used approach of averaging predictions from different crops of original image. The averaging is beneficial since it decreases variance of images classification; however, it is computationally expensive. The authors propose a solution that retains the advantages while cutting the costs. They suggest to split the input image in several regions, predict the whole hand pose separately from each region and aggregate regional results afterwards. The REN architecture starts with six convolutional layers augmented with two residual connections. The region-wise prediction is implemented through dividing the output of the convolutional layers into a uniform grid. Each grid cell is fed into fully connected layers. Subsequently the outputs of all the cells are concatenated together and used to predict the final hand pose. This approach has state of the art performance on NUY and ICVL datasets.
 
 \hspace{-0.4em}
 \textbf{\cite{madadi2017end}} 
-propose using a hierarchical tree-like CNN mimicking the kinematic structure of human hand. The branches of the network are trained to become specialized in predicting the locations of subsets of hand joints (local pose), while the parameters closer to the tree root are shared for all hand parts. The network contains a loss term for each local pose. Additionally, the outputs of the tree branches are concatenated and feed to the fully-connected layer for estimating the final pose. The authors argue that this step allows to learn higher order dependencies among joints. The loss function also contains the terms that penalize predicting joint locations outside of data hull and encourage all joints from one finger to be co-planar.
+propose a hierarchical tree-like CNN that mimics the kinematic structure of human hand. The branches of the network are trained to become specialized in predicting the locations of subsets of hand joints (local pose), while the parameters closer to the tree root are shared for all hand parts. The network contains a loss term for each local pose. Additionally, the outputs of the tree branches are concatenated and feed to the fully-connected layer for estimating the final pose. The authors argue the later step allows to learn higher order dependencies among joints. The loss function also contains the terms that penalize predicting joint locations outside of data hull and encourage all joints from one finger to be co-planar.
 
 \hspace{-0.4em}
 \textbf{\cite{mueller2017real}} 
-present a method for predicting hand pose in egocentric view. There system is designed for hand-object interaction scenarios which and is robust to occlusions. They estimate hand pose in several steps. Firstly, to localize the hand, a heat map of the hand root position is regressed. Given the hand root, the image is normalized and feed into a joint regression network. This network outputs 2D heat maps and 3D positions of the joints. As the last step, a kinematically valid hand pose is computed by optimizing a sum of energies cost function, which includes the closeness to regressed joint locations, joint limits and temporal smoothness term. The networks were trained on synthetic data generated by accurately tracked hand motion with existing tracker and retargeting it to a virtual hand model.
+present a method for predicting hand pose in egocentric view. Their system is designed for hand-object interaction scenarios and is robust to occlusions. They estimate hand pose in several steps. Firstly, to localize the hand, a heat map of the hand root position is regressed. Given the hand root, the input image is normalized and feed into a joint regression network. This network outputs 2D heat maps and 3D positions of the joints. As the last step, a kinematically valid hand pose is computed by optimizing a sum of energies cost function. The cost function includes the closeness of optimized joint locations to the CNN-predicted joint locations, joint limits and temporal smoothness term. Both networks are trained on synthetic data generated by accurately tracked hand motion with existing tracker and retargeting it to a virtual hand model.
 
 \hspace{-0.4em}
 \textbf{\cite{oberweger2017deepprior++}} 
-extend their work from 2015 and carry out an extensive evaluation to show that it achieves better or similar performance with all recent methods on three main benchmarks of hand tracking. They introduce to following improvements: the training data is augmented online up to 10M samples by translation, rotation and scaling. The second enhancement is training a CNN that regresses hand root for accurate hand localization. The new pose network architecture is similar to ResNet: a convolution layer is followed by four residual modules followed by several fully connected layers with dropout.
-
-\hspace{-0.4em}
-\textbf{\cite{wan2017crossing}} 
-propose a framework for learning from unlabeled data in a semi-supervised manner. They learn a shared latent space where each point can be mapped both to a synthetic depth image and to the corresponding hand pose parameters. The hand pose is regressed by training a discriminator to predict a posterior of the latent pose given the input depth map. The depth map generator and discriminator are trained jointly in order to improve generalization. To avoid overfitting during posterior estimation they add several more loss terms that share first several convolutional layers with pose estimation.
+extend their previous work \cite{oberweger2015hands}. They carry out an extensive evaluation to show that the improved method achieves superior or comparable performance to all recent works on three main benchmarks of hand tracking (NUY, ICVL and MSRA datasets). The authors introduce to following improvements: firstly, the training data is augmented online up to 10M samples by translation, rotation and scaling. The second enhancement is training a CNN that regresses hand root for accurate hand localization. Finally, the new pose network architecture is similar to ResNet: a convolution layer is followed by four residual modules, that are in turn followed by several fully connected layers with dropout.
 
 \subsection{Generative Methods}
 
 \hspace{-0.4em}
 \textbf{\cite{oiko2011hand}} 
-present a generative tracking approach. Their algorithm minimizes the difference between the sensor data and the rendered capsules model. The optimization is performed using Particle Swarm Optimization. The method runs at 15 fps on GPU and does not include re-initialization component in case of tracking failure.
+present one of the first generative tracking approaches. Their algorithm minimizes the difference between the sensor data and the rendered capsules model. The optimization is performed using Particle Swarm Optimization. The method runs at 15 fps on GPU and does not include re-initialization component in case of tracking failure.
 
 \hspace{-0.4em}
 \textbf{\cite{melax2013dynamics}} 
-show compelling 60 fps realtime performance using gradient-based optimization. The optimization is expressed as a convex rigid body simulation, and numerous heuristics for re-initialization were employed to avoid tracking failures. Melax et al. introduce a convex polyhedral model and track it with rigid body dynamics solver. The rigid bodies from the model are constrained to come into contact with point cloud. The hand parts are attached together with constraints of larger strength. Thus, in contrast the majority of model based systems, this technique does not use Inverse Kinematics. As in ICP, each data point adds a constraint on the closest articulated component of the hand. The model is also constrained to stay within 3D hull of the point cloud by adding collision planes constraints on the boundaries of the convex hull.
+show compelling 60 fps realtime performance using gradient-based optimization. The optimization is expressed as a convex rigid body simulation, and numerous heuristics for re-initialization are employed to avoid tracking failures. The authors introduce a convex polyhedral model and track it with rigid body dynamics solver. The rigid bodies from the model are constrained to come into contact with point cloud. The hand parts are attached together with constraints of larger strength. Thus, in contrast with the majority of model-based systems, their technique does not use Inverse Kinematics. As in ICP, each data point adds a constraint on the \textit{closest} articulated component of the hand. The model is also constrained to stay within 3D hull of the point cloud by adding collision planes constraints on the boundaries of the convex hull.
 
 \hspace{-0.4em}
 \textbf{\cite{oikonomidis2014evolutionary}} 
-introduce a more advanced sampling strategy that improves tracking efficiency without compromising quality. They sample the space using quasi-random sequence that covers multi-dimensional spaces better than random. However, gradient-based optimization approaches converge faster and more accurately than PSO when close to the solution.
+extend their previous work \cite{oiko2011hand} by introducing a more advanced sampling strategy that improves tracking efficiency without compromising quality. They sample the hand-pose vectors using quasi-random sequence that covers multi-dimensional spaces better than random sampling. However, gradient-based optimization approaches converge faster and more accurately than PSO when close to the solution.
 
 \hspace{-0.4em}
 \textbf{\cite{qian2014realtime}} 
-modify PSO algorithm employed by Oikonomidis et al. by adding a gradient-based component to it. Each particle takes an additional ICP like gradient descent step in each PSO generation. This is intended to combine advantages and mitigate drawbacks of PSO and ICP. The authors demonstrate that their system has superior performance to Oikonomidis et. al. The presented system is hybrid, it uses a spheres model for ICP-PSO optimization and detects fingertips with flood fill for re-initialization.  Apart from closeness of the model to the data, the cost function also includes a term that constrains the model to lie within sensor visual hull and behind the data.
+modify PSO algorithm employed by \cite{oiko2011hand} by adding a gradient-based component to it. Each particle takes an additional ICP-like gradient descent step in each PSO generation. This is intended to combine advantages and mitigate drawbacks of PSO and ICP. The authors demonstrate that their system has superior performance to \cite{oiko2011hand}. The presented system is hybrid, it uses a spheres model for ICP-PSO optimization and detects fingertips with flood fill for re-initialization.  Apart from closeness of the model to the data, the cost function also includes a term that constrains the model to lie within sensor visual hull and behind the data.
 
 \hspace{-0.4em}
 \textbf{\cite{schroder2014real}} 
-formulate the optimization in a subspace of likely hand poses, rather than resorting to reinitialization for robustness. They capture a dataset of human hand movements with a Vicon motion tracking system as the ground truth for deriving natural hand synergies based on principal component analysis. While the lower number of optimization variables leads to efficient computations, tracking accuracy can be limited by the reduced pose complexity induced by the subspace. Schroder et al. use a cylinder hand model driven by Inverse Kinematics and employ ICP algorithm for aligning the model with the data.
+formulate the optimization in a subspace of likely hand poses, rather than resorting to reinitialization for robustness. They capture a dataset of human hand movements with a Vicon motion tracking system. The dataset is employed as the ground truth for deriving natural hand synergies based on principal component analysis. While the lower number of optimization variables leads to efficient computations, tracking accuracy can be limited by the reduced pose complexity induced by the subspace. The authors use a cylinder hand model driven by Inverse Kinematics and apply ICP algorithm for aligning the model with the data.
 
 \hspace{-0.4em}
 \textbf{\cite{fleishman2015icpik}} 
-present a system that uses capsules and model and ICP-IK algorithm for data-model alignment. The authors use RF classifier to label data pixels with hand parts. For robustness, the system generates several hypotheses of hand pose from the labeled data. In the final step, they apply ICP-IK algorithm to each skeleton hypothesis (with each finger being straight or bent). The closed point correspondences are only created between the same parts of the data and model. The authors claim that ICP-IK algorithm gives superior performance wrt PSO.
+present a system that uses capsules hand model and ICP-IK algorithm for data-model alignment. For initialization they train an RDF classifier to label data pixels with hand parts. To increase the robustness, the system generates several hypotheses of hand pose from the labeled data. In the final step, they apply ICP-IK algorithm to each skeleton hypothesis (with each finger being straight or bent). The closed point correspondences are only created between the same parts of the data and model. The authors show that ICP-IK algorithm gives superior performance with respect to their implementation of PSO.
 
 \hspace{-0.4em}
-\textbf{\cite{poier2015hybrid}} 
-regress joint locations using and RDF. The authors consider several top predictions for each joint along with their confidence score. The kinematic parameters of a 3D hand model are found by selecting a proposal for each joint location, such that the selected locations for all joints form an anatomically valid pose. They apply PSO for optimizing the corresponding cost function. For efficiency, the authors split the full PSO problem into subproblems solving for the pose of each finger independently. Differently from \cite{oiko2011hand} this approach does not require rendering the model, thus it runs on CPU.
+\textbf{\cite{oberweger2015feedback}} 
+design a convolutional neural network capable of directly synthesizing hand depth images. The motivation for this work is replacing hand model for hybrid tracking. As a first step they use a CNN to predict an initial pose from the depth input. The initial pose is used to synthesize a depth image. The synthesized image and the input image are feed to updater CNN. The updater learns to predict updates, which would improve the pose estimate, given the input and the synthesized depth. This process is repeated for several iterations. The synthesizer network consists of several fully-connected layers followed by several unpooling and convolution layers. The updater network has a Siamese architecture. It consists of two identical paths of several convolutional layers. The final feature maps are concatenated and fed into a fully connected network.
+
+\hspace{-0.4em}
+\textbf{\cite{poier2015hybrid}}
+initialize the proposed hybrid tracking system by regressing hand joint locations with an RDF. The authors consider several top predictions for each joint along with the confidence score. The kinematic parameters of a 3D hand model are determined by selecting a proposal for each joint location, such that the chosen locations for all joints form an anatomically valid pose. They apply PSO algorithm for optimizing the described cost function. For efficiency, the authors split the full PSO problem into sub-problems, solving for the pose of each finger independently. Differently from \cite{oiko2011hand}, this approach does not require rendering the model, thus it can run on CPU.
 
 \hspace{-0.4em}
 \textbf{\cite{sharp2015accurate}} 
-introduce a hybrid approach minimizes “golden energy” - the reconstruction error between a rendered 3D hand model and the observed depth image. The comparison can be done accurately since this is the first approach to use a detailed hand model instead of spheres/cylinders. The model is not differentiable; thus the authors use PSO for optimization. The RDF re-initializer runs in two stages, the first stage only deals with predicting quantized global hand rotation, the second stage refines the rotation and regresses the pose. The system is robust and works well at distance of several meters and moving camera scenarios.
+introduce a hybrid approach minimizes “golden energy” - the reconstruction error between a rendered 3D hand model and the observed depth image. The rendered image has a potential to match the observed image, since they use a detailed triangular mesh hand model instead of spheres/cylinders. The model is not differentiable; thus the authors apply PSO algorithm for optimization. For re-initialization they train a two-staged RDF regressor, the first stage only deals with predicting quantized global hand rotation, while the second stage refines the rotation and regresses the pose. The system is robust and works well at distance of several meters and in moving camera scenarios.
 
 \hspace{-0.4em}
 \textbf{\cite{sridhar2015fast}} 
-encode the model with a predefined mixture of gaussians. The data is also represented as a mixture of gaussians. This is done through decomposing the depth image into regions of homogeneous depth using quadtree and fitting a Gaussian to each region. The authors optimize the closeness of model to the data with gradient descent. Gaussian mixture representation allows, instead of computing closest point correspondences, to match data mixtures of gaussians with the model. For robustness the system generates multiple hypotheses of hand pose and chooses the best based on pose fitting energy. One of the hypothesis comes from an RDF hand parts classifier. For that hypothesis another type of energy is optimized: each gaussian in the data is given a part label which is most frequent among its pixels. The model is aligned with the data according to hand part labels.
+encode the model with a predefined mixture of gaussians. The data is also represented as a mixture of gaussians. This is done through decomposing the depth image into regions of homogeneous depth (using a quad-tree) and fitting a Gaussian to each region. The authors optimize the closeness of model to the data with gradient descent. Gaussian mixture representation allows, instead of computing closest point correspondences, to match data mixtures of gaussians with the model. For robustness the system generates multiple hypotheses of hand pose and chooses the best one based on pose fitting energy. One of the hypothesis comes from an RDF hand parts classifier. For that hypothesis a different type of energy is optimized: each gaussian in the data is given a part label which is most frequent among its pixels; the model is aligned with the data according to hand part labels.
 
 \hspace{-0.4em}
 \textbf{\cite{taylor2016concerto}} 
-present a continuous registration framework for tracking hands with triangular meshes. The control mesh is augmented with a continuous Loop subdivision surface that provides gradients for optimization. Similar to Tagliasacchi et al they define a differentiable cost function as a weighted sum of several terms, including data energy, joint limits, pose prior, temporal prior, etc. For the data energy term Taylor et al introduce an alternative to ICP algorithm. To compute closest point correspondences, they define a set of corresponding variables that are optimized jointly with model pose. Compared to ICP, the proposed algorithm requires less iterations and has a wider convergence basin. 
+present a continuous registration framework for tracking hands with triangular meshes. The control mesh is augmented with a continuous Loop subdivision surface that provides gradients for optimization. Similar to \cite{tagliasacchi2015robust} they define a differentiable cost function as a weighted sum of several terms, including data energy, joint limits, pose prior, temporal prior, etc. For the data energy term Taylor et al. introduce an alternative to ICP algorithm. To compute closest point correspondences, they define a set of corresponding variables that are optimized jointly with model pose. Compared to ICP, the proposed algorithm requires less iterations and has a wider convergence basin. 
+
+\hspace{-0.4em}
+\textbf{\cite{dibra2017refine}} propose the first CNN-based approach that does not require an annotated hand-motion dataset for training. As a first step, they train a network to predict an approximate hand pose from synthetic depth images. As a second step, they refine the network by training it on the unlabeled data. The loss function on unlabeled data is an L1 error norm between the input depth image and a synthesized depth image, given the current hand pose. To enable backpropagation of the error, the authors introduce a differentiable algorithm for “rendering” the hand model. The algorithm applies linear blend skinning to the point cloud that was uniformly sampled from the hand model. The authors also propose a differentiable method for rendering only the visible part of the model, which relies on defining a support circle for each model point. The presented system achieves performance comparable to state of the art methods without requiring costly annotation.
 
 \hspace{-0.4em}
 \textbf{\cite{taylor2017articulated}} 
-introduce a new hand model representation that avoids the compromise between efficiency and accuracy. This is achieved by constructing an articulated signed distance function that provides closed form distances to the model surface and is differentiable. In more details the hand model is driven by a linear blend skinned tetrahedral mesh that deforms a precomputed signed distance field (detailed hand surface) into a given pose. The closest point correspondences are computed in efficient and parallelizable manner, this allows the system to run at ultra-high frame rates of GPU (1000Hz). Due to its efficiency and robustness of this system becomes the first one to that accurately tracks complex interaction of two hands.
+introduce a new hand model representation that avoids the compromise between efficiency and accuracy. This is achieved by constructing an articulated signed distance function that provides closed-form distances to the model surface and is differentiable. In more details, the hand model is driven by a linear blend skinned tetrahedral mesh, that deforms a precomputed signed distance field (detailed hand surface) into a given pose. The closest point correspondences are computed in efficient and parallelizable manner. This allows the system to run at ultra-high frame rates of GPU (1000Hz). Due to its efficiency and robustness, this system becomes the first one to accurately track complex interaction of two hands.
 
+\hspace{-0.4em}
+\textbf{\cite{wan2017crossing}} 
+propose a framework for learning from unlabeled data in a semi-supervised manner. They learn a shared latent space where each point can be mapped both to a synthetic depth image and to the corresponding hand pose parameters. The hand pose is regressed by training a discriminator to predict a posterior of the latent pose given the input depth image. The depth image generator and discriminator are trained jointly in order to improve generalization. To avoid overfitting during posterior estimation the authors add  additional loss terms that share first several convolutional layers with pose estimation.
 
+\subsection{Comparison of Previous Works}
+The comparative summary of previous hand tracking works is presented in Table \ref{tab:methods_summary}, while the partial ranking of their accuracy on hand tracking benchmarks in shown in Table \ref{tab:methods_accuracy}. 
+
+\paragraph{Comparative Summary} Table \ref{tab:methods_summary} includes type of applied discriminative and/or generative algorithm, type of hand model, time complexity of the system (GPU/CPU and FPS) as well as domain knowledge (priors) incorporated in each method and the type of final output. The final output can be different from the model type for some dicsriminative approaches that perform a model-fitting step after regressing joint locations. 
+
+We used the following model types naming convention: 
+\vspace{-1em}
+\begin{itemize}
+\item \textit{inconsistent joints} - model type for discriminative methods that predict a set joint locations per-frame. Without an additional model fitting step, joint locations are not guaranteed to correspond to a skeleton with consistent length of phalanges. Thus, they can overfit to the input data and get higher performance score, but cannot be directly used to drive a hand model.
+\item \textit{skeleton} - model type for discriminative methods that regress joint angles. These methods have to use a skeleton with constant joint length to pose it with the predicted joint angles.
+\item \textit{<description> model} - (volumetric) model type for generative methods, where the \textit{<description>} names model components, such as capsules, spheres, triangular mesh, guassians, ect.
+\item \textit{point cloud} - model type for generative methods that train a CNN to regress an image/point-cloud of the hand.
+\end{itemize}
+
+{\scriptsize
+\begin{longtable}{| p{0.10\textwidth}| p{0.17\textwidth} | p {0.15\textwidth}| p {0.09\textwidth} | p {0.04\textwidth} | l |p {0.10\textwidth} |  p {0.08\textwidth} |} 
+\hline
+Paper & Discriminative Algorithm & Generative Algorithm & Model Type & GPU/ CPU & FPS & Priors & Final Output \\ 
+\hline 
+\cite{oiko2011hand} & none &	PSO & capsules model & GPU &	15 & fingers have similar abduction & surface\\
+\hline 
+\cite{keskin2012hand} & classification of pixels with RDF	 & none & inconsistent joints & CPU & 30 & none & joint locations \\ 
+\hline 
+\cite{melax2013dynamics} & none &	rigid body dynamics solver & convex polyhedral model& CPU & 60 & abduction limits, sensor visual hull & surface \\
+\hline 
+\cite{oikonomidis2014evolutionary} & none & PSO & capsules model	 & GPU & 30-60 & collisions & surface \\
+\hline 
+\cite{qian2014realtime} & fingers detection by flood fill & ICP-PSO & spheres model  & CPU	 & 25 & sensor visual hull & surface\\
+\hline 
+\cite{schroder2014real} & none &	ICP-IK & capsules model &	CPU & 25 &	pose subspace, joint limits & surface \\
+\hline 
+\cite{tompson2014real} & regression of heat-maps with CNN &	none  & skeleton & GPU & 30 & none & skeleton \\
+\hline 
+\cite{fleishman2015icpik} & classification of pixels with RDF &	ICP-IK &	capsules model & CPU & 25 & none & surface \\
+\hline 
+\cite{oberweger2015feedback} & regression of joint locations with CNN & generation of model surface with CNN & skeleton and point cloud & GPU & 400 & none & surface\\
+\hline 
+\cite{poier2015hybrid} & regression of joint locations with RDF & PSO & skeleton & CPU & 23 & joint limits & skeleton \\
+\hline 
+\cite{sharp2015accurate} & regression of joint angles with RDF & PSO & triangular mesh model & GPU & 30 & none & surface\\
+\hline 
+\cite{sridhar2015fast} & classification of pixels with RDF & gradient descent & gaussian mixture model&	CPU & 50 & collisions, motion smoothness, joint limits & surface\\
+\hline 
+\cite{sun2015cascaded} & cascaded regression of joint angles with RDF & none & skeleton & CPU & 300 &  none  & skeleton \\
+\hline 
+\cite{tang2015opening} & regression of joint locations with LRF	 & none &	inconsistent joints  & CPU	& 62.5	 & none &	 joint locations \\
+\hline 
+\cite{li20153d} & regression of joint locations with RDF & none	& inconsistent joints  & CPU & 55.5 &	none & joint locations\\
+\hline 
+\cite{oberweger2015hands} & regression of joint locations with CNN & none & skeleton & CPU & 500 & pose subspace & skeleton\\
+\hline 
+\cite{ge2016robust} & regression of heat-maps with CNN & none &	skeleton & GPU & 70 & pose subspace & skeleton\\
+\hline 
+\cite{sinha2016deephand} & classification of joint angles with CNN & none & skeleton & CPU & 32  & none & skeleton\\
+\hline 
+\cite{taylor2016concerto} & regression of joint angles with RDF & gradient descent & Loop subdivision surface model& CPU & > 30 & pose, limits, temporal, background, fingertips, collisions & surface \\
+\hline 
+\cite{zhou2016model} & regression of joint angles and locations with CNN & none & skeleton & GPU & 125 & joint limits & skeleton\\
+\hline 
+\cite{dibra2017refine} & regression of joint angles with CNN & generation of model surface with CNN & point cloud & GPU & 285 & collisions, joint limits & surface \\
+\hline 
+\cite{guo2017region} & regression of joint locations with CNN & none & inconsistent joints & GPU & 3000 & none & joint positions\\
+\hline 
+\cite{madadi2017end} & regression of joint locations with CNN & none & inconsistent joints & GPU &	50 & co-planar finger joints, sensor visual hull & joints positions\\
+\hline 
+\cite{mueller2017real} & regression of joint locations with CNN & none & skeleton & CPU & 50 & joint limits, temporal smoothness & skeleton\\
+\hline 
+\cite{oberweger2017deepprior++} & regression of joint locations with CNN & none & skeleton & GPU & 30 & pose subspace & skeleton \\
+\hline 
+\cite{taylor2017articulated} & regression of joint locations with RDF & gradient descent & articulated SDF model & GPU  & 1000  & pose prior, joint limits  & surface \\
+\hline 
+\cite{wan2017crossing} & regression joint angles with VAE & generation of model surface with GAN & skeleton and point cloud	& CPU	 & 90 & none &	surface \\
+\hline 
+\caption{Comparative summary of hand tracking methods} % needs to go inside longtable environment
+\label{tab:methods_summary}
+\end{longtable}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Partial Ranking of Accuracy} 
+Table \ref{tab:methods_accuracy} contains ranking of described methods on the following benchmarks:
+
+\vspace{-1em}
+\begin{itemize}
+\item \textit{NUY dataset} - introduced at \cite{tompson2014real};
+\item \textit{NYU dataset, Subject 1} - introduced at \cite{tompson2014real};
+\item \textit{ICVL dataset} - introduced at \cite{tang_cvpr14};
+\item \textit{MSRA dataset} - introduced at \cite{sun2015cascaded};
+\item \textit{Dexter dataset} - introduced at \cite{sridhar2013multicam};
+\item \textit{FinterPaint dataset} - introduced at \cite{sharp2015accurate};
+\item \textit{Handy dataset} - introduced at \cite{tkach2016sphere}
+\end{itemize}
+
+The ranking of the methods on the above benchmarks is obtained from the following sources:
+\vspace{-1em}
+\begin{enumerate} [label=\textbf{\Alph*}]
+\item \label{nyu:oberweger2017-tab1} - \cite{oberweger2017deepprior++}, Table 1;
+\item \label{nyu1:oberweger2017-fig5} -  \cite{oberweger2017deepprior++}, Figure 5;
+\item \label{icvl:oberweger2017-tab2} - \cite{oberweger2017deepprior++}, Table 2;
+\item \label{msra:oberweger2017-tab3} - \cite{oberweger2017deepprior++}, Table 3;
+\item \label{dexter:taylor2017-fig12} - \cite{taylor2017articulated}, Figure 12;
+\item \label{fingerpaint:taylor2016-fig10} - \cite{taylor2016concerto}, Figure 10;
+\item \label{handy:taylor2017-fig15} - \cite{taylor2017articulated}, Figure 15;
+\item \label{icvl:oberweger2017-fig6} - \cite{oberweger2017deepprior++}, Figure 6;
+\item \label{icvl:tang2015-fig6} - \cite{tang2015opening}, Figure 6;
+\item \label{dexter:sridhar2015-fig4} - \cite{sridhar2015fast}, Figure 4;
+\item \label{handy:tkach2017-fig9} - \cite{tkach2017online}, Figure 9;
+\item \label{nyu:dibra2017-fig8} - \cite{dibra2017refine}, Figure 8;
+\item \label{nyu:neverova2017-fig8} - \cite{neverova2017hand}, Figure 8;
+\end{enumerate}
+
+The reference to the source in the header of the column, for example  $\text{NUY }^{\ref{nyu:oberweger2017-tab1}}$, means that the ranking of the all methods shown in the column was inferred from the source \ref{nyu:oberweger2017-tab1}. The reference to the source in the table cell, for example	$1^{\ref{icvl:oberweger2017-fig6}}$,  means that the ranking of the corresponding method does not come from the source listed in the column header, but was inferred from the source \ref{icvl:oberweger2017-fig6}. The interval of the ranks instead of a single number, fir example [10 - 11], refers to the fact that the exact rank is unclear and is somewhere in the interval.
+
+{\scriptsize
+\begin{longtable}{| l | l | l | l | l | l | l | l |} 
+\hline
+ & & & & & & & \\[-1em]
+Paper & $\text{NUY }^{\ref{nyu:oberweger2017-tab1}}$ &
+$\text{NUY Subject 1 }^{\ref{nyu1:oberweger2017-fig5}}$ & 
+$\text{ICVL }^{\ref{icvl:oberweger2017-tab2}}$ & 
+$\text{MSRA }^{\ref{msra:oberweger2017-tab3}}$ & 
+$\text{Dexter }^{\ref{dexter:taylor2017-fig12}}$ & 
+$\text{Finger Paint }^{\ref{fingerpaint:taylor2016-fig10}}$ & 
+$\text{Handy }^{\ref{handy:taylor2017-fig15}}$\\
+\hline
+%
+\cite{oiko2011hand} &  &	&	&	&	&	& \\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{keskin2012hand} 	& & &	 $11^{\ref{icvl:tang2015-fig6}}$ & &	&	&\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{melax2013dynamics} &	&	& $11^{\ref{icvl:tang2015-fig6}}$ &	&	&	& \\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{xu2013efficient} & 3 &	&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{oikonomidis2014evolutionary} & &	&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{qian2014realtime} & &	&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{schroder2014real} & &	&	&	&	&	&	 \\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{tang_cvpr14} & &	&	10&	&	$5^{\ref{dexter:sridhar2015-fig4}}$ &	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{tompson2014real} & 11&	6&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{fleishman2015icpik} & &	&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{li20153d} & &	&	&	&	&	&	 \\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{oberweger2015hands} & 10&	&	8&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{oberweger2015feedback} & 7&	3&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{poier2015hybrid} & &	&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{sharp2015accurate} & &	&	&	&	&	2&	5\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{sridhar2015fast} & &	&	&	&	4&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{sun2015cascaded} & &	&	6&	4&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{tagliasacchi2015robust} &&	4&	&	&	2&	&	4 \\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{tang2015opening} & &	5&	$1^{\ref{icvl:oberweger2017-fig6}}$ &	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{ge2016robust} & &	&	&	3&	&	&	 \\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{sinha2016deephand} & $[10-11]^{\ref{nyu:neverova2017-fig8} }$ &	&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{taylor2016concerto} & &	2&	&	&	1&	1&	3 \\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{tkach2016sphere} & &	&	&	&	&	&	1\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{wan2016hand} & 5&	&	4&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{zhou2016model} &9&	&	9&	&	&	&	 \\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{fourure2017multi} & 8&	&	5&	&	&	&	 \\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{dibra2017refine} & $[3-6]^{\ref{nyu:dibra2017-fig8}}$ &	&	$[4-7]^{\ref{nyu:dibra2017-fig8}}$ &	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{guo2017region} & 2&	&	$3^{\ref{icvl:oberweger2017-fig6}}$ &	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{madadi2017end} & 6&	&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{mueller2017real} & &	&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{neverova2017hand} & 4&	&	&	&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{oberweger2017deepprior++} & 1&	1&	$2^{\ref{icvl:oberweger2017-fig6}}$ &	1&	&	&	\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{taylor2017articulated} & &	&	&	&	3&	&	2\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{tkach2017online} & &	&	&	&	&	&	$1^{\ref{handy:tkach2017-fig9}}$\\
+\hline & & & & & & & \\[-1.2em]
+%
+\cite{wan2017crossing} & &	&	7&	2&	&	&	\\
+\hline
+
+\caption{Comparative summary of hand tracking methods} % needs to go inside longtable environment
+\label{tab:methods_accuracy}
+\end{longtable}
+}
 
 
 \chapter{Robust Articulated-ICP for Real-Time Hand Tracking} \label{ch:tracking}
@@ -301,37 +540,56 @@ introduce a new hand model representation that avoids the compromise between eff
 \input{htrack/sec/abstract}
 \input{htrack/sec/intro}
 \input{htrack/sec/related}
-%\input{htrack/sec/overview}
-%\input{htrack/sec/technical}
-%\input{htrack/sec/technical2}
-%\input{htrack/sec/eval}
-%\input{htrack/sec/conclusions}
-%\input{htrack/sec/appendix}
-%\input{htrack/sec/ack}
-%
-%\chapter{Sphere-Meshes for Real-Time Hand Modeling and Tracking} \label{ch:sphere-meshes}
-%\input{hmodel/fig/teaser/item.tex}
-%\input{hmodel/sec/abstract}
-%\input{hmodel/sec/intro.tex}
-%\input{hmodel/sec/related.tex}
-%\input{hmodel/sec/overview.tex} 
-%\input{hmodel/sec/corresp.tex}
-%\input{hmodel/sec/fitting.tex}
-%\input{hmodel/sec/results.tex}
-%\input{hmodel/sec/discussion.tex}
-%\input{hmodel/sec/conclusion.tex}
-%\input{hmodel/sec/acks.tex}
-%
-%\chapter{Online Generative Model Personalization for Hand Tracking} \label{ch:online}
-%\input{honline/fig/teaser/teaser}
-%\input{honline/sec/0_abstract}
-%\input{honline/sec/1_introduction}
-%\input{honline/sec/2_related}
-%\input{honline/sec/3_technical}
-%\input{honline/sec/4_evaluation}
-%\input{honline/sec/5_conclusions}
-%%\input{honline/sec/6_acks}
-%\input{honline/sec/appendix}
+\input{htrack/sec/overview}
+\input{htrack/sec/technical}
+\input{htrack/sec/technical2}
+\input{htrack/sec/eval}
+\input{htrack/sec/conclusions}
+\input{htrack/sec/appendix}
+\input{htrack/sec/ack}
+
+\chapter{Sphere-Meshes for Real-Time Hand Modeling and Tracking} \label{ch:sphere-meshes}
+\input{hmodel/fig/teaser/item.tex}
+\input{hmodel/sec/abstract}
+\input{hmodel/sec/intro.tex}
+\input{hmodel/sec/related.tex}
+\input{hmodel/sec/overview.tex} 
+\input{hmodel/sec/corresp.tex}
+\input{hmodel/sec/fitting.tex}
+\input{hmodel/sec/results.tex}
+\input{hmodel/sec/discussion.tex}
+\input{hmodel/sec/conclusion.tex}
+\input{hmodel/sec/acks.tex}
+
+\chapter{Online Generative Model Personalization for Hand Tracking} \label{ch:online}
+\input{honline/fig/teaser/teaser}
+\input{honline/sec/0_abstract}
+\input{honline/sec/1_introduction}
+\input{honline/sec/2_related}
+\input{honline/sec/3_technical}
+\input{honline/sec/4_evaluation}
+\input{honline/sec/5_conclusions}
+%\input{honline/sec/6_acks}
+\input{honline/sec/appendix}
+
+\chapter{Conclusion}
+
+\section{Summary}
+
+In Chapter \ref{ch:tracking} have presented a new model-based approach to realtime hand tracking using a single low-cost depth camera. This simple acquisition setup maximizes ease of deployment, but poses significant challenges for robust tracking. 
+Our analysis revealed that a major source of error when tracking articulated hands are erroneous correspondences between the hand model and the acquired data, mainly caused by outliers, holes, or data popping in and out during acquisition. 
+We demonstrate that these problems can be resolved by our new formulation of correspondence search. In combination with suitable 2D/3D registration energies and data-driven priors, this leads to a robust and efficient hand tracking algorithm that outperforms existing model- and appearance-based solutions. In our experiments we show that our system runs seamlessly for sensors capturing data at 60 Hz. 
+
+In Chapter \ref{ch:sphere-meshes} we have introduced the use of sphere-meshes as a novel geometric representation for articulated tracking. We have demonstrated how this representation yields excellent results for real-time registration of articulated geometry, and presented a calibration algorithm to estimate a per-user tracking template. We have validated our results by demonstrating qualitative as well as quantitative improvements over the state-of-the-art. Our calibration optimization is related to the works of \cite{taylor2014user},  \cite{khamis15learning} and  \cite{joseph2016fits}, with a fundamental difference: the innate simplicity of sphere-meshes substantially simplifies the algorithmic complexity of calibration and tracking algorithms. This considered, we believe that with the use of compute shaders, articulated tracking on the GPU can become as effortless and efficient as simple mesh rasterization. 
+Our sphere-mesh models are a first approximations to the implicit functions lying at the core of the recently proposed geometric skinning techniques \cite{vaillant2013implicit},  \cite{vaillant2014robust}. Therefore, we believe the calibration of sphere-meshes to be the first step towards photorealistic real-time hand modeling and tracking.
+
+In Chapter \ref{ch:online} we have presented the first accurate online hand calibration system. 
+From an application point of view, our approach significantly improves on the usability of real-time hand tracking, as it requires neither controlled calibration scans nor offline processing prior to tracking. This allows easy deployment in consumer-level applications. From a technical point of view, we introduce a principled approach to online integration of shape information of user-specific hand geometry. By leveraging uncertainty estimates derived from the optimization objective function, we automatically determine how informative each input frame is for improving the estimates of the different unknown model parameters. Our approach is general and can be applied to different types of calibration, e.g., for full body tracking. More broadly, we envisage applications to other difficult types of model estimation problems, where unreliable data needs to be accumulated and integrated into a consistent representation.
+
+By fully disclosing our source code and data we ensure that our method and results are reproducible, as well as facilitating future research and product development. 
+
+\section {Future Work}
+
 
 \bibliographystyle{apalike}
 \bibliography{thesis}
