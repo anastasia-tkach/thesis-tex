@@ -32,16 +32,16 @@
 
 \begin{document}
 \frontmatter
-%\input{head/titlepage.tex}
+\input{head/titlepage.tex}
 %\include{head/dedication}
 %\input{head/acknowledgements}
 %\include{head/preface}
 \include{abstract}
 
-%\tableofcontents
-%\addcontentsline{toc}{chapter}{List of figures} % adds an entry to the table of contents
+\tableofcontents
+%\addcontentsline{toc}{chapter}{List of figures} 
 %\listoffigures
-%\addcontentsline{toc}{chapter}{List of tables} % adds an entry to the table of contents
+%\addcontentsline{toc}{chapter}{List of tables}
 %\listoftables
 
 \setlength{\parskip}{1em}
@@ -50,49 +50,47 @@
 
 \input{introduction.tex}
 
-%\chapter{Robust Articulated-ICP for Real-Time Hand Tracking} \label{ch:tracking}
-%\input{htrack/sec/teaser.tex}
-%\input{htrack/sec/abstract}
-%\input{htrack/sec/intro}
-%\input{htrack/sec/related}
-%\input{htrack/sec/overview}
-%\input{htrack/sec/technical}
-%\input{htrack/sec/technical2}
-%\input{htrack/sec/eval}
-%\input{htrack/sec/conclusions}
-%\input{htrack/sec/appendix}
-%\input{htrack/sec/ack}
-%
-%\chapter{Sphere-Meshes for Real-Time Hand Modeling and Tracking} \label{ch:sphere-meshes}
-%\input{hmodel/fig/teaser/item.tex}
-%\input{hmodel/sec/abstract}
-%\input{hmodel/sec/intro.tex}
-%\input{hmodel/sec/related.tex}
-%\input{hmodel/sec/overview.tex} 
-%\input{hmodel/sec/corresp.tex}
-%\input{hmodel/sec/fitting.tex}
-%\input{hmodel/sec/results.tex}
-%\input{hmodel/sec/discussion.tex}
-%\input{hmodel/sec/conclusion.tex}
-%\input{hmodel/sec/acks.tex}
-%
-%\chapter{Online Generative Model Personalization for Hand Tracking} \label{ch:online}
-%\input{honline/fig/teaser/teaser}
-%\input{honline/sec/0_abstract}
-%\input{honline/sec/1_introduction}
-%\input{honline/sec/2_related}
-%\input{honline/sec/3_technical}
-%\input{honline/sec/4_evaluation}
-%\input{honline/sec/appendix}
-%\input{honline/sec/5_conclusions}
-%\input{honline/sec/6_acks}
+\chapter{Robust Articulated-ICP for Real-Time Hand Tracking} \label{ch:tracking}
+\input{htrack/sec/teaser.tex}
+\input{htrack/sec/abstract}
+\input{htrack/sec/intro}
+\input{htrack/sec/related}
+\input{htrack/sec/overview}
+\input{htrack/sec/technical}
+\input{htrack/sec/technical2}
+\input{htrack/sec/eval}
+\input{htrack/sec/conclusions}
+\input{htrack/sec/appendix}
+\input{htrack/sec/ack}
+
+\chapter{Sphere-Meshes for Real-Time Hand Modeling and Tracking} \label{ch:sphere-meshes}
+\input{hmodel/fig/teaser/item.tex}
+\input{hmodel/sec/abstract}
+\input{hmodel/sec/intro.tex}
+\input{hmodel/sec/related.tex}
+\input{hmodel/sec/overview.tex} 
+\input{hmodel/sec/corresp.tex}
+\input{hmodel/sec/fitting.tex}
+\input{hmodel/sec/results.tex}
+\input{hmodel/sec/discussion.tex}
+\input{hmodel/sec/conclusion.tex}
+\input{hmodel/sec/acks.tex}
+
+\chapter{Online Generative Model Personalization for Hand Tracking} \label{ch:online}
+\input{honline/fig/teaser/teaser}
+\input{honline/sec/0_abstract}
+\input{honline/sec/1_introduction}
+\input{honline/sec/2_related}
+\input{honline/sec/3_technical}
+\input{honline/sec/4_evaluation}
+\input{honline/sec/appendix}
+\input{honline/sec/5_conclusions}
+\input{honline/sec/6_acks}
 
 \input{conclusion.tex}
 
 \bibliographystyle{apalike}
 \bibliography{thesis}
-
-%\include{tail/biblio}
-%\include{tail/cv}
+\include{tail/cv}
 
 \end{document}

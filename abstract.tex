@@ -1,25 +1,24 @@
 %\cleardoublepage
-\vspace{-5em}
+
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract (English/Français)}
 
 In our everyday life we interact with the surrounding environment using our hands. A main focus of recent research has been to bring such interaction to virtual objects, such as the ones projected in virtual reality devices, or super-imposed as holograms in AR/MR headsets. For these applications, it is desirable for the tracking technology to be robust, accurate, and have a seamless deployment. In this thesis we address these requirements by proposing an efficient and robust hand tracking algorithm, introducing a hand model representation that strikes a balance between accuracy and performance, and presenting the online algorithm for precise hand calibration.
 
-\vspace{-0.5em}
+
 In the first part we present a robust method for capturing articulated hand motions in realtime using a single depth camera. Our system is based on a realtime registration process that accurately reconstructs hand poses by fitting a 3D articulated hand model to depth images. We register the hand model using depth, silhouette, and temporal information. To effectively map low-quality depth maps to realistic hand poses, we regularize the registration with kinematic and temporal priors, as well as a data-driven prior built from a database of realistic hand poses. We present a principled way of integrating such priors into our registration optimization to enable robust tracking without severely restricting the freedom of motion. 
-%
+
 In the second part we propose the use of sphere-meshes as a novel geometric representation for real-time generative hand tracking.  We derive an optimization to non-rigidly deform a template model to fit the user data in a number of poses. This optimization jointly captures the user's static and dynamic hand geometry, thus facilitating high-precision registration. At the same time, the limited number of primitives in the tracking template allows us to retain excellent computational performance. We confirm this by embedding our models in an open source real-time registration algorithm to obtain a tracker steadily running at 60Hz.
-%
-In the third part we introduce an online hand calibration method that learns the geometry as the user performs live in front of the camera, thus enabling seamless virtual interaction at the consumer level. The key novelty in our approach is an online optimization algorithm that jointly estimates pose and shape in each frame, and determines the uncertainty in such estimates. This knowledge allows the algorithm to integrate per-frame estimates over time, and build a personalized geometric model of the captured user. We provide a detailed evaluation that shows how our approach achieves accurate motion tracking for real-time applications, while significantly simplifying the workflow of accurate hand performance capture.
 
-%\vspace{-0.5em}
-\textbf{Keywords:} non-rigid registration, hand tracking, hand calibration, sphere-meshes.
+In the third part we introduce an online hand calibration method that learns the geometry as the user performs live in front of the camera, thus enabling seamless virtual interaction at the consumer level. The key novelty in our approach is an online optimization algorithm that jointly estimates pose and shape in each frame, and determines the uncertainty in such estimates. This knowledge allows the algorithm to integrate per-frame estimates over time, and build a personalized geometric model of the captured user. Our approach can easily be integrated in state-of-the-art continuous generative motion tracking software. We provide a detailed evaluation that shows how our approach achieves accurate motion tracking for real-time applications, while significantly simplifying the workflow of accurate hand performance capture.
 
-%% French abstract
-%\begin{otherlanguage}{french}
-%\cleardoublepage
-%\chapter*{Résumé}
-%%\markboth{Résumé}{Résumé}
-%\lipsum[1-2]
-%\end{otherlanguage}
+\textbf{Keywords:} non-rigid registration, realtime hand tracking, realtime hand calibration, sphere-meshes, markerless motion capture
+
+% French abstract
+\begin{otherlanguage}{french}
+\cleardoublepage
+\chapter*{Résumé}
+\markboth{Résumé}{Résumé}
+\lipsum[1-2]
+\end{otherlanguage}
 
