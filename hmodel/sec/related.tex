@@ -1,39 +1,31 @@
-% !TEX root = ../hmodel.tex
-
-% USE THIS? (good hand model key to high-quality in-hand scanning)
-% http://files.is.tue.mpg.de/dtzionas/In-Hand-Scanning/
-
-% I IGNORED THIS ONE, NOT ENOUGH DETAILS:
-% Straka et al. \cite{straka2012simultaneous} also fit the template mesh with attached skeleton to 3D data. The model is deformed to explain the data while keeping the vertices attached to their corresponding bones. It is on clear whether the approach whether be able to handle a hand motion sequence, since the results are demonstrated on a full body model.
+% !TEX root = ../../thesis.tex
 
 \input{hmodel/fig/handmodels/item.tex}
 \section{Related Work}
 \label{sec:related}
 
-% \paragraph{Overkill} %< Instrumented + Multi-Camera
-The simplest way of tracking a hand in motion is by instrumentation. We can place retro-reflective markers on the hand, wear a data glove with embedded abduction and flexion sensors~\cite{dipietro2008survey} or a colored glove~\cite{wang2009colorglove}. While effective, active instrumentation can be cumbersome as it requires lengthy preparation and/or calibration.
-%\AnastasiaComment{We do we talk about these systems, they are from a different area and are solving completely different problems. If someone wrote related literature this way before, it does not mean that we have to do the same.}
-Systems solely relying on computer vision (i.e.\ color cameras) are highly desirable, but pose estimation  relying on color information is extremely challenging~\cite{erol2007vision}: the complexity of hand motion, the large number of self-occlusions and rapidly changing backgrounds all contribute to their limited success. Multiple-camera acquisition can mitigate these challenges. In \cite{ballan2013salient}, the authors demonstrate high-quality tracking of two-hand and hand-object interactions. 
-% REFUSE TO GIVE A CITE TO THIS GUY...
-% , while \cite{wang2013physics} additionally considers the physics of motion interaction.
-However, due to the substantial increase in data bandwidth, these algorithms do not scale to real-time performance.\todo{ A notable exception is the 10Hz system of  \cite{sridhar2013multicam}, but this acquisition setup also considers data from a depth sensor.} While providing accurate results, multi-camera rigs are  impractical for consumer-level applications. Therefore, we limit our attention to techniques relying on data from a \emph{single} depth camera; with a slight abuse of wording \todo{we refer to these systems as \emph{monocular} acquisition setups.}
-% IGNORED THIS: place a camera directly on the user's wrist~\cite{kim2012digits}.
-
-\subsection*{Hybrid = discriminative + generative}
-% 
-Pose estimation techniques can be grouped into \emph{discriminative} and \emph{generative} techniques, also known respectively as \emph{appearance-based} and \emph{model-based} approaches.
-% Generative
-Generative approaches fit a template through a temporal sequence of images~\cite{oiko2011hand,melax2013dynamics,schroder2014real,tagliasacchi2015robust}. Given an accurate template of the user being tracked, these methods can resolve highly accurate motion. As the optimization is initialized from the previous frame, tracking loss can occur, although simple geometric reinitialization heuristics can be employed to overcome this issue~\cite{melax2013dynamics,qian2014realtime}. 
-% Discriminative
-Conversely, discriminative methods estimate the pose by extracting features from each image independently by learning from a large dataset of annotated exemplars~\cite{keskin2012hand,tang2013real,tejani2014latent,sun2015cascaded}.
-While discriminative methods avoid drift, they lack the accuracy of generative methods, and joint estimates often violate kinematic constraints, like consistent finger lengths and joint limits.
-% Hybrid-1
-State-of-the-art tracking performance is achieved by \emph{hybrid} algorithms that combine the two approaches. These algorithms estimate (potentially) multiple per-frame coarse poses leveraging discriminative frameworks, and then refine the alignment with a generative fitting~\cite{tompson2014real,qian2014realtime,sharp2015accurate}.
-% Hybrid-2
-Another class of hybrid algorithms introduce correspondences through a labeling obtained through a per-pixel forest  classifier~\cite{sridhar2015fast,fleishman2015icpik}.
-% 
-% What we (do not) cover?
-Our literature review focuses on generative approaches, while we refer the reader to the very recent work by Taylor and colleagues \cite{taylor2016joint} for a review of recent discriminative methods. Commercial systems for hand tracking like the \emph{NimbleVR}, the \emph{LeapMotion Orion} and the \emph{Intel Perceptual SDK} also exist, but it is difficult to consider them as the underlying technology is undisclosed.
+%% \paragraph{Overkill} %< Instrumented + Multi-Camera
+%The simplest way of tracking a hand in motion is by instrumentation. We can place retro-reflective markers on the hand, wear a data glove with embedded abduction and flexion sensors~\cite{dipietro2008survey} or a colored glove~\cite{wang2009colorglove}. While effective, active instrumentation can be cumbersome as it requires lengthy preparation and/or calibration.
+%
+%Systems solely relying on computer vision (i.e.\ color cameras) are highly desirable, but pose estimation  relying on color information is extremely challenging~\cite{erol2007vision}: the complexity of hand motion, the large number of self-occlusions and rapidly changing backgrounds all contribute to their limited success. Multiple-camera acquisition can mitigate these challenges. In \cite{ballan2013salient}, the authors demonstrate high-quality tracking of two-hand and hand-object interactions. 
+%
+%However, due to the substantial increase in data bandwidth, these algorithms do not scale to real-time performance.\todo{ A notable exception is the 10Hz system of  \cite{sridhar2013multicam}, but this acquisition setup also considers data from a depth sensor.} While providing accurate results, multi-camera rigs are  impractical for consumer-level applications. Therefore, we limit our attention to techniques relying on data from a \emph{single} depth camera; with a slight abuse of wording \todo{we refer to these systems as \emph{monocular} acquisition setups.}
+%
+%\subsection*{Hybrid = discriminative + generative}
+%% 
+%Pose estimation techniques can be grouped into \emph{discriminative} and \emph{generative} techniques, also known respectively as \emph{appearance-based} and \emph{model-based} approaches.
+%% Generative
+%Generative approaches fit a template through a temporal sequence of images~\cite{oiko2011hand,melax2013dynamics,schroder2014real,tagliasacchi2015robust}. Given an accurate template of the user being tracked, these methods can resolve highly accurate motion. As the optimization is initialized from the previous frame, tracking loss can occur, although simple geometric reinitialization heuristics can be employed to overcome this issue~\cite{melax2013dynamics,qian2014realtime}. 
+%% Discriminative
+%Conversely, discriminative methods estimate the pose by extracting features from each image independently by learning from a large dataset of annotated exemplars~\cite{keskin2012hand,tang2013real,tejani2014latent,sun2015cascaded}.
+%While discriminative methods avoid drift, they lack the accuracy of generative methods, and joint estimates often violate kinematic constraints, like consistent finger lengths and joint limits.
+%% Hybrid-1
+%State-of-the-art tracking performance is achieved by \emph{hybrid} algorithms that combine the two approaches. These algorithms estimate (potentially) multiple per-frame coarse poses leveraging discriminative frameworks, and then refine the alignment with a generative fitting~\cite{tompson2014real,qian2014realtime,sharp2015accurate}.
+%% Hybrid-2
+%Another class of hybrid algorithms introduce correspondences through a labeling obtained through a per-pixel forest  classifier~\cite{sridhar2015fast,fleishman2015icpik}.
+%% 
+%% What we (do not) cover?
+%Our literature review focuses on generative approaches, while we refer the reader to the very recent work by Taylor and colleagues \cite{taylor2016joint} for a review of recent discriminative methods. Commercial systems for hand tracking like the \emph{NimbleVR}, the \emph{LeapMotion Orion} and the \emph{Intel Perceptual SDK} also exist, but it is difficult to consider them as the underlying technology is undisclosed.
 
 \subsection*{Generative tracking models}
 The capsule model originally proposed by~\cite{rehg1994tracking} has been adopted by a number of researchers \cite{oiko2011hand,schroder2014real,fleishman2015icpik,tagliasacchi2015robust}; see \Figure{handmodels}(a). Such a coarse representation is suitable to the task given the low signal-to-noise ratio in modern depth sensors, while its simplicity enables the efficient closed-form computation of alignment queries. Cylinders can also be approximated by a small set of disconnected spheres~\cite{qian2014realtime}, but this rough approximation is only sufficient for coarse-scale tracking. An alternative to cylinders and spheres is the use of isotropic~\cite{sridhar2013multicam,sridhar2015fast}, as well as anisotropic Gaussians~\cite{sridhar2014anisotropic}; see \Figure{handmodels}(b).

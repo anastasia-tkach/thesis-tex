@@ -150,7 +150,7 @@ We linearize the point cloud alignment energy as
 %
 where $\mathbf{y} = \proj_{\handmodel}(\pointHtrack,\parsHtrack)$ is the closest point from $\pointHtrack$ on the hand model $\handmodel$ with hand pose $\parsHtrack$. $\mathbf{n}$ is the surface normal at $\mathbf{y}$, and $\mathbf{d} = (\mathbf{y} - \pointHtrack)$.
 %\MB{Confusing to see a normal vector here. Point-point energies don't employ normals, and their derivatives should not use normals, too. This is a point-plane distance, which you wrote not to use.}
- As we minimize the $\ell_2$ norm we use a weight $\omega_{\text{re}}=1/\|\mathbf{d}\|_2$ in an iteratively re-weighted least squares fashion~\cite{bouaziz_sgp13}.
+ As we minimize the $\ell_2$ norm we use a weight $\omega_{\text{re}}=1/\|\mathbf{d}\|_2$ in an iteratively re-weighted least squares fashion.
 %\MB{should be $\omega_{\mathrm{re}}$ for the font-addicts.}
 %\MB{Rephrase to avoid confusion with the l1 stuff. If you had a residual vector of point-point differences $r=(r_1, \dots, r_n) \in R^{3n}$, with each $r_i \in R^3$, then you denote the minimization of $\|r\|_1$ as an l1 minimization. However, this is not what you are doing since you use the 2-norm for each point, and an l1-like summation over all points. }
 % \begin{equation}

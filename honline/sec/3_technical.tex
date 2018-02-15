@@ -1,4 +1,4 @@
-%!TEX root = ../paper.tex
+%!TEX root = ../../thesis.tex
 \input{honline/fig/intra/item}
 
 \section{Online model calibration}
@@ -255,7 +255,7 @@ The initializations $\beta_n^0$ are derived from the per-frame optimization of \
 
 \subsection{Shape regularizers}
 \label{sec:shapeprior}
-Hand shape variation can be explained in a low dimensional space whose fundamental degrees of freedom include variation like uniform scale, palm width, and finger thickness \cite{khamis15learning}. In our paper we follow the ideas presented in~\cite{edoardo}, and build a latent-space encoding hand shape variability through \emph{anisotropic scaling}. By setting $\omega_\text{shape-space}{\ll}1$,
+Hand shape variation can be explained in a low dimensional space whose fundamental degrees of freedom include variation like uniform scale, palm width, and finger thickness \cite{khamis15learning}. We follow the ideas presented in~\cite{edoardo}, and build a latent-space encoding hand shape variability through \emph{anisotropic scaling}. By setting $\omega_\text{shape-space}{\ll}1$,
 % \AN{actually, $\omega = 5 - 10$, it still makes very week influence}.
 this prior acts as a soft regularizer and does not prevent the algorithm from computing a tight fit:
 % to the observed user:

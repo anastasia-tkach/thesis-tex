@@ -1,18 +1,14 @@
-% !TEX root = ../htrack.tex
+% !TEX root = ../../thesis.tex
+
 \input{htrack/fig/overview.tex}
 \section{Related Work}
 \label{sec:htrack-related}
 
 
-
-We discuss the most relevant papers on human hand tracking related to our approach. For a more general overview of human motion analysis using depth sensors we refer to the recent survey of~\cite{ye_13}.
-
-Tracking algorithms can be roughly divided into two main classes, \emph{appearance-based} and \emph{model-based} methods~\cite{erol2007vision}.
-Appearance-based approaches train a classifier or a regressor to map image features to hand poses. Consequently, while these systems can robustly determine a hand pose from a single frame, appearance-based methods are optimal in scenarios where only a rough pose estimate is desired~\cite{wang_uist11} or highly discriminative features can be extracted~\cite{wang2009colorglove}. Conversely, \emph{model-based} techniques approach tracking as an alignment optimization, where the objective function typically measures the discrepancy between the data synthesized from the model and the one observed by the sensor. While model-based methods can suffer from loss-of-tracking~\cite{wei_siga12}, regularizing priors can be employed to infer high-quality tracking even when sensor data is incomplete or corrupted~\cite{melax2013dynamics,schroder2014real}. 
-In this work we focus on improving the robustness and accuracy of model-based approaches by combining effective 2D and 3D registration energies with carefully designed priors.
-
 \subsection*{Appearance-based hand tracking} 
-During the past few years, numerous appearance-based methods have been developed for hand tracking. Approaches based on nearest neighbor search~\cite{wang2009colorglove,wang_uist11,romero_13}, decision trees~\cite{keskin2012hand,tang2013real,tang_cvpr14,krupka2014discriminative}, or convolutional networks \cite{tompson2014real} have demonstrated that appearance-based methods can be successfully employed for realtime hand tracking. The strength of these methods is the capability of inferring a hand pose from a single frame without the need of relying on temporal coherence, which avoids drift.
+ 
+As discussed in Chapter \ref{thesis_intro} numerous appearance-based methods have been developed for hand tracking. 
+The strength of these methods is the capability of inferring a hand pose from a single frame without the need of relying on temporal coherence, which avoids drift.
  However, such appearance-based approaches are tightly linked to the training data and often do not generalize well to previously unseen hand poses, i.e., poses not contained in the training database. For this reason most of these methods assume a single hand in isolation to avoid data explosion, and often do not reach the accuracy of model-based methods.
 
 \subsection*{Model-based hand tracking}

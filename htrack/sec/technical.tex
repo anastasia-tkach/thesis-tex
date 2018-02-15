@@ -1,4 +1,4 @@
-% !TEX root = ../htrack.tex
+% !TEX root = ../../thesis.tex
 
 
 \input{htrack/fig/frontcorr.tex}
@@ -54,15 +54,15 @@ The term $E_{\text{3D}}$ models a 3D geometric registration in the spirit of ICP
 %. The energy is defined as
 %
 \begin{equation}
-    E_{\text{3D}}  = \omegacloud \sum_{\pointHtrack \in \PointsSensorHtrack} \| \pointHtrack - \proj_{\handmodel}(\pointHtrack,\parsHtrack) \|_2,
+    E_{\text{3D}}  = \omegacloud \sum_{\pointHtrack \in \PointsSensorHtrack} \| \pointHtrack - \proj_{\handmodel(\parsHtrack)}(\pointHtrack,\parsHtrack) \|_2^1,
 \label{eq:align3d}
 \end{equation}
 %
-where $\|\cdot\|_2$ denotes the $\ell_2$ norm, $\pointHtrack$ represents a 3D point of $\PointsSensorHtrack$, and $\proj_{\handmodel}(\pointHtrack,\parsHtrack)$ is the projection of $\pointHtrack$ onto the hand model $\handmodel$ with hand pose $\parsHtrack$. 
+where $\|\cdot\|_2$ denotes the $\ell_2$ norm, $\pointHtrack$ represents a 3D point of $\PointsSensorHtrack$, and $\proj_{\handmodel(\parsHtrack)}(\pointHtrack,\parsHtrack)$ is the projection of $\pointHtrack$ onto the hand model $\handmodel$ with hand pose $\parsHtrack$. 
 %This projection defines the correspondence of $\point$ on the model. For brevity of notation, we define this correspondence as $\mathbf{y} = \proj_{\handmodel}(\point,\pars)$.
 %
  Note that we compute a sum of absolute values of the registration residuals, not their squares. This corresponds to a mixed $\ell_{2}/\ell_{1}$ norm of the stacked vector of the residuals. For 3D registration such a sparsity-inducing norm has been shown to be more resilient to noisy point clouds containing a certain amount of outliers
-such as the ones produced by the Creative sensor (\Figure{data}). We refer to~\cite{bouaziz_sgp13} for more details.
+such as the ones produced by the Creative sensor (\Figure{data}). We refer to~\cite{Bouaziz_eg2014} for more details.
 
 % \SB{not sure if we should say that here: As the 3D hand model is simply composed of cylinders, we compute the projections in close form ignoring back facing correspondences.}
 
@@ -72,7 +72,7 @@ such as the ones produced by the Creative sensor (\Figure{data}). We refer to~\c
 \subsection*{3D correspondences}
 % The projection operators are now decoupled from the optimization and can be evaluated, rather than differentiated.
 % The optimization problems in Step.1 can be solved in close form. The computation of 3D correspondences in \Equation{cp3d} can be performed either by exhaustively computing the distances to the underlying cylinder model, or by first rendering the point cloud with the same viewport of the sensor and then fetching closest points with a spatial data structure (kdtree or octree). \AT{Note that the first way of computing closest points is trivially parallelizable}
-The 3D registration term involves computing the corresponding point  $\mathbf{y} = \proj_{\handmodel}(\pointHtrack,\parsHtrack)$ on the cylinder model~$\handmodel$ for each sensor point $\pointHtrack \in \PointsSensorHtrack$. 
+The 3D registration term involves computing the corresponding point  $\mathbf{y} = \proj_{\handmodel(\parsHtrack)}(\pointHtrack,\parsHtrack)$ on the cylinder model~$\handmodel$ for each sensor point $\pointHtrack \in \PointsSensorHtrack$. 
 In contrast to standard closest point search, we define the correspondence $\mathbf{y}$  as the closest point on the \emph{front-facing} part $\visiblehand$ of $\handmodel$. This includes parts of the model that are oriented towards the camera but occluded by other parts. 
  In our experiments we learned that this seemingly simple extension proved absolutely essential to obtain high-quality tracking results.
  Only considering model points that are visible from the sensor viewpoint, i.e., matching to the rendered model, is not sufficient for handling occlusions or instances of disappearing and reappearing sensor data; see \Figure{frontcorr} and \Figure{occlusion}. 
@@ -168,7 +168,8 @@ The projection function $\proj_{\SilhoSensor}(\pixelHtrack,\parsHtrack)$ to comp
     E_\text{wrist} = \omegawrist \| \proj_\text{2D}(\mathbf{k}_0(\parsHtrack)) - \proj_{\ell}(\mathbf{k}_0(\parsHtrack)) \|_2^2,
 \end{equation}
 \new{
-Minimizing this energy helps preventing the hand from erroneously rotating/flipping during tracking; an occurrence of this can be observed at 04:03 in the accompanying video.
+Minimizing this energy helps preventing the hand from erroneously rotating/flipping during tracking; an occurrence of this can be observed at \VideoHtrackWrist \footnote{Please find the accompanying Video1 at \url{http://lgg.epfl.ch/publications/2015/Htrack_ICP/new_video.mp4}
+.}.
 % 
 Here $\mathbf{k}_0$ is the 3D position of the wrist joint, and $\ell$ is the 2D line extracted by PCA of the 3D points associated with the wristband; see \Figure{wristband}. Note that $\proj_\text{2D}$ causes residuals to be minimized in screen-space, therefore the optimization of this energy will be analogous to the one of \Equation{align2d}. 
 We optimize in screen space because, due to occlusion, we are only able to observe half of the wrist and this causes its axis to be shifted toward the camera.}
@@ -191,7 +192,7 @@ Minimizing the fitting energies alone easily leads to unrealistic or unlikely ha
 %The $E_{\text{kinematic}}$ energy aims at generating a plausible hand posture by finding a hand pose respecting some kinematic constraints, i.e., angle bounds and the avoidance of self-collisions. The $E_{\text{temporal}}$ term enforces temporal smoothness to avoid jittering and in order to predict hand parameters in  case of missing data. Finally, to achieve a tracking that produces  postures realizable by a human hand we employ a data-driven energy $E_{\text{pose}}$. 
 
 
-\subsection*{Pose Space prior (data-driven)}
+\subsection*{Pose Space Prior (data-driven)}
 \input{htrack/fig/pca.tex}
 
 The complex and highly coupled articulation of human hands is difficult to model directly with geometric or physical constraints. Instead, we use a publicly available database of recorded hand poses~\cite{schroder2014real} to create a data-driven prior $E_{\text{pose}}$ that encodes this coupling.
@@ -229,7 +230,7 @@ E_{\text{mean}} = \omegapcareg \|\boldsymbol{\Sigma} \parssub \|_2^2.
 $\boldsymbol{\Sigma}$ is a diagonal matrix containing the inverse of the standard deviation of the PCA basis.
 Our tracking optimization is modified to consider the pose space by introducing the auxiliary variable $\tilde\parsHtrack$ and then jointly minimizing over $\parsHtrack$ and $\tilde\parsHtrack$. \new{The difference between our approach and optimizing directly in the subspace is further discussed in~\Appendix{pca}}.
 % 
-\new{Note how the regularization energy in \Equation{pcareg} helps the tracking system recover from tracking failures. When no sensor constraints are imposed on the model, the optimization will attempt to push the pose toward the mean -- a statistically likely pose from which tracking recovery is highly effective.}
+\new{Note how the regularization energy in \Equation{pcareg} helps the tracking system recover from tracking failures. When no sensor constraints are imposed on the model, the optimization will attempt to push the pose towards the mean -- a statistically likely pose from which tracking recovery is highly effective.}
 
 \Figure{pca} illustrates how the PCA data prior improves tracking by avoiding unlikely poses, in particular when the input data is incomplete.
 We found that even when data  coverage is sufficient to recover the correct pose, the data term improves the convergence of the optimization as illustrated in \Figure{pcaconv}.
@@ -241,7 +242,7 @@ We found that even when data  coverage is sufficient to recover the correct pose
 
 % \todo{Explain why this is better than measuring the distance to the projection.}
 
-\subsection*{Kinematic prior}
+\subsection*{Kinematic Prior}
 The PCA data term is a computationally efficient way of approximating the space of plausible hand poses.
 However, the PCA model alone cannot guarantee that the recovered pose is realistic. In particular, since the PCA is symmetric around the mean, fingers bending backwards beyond the physically realistic joint angle limits are not penalized by the data prior. Similarly, the PCA model is not descriptive enough to avoid self-intersections of fingers. These two aspects are addressed by the kinematic prior $E_{\text{kinematic}} = E_{\text{collision}} + E_{\text{bounds}}$.
 %
@@ -285,7 +286,7 @@ The bottom row of \Figure{posepriors} illustrates the effect of the joint angle 
 
 
 \input{htrack/fig/temporal.tex}
-\subsection*{Temporal prior}
+\subsection*{Temporal Prior}
 
 A common problem in particular with appearance-based methods are small-scale temporal oscillations that cause the tracked hand to jitter. A standard way to enforce temporal smoothness is to penalize the change of model parameters~$\parsHtrack$ through time, for example, by penalizing a quadratic energy accounting for velocity $\|\dot \parsHtrack\|^2$ and acceleration $\|\ddot \parsHtrack\|^2$~\cite{wei_siga12}. 
 % 
@@ -302,4 +303,4 @@ Therefore, we propose a solution that measures the velocity and acceleration of 
 \end{eqnarray}
 %
 % \MB{Mention how you compute the time-derivatives.}
-\Figure{temporal} illustrates how the temporal prior reduces jitter and improves the overall robustness of the tracking; see also accompanying video.
+\Figure{temporal} illustrates how the temporal prior reduces jitter and improves the overall robustness of the tracking; see also \VideoHtrackTemporal.
